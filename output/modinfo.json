@@ -1,0 +1,11 @@
+{
+    "id": "alduris.wordworld",
+    "name": "Word World",
+    "version": "1.0.0",
+    "authors": "Alduris",
+    "description": "Replaces all creatures with words",
+    "tags": ["Creatures"],
+    "requirements": [],
+    "requirements_names": [],
+    "checksum_override_version": true
+}
