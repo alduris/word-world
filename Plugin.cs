@@ -322,7 +322,7 @@ namespace WordWorld
                             labels[i + 1].scale = 1.125f;
                         }
                         break;
-                    } // *
+                    }
                     case MoreSlugcats.StowawayBugGraphics stowawayGraf: {
                         // Main body
                         labels[0].scale = (stowawayGraf.myBug.bodyChunks[0].rad + stowawayGraf.myBug.bodyChunks[1].rad) * 2f / FontSize;
@@ -419,7 +419,7 @@ namespace WordWorld
                     }
                     case VultureGrubGraphics grubGraf: {
                         break;
-                    } // * (?)
+                    }
 
                     // Things that are not Creatures
                     case OracleGraphics oracleGraf: {
@@ -713,7 +713,7 @@ namespace WordWorld
                             labels[i + 1].color = insp.bodyColor;
                         }
                         break;
-                    } // *
+                    }
                     case MoreSlugcats.StowawayBugGraphics stowawayGraf: {
                         // Main body
                         labels[0].SetPosition(GetPos(stowawayGraf.myBug.bodyChunks[1], timeStacker) - camPos);
@@ -859,36 +859,6 @@ namespace WordWorld
 
                         labels[0].SetPosition(pos);
                         labels[0].rotation = rot;
-
-                        // Creature should be single thingy
-                        /*if (labels.Length == 1)
-                        {
-                        }
-                        else
-                        {
-                            // Creature is big long toob
-                            for (int i = 0; i < labels.Length; i++) {
-                                var label = labels[i];
-
-                                float percent = (float)i / (labels.Length - 1);
-                                var chunkInd = (module.owner.bodyChunks.Length - 1) * percent;
-                                var spriteInd = (self.sprites.Length - 1) * percent;
-
-                                var pos = Vector2.Lerp(
-                                        Vector2.Lerp(module.owner.bodyChunks[Mathf.FloorToInt(chunkInd)].lastPos, module.owner.bodyChunks[Mathf.FloorToInt(chunkInd)].pos, timeStacker),
-                                        Vector2.Lerp(module.owner.bodyChunks[Mathf.CeilToInt(chunkInd)].lastPos, module.owner.bodyChunks[Mathf.CeilToInt(chunkInd)].pos, timeStacker),
-                                        chunkInd % 1f
-                                    ) - camPos;
-                                var rot = Mathf.Lerp(
-                                        self.sprites[Mathf.FloorToInt(spriteInd)].rotation,
-                                        self.sprites[Mathf.CeilToInt(spriteInd)].rotation,
-                                        chunkInd % 1f
-                                    );
-
-                                label.SetPosition(pos);
-                                label.rotation = rot;
-                            }
-                        }*/
                         break;
                     }
                     default: { break; } // do nothing
