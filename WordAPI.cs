@@ -6,7 +6,7 @@ namespace WordWorld
 {
     public class WordAPI
     {
-        internal static Dictionary<Type, (Func<IDrawable, string[]>, Action<IDrawable, FLabel[]>, Action<IDrawable, FLabel[], Vector2>)> RegisteredClasses = [];
+        internal static Dictionary<Type, (Func<IDrawable, string[]>, Action<IDrawable, FLabel[]>, Action<IDrawable, FLabel[], float, Vector2>)> RegisteredClasses = [];
 
         /// <summary>
         /// Registers an IDrawable with the mod to replace with text.
@@ -14,9 +14,9 @@ namespace WordWorld
         /// <param name="type">The type, which extends IDrawable.</param>
         /// <param name="createLabelsFunc">Function to return the strings to turn into FLabels. Parameter: the corresponding IDrawable.</param>
         /// <param name="initLabelsFunc">Action that will be called after InitializeSprites. Parameters: the IDrawable and the FLabels.</param>
-        /// <param name="drawLabelsFunc">Action that will be called after DrawSprites. Parameters: the IDrawable, the FLabels, and camPos.</param>
+        /// <param name="drawLabelsFunc">Action that will be called after DrawSprites. Parameters: the IDrawable, the FLabels, timeStacker, and camPos.</param>
         /// <exception cref="ArgumentException">Throws if the type passed into the function is not an IDrawable.</exception>
-        public static void RegisterItem(Type type, Func<IDrawable, string[]> createLabelsFunc, Action<IDrawable, FLabel[]> initLabelsFunc, Action<IDrawable, FLabel[], Vector2> drawLabelsFunc)
+        public static void RegisterItem(Type type, Func<IDrawable, string[]> createLabelsFunc, Action<IDrawable, FLabel[]> initLabelsFunc, Action<IDrawable, FLabel[], float, Vector2> drawLabelsFunc)
         {
             if (!typeof(IDrawable).IsAssignableFrom(type))
             {

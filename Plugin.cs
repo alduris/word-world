@@ -60,9 +60,6 @@ namespace WordWorld
                 On.RainWorld.OnModsInit += RainWorld_OnModsInit;
 
                 Logger.LogInfo("Success");
-
-                WordAPI.RegisterItem(typeof(PlayerGraphics), (_) => new string[] { "Player" }, (s, l) => {  }, (s, l, p) => { l[0].color = new Color(Random.value, Random.value, Random.value); l[0].SetPosition((s as PlayerGraphics).player.bodyChunks[0].pos - p); });
-                Logger.LogInfo("Success 2 electric boogaloo");
             }
             catch (Exception e)
             {
@@ -460,7 +457,7 @@ namespace WordWorld
                 if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs))
                 {
                     // Deal with API stuff
-                    funcs.Item3.Invoke(obj, labels, camPos);
+                    funcs.Item3.Invoke(obj, labels, timeStacker, camPos);
                 }
                 else
                 {
