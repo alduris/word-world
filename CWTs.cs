@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using MoreSlugcats;
@@ -19,6 +20,15 @@ namespace WordWorld
             try
             {
                 var font = Custom.GetFont();
+
+                // Test API stuff first
+                if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs))
+                {
+                    var strs = funcs.Item1.Invoke(self.drawableObject);
+                    return strs.Select(x => new FLabel(font, x)).ToArray();
+                }
+
+                // Built-in stuff
                 if ((self.drawableObject as GraphicsModule)?.owner is Creature)
                 {
                     var type = ((self.drawableObject as GraphicsModule).owner as Creature).abstractCreature.creatureTemplate.type;
@@ -138,17 +148,17 @@ namespace WordWorld
                         }
                         return new FLabel[] { new(font, name) };
                     }
-                    else if (ModManager.MSC && type == MoreSlugcatsEnums.CreatureTemplateType.Inspector)
+                    else if (ModManager.MSC && self.drawableObject is InspectorGraphics inspGraf)
                     {
                         List<FLabel> list = new() { new(font, "Inspector") };
-                        for (int i = 0; i < (self.drawableObject as InspectorGraphics).myInspector.heads.Length; i++)
+                        for (int i = 0; i < inspGraf.myInspector.heads.Length; i++)
                             list.Add(new(font, "Head"));
                         return list.ToArray();
                     }
-                    else if (ModManager.MSC && type == MoreSlugcatsEnums.CreatureTemplateType.StowawayBug)
+                    else if (ModManager.MSC && self.drawableObject is StowawayBugGraphics stowawayGraf)
                     {
                         List<FLabel> list = new() { new(font, "Stowaway") };
-                        for (int i = 0; i < (self.drawableObject as StowawayBugGraphics).myBug.heads.Length; i++)
+                        for (int i = 0; i < stowawayGraf.myBug.heads.Length; i++)
                         {
                             foreach (var c in "Tentacle")
                             {
@@ -158,11 +168,6 @@ namespace WordWorld
                         return list.ToArray();
                     }
                     else if (
-                        //type == CreatureTemplate.Type.Centipede ||
-                        //type == CreatureTemplate.Type.SmallCentipede ||
-                        //type == CreatureTemplate.Type.RedCentipede ||
-                        //type == CreatureTemplate.Type.Centiwing ||
-                        // (ModManager.MSC && type == MoreSlugcatsEnums.CreatureTemplateType.AquaCenti) ||
                         type == CreatureTemplate.Type.BigNeedleWorm ||
                         type == CreatureTemplate.Type.SmallNeedleWorm ||
                         type == CreatureTemplate.Type.PoleMimic ||
@@ -185,7 +190,8 @@ namespace WordWorld
                         }
                         return arr;
                     }
-                    else {
+                    else
+                    {
                         // Normal creature; will only have one FLabel
                         var str = type.value;
 
@@ -201,25 +207,6 @@ namespace WordWorld
                             str = "Jetfish";
                         else if (self.drawableObject is LeechGraphics)
                             str = pascalRegex.Replace(str, " ");
-                        else if (
-                            type == CreatureTemplate.Type.RedLizard ||
-                            type == CreatureTemplate.Type.BlueLizard ||
-                            type == CreatureTemplate.Type.CyanLizard ||
-                            type == CreatureTemplate.Type.PinkLizard ||
-                            type == CreatureTemplate.Type.BlackLizard ||
-                            type == CreatureTemplate.Type.GreenLizard ||
-                            type == CreatureTemplate.Type.WhiteLizard ||
-                            type == CreatureTemplate.Type.YellowLizard ||
-                            ModManager.MSC && (
-                                type == MoreSlugcatsEnums.CreatureTemplateType.EelLizard ||
-                                type == MoreSlugcatsEnums.CreatureTemplateType.SpitLizard ||
-                                type == MoreSlugcatsEnums.CreatureTemplateType.ZoopLizard ||
-                                type == MoreSlugcatsEnums.CreatureTemplateType.TrainLizard
-                            )
-                        )
-                            str = "Lizard";
-                        //else if (type == CreatureTemplate.Type.BigEel)
-                        //    str = "Leviathan";
                         else
                             str = pascalRegex.Replace(str, Environment.NewLine);
                         
