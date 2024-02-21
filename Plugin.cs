@@ -10,6 +10,7 @@ using RWCustom;
 using MoreSlugcats;
 using UnityEngine;
 using SpriteLeaser = RoomCamera.SpriteLeaser;
+using Random = UnityEngine.Random;
 using static WordWorld.WordUtil;
 
 #pragma warning disable CS0618
@@ -59,6 +60,9 @@ namespace WordWorld
                 On.RainWorld.OnModsInit += RainWorld_OnModsInit;
 
                 Logger.LogInfo("Success");
+
+                WordAPI.RegisterItem(typeof(PlayerGraphics), (_) => new string[] { "Player" }, (s, l) => {  }, (s, l, p) => { l[0].color = new Color(Random.value, Random.value, Random.value); l[0].SetPosition((s as PlayerGraphics).player.bodyChunks[0].pos - p); });
+                Logger.LogInfo("Success 2 electric boogaloo");
             }
             catch (Exception e)
             {
@@ -362,7 +366,7 @@ namespace WordWorld
                             {
                                 // My incredibly sketchy solution to not requiring yeek fix in build or game
                                 // Yeek fix outright replaces yeeks with a class of its own type
-                                int bodySpritesStart = (int)module.GetType().GetMethod("get_BodySpritesStart").Invoke(module, new object[] {});
+                                int bodySpritesStart = (int)module.GetType().GetMethod("get_BodySpritesStart").Invoke(module, []);
                                 label.scale = module.owner.bodyChunks[0].rad * 4f / TextWidth(labels[0].text);
                                 TriangleMesh bodySprite = self.sprites[bodySpritesStart] as TriangleMesh;
                                 int numVerts = bodySprite.verticeColors.Length;

@@ -36,10 +36,10 @@ namespace WordWorld
                     if (self.drawableObject is VultureGraphics vultureGraf)
                     {
                         // Vultures get extra sprites
-                        List<FLabel> list = new() {
+                        List<FLabel> list = [
                             new(font, pascalRegex.Replace(type.value, Environment.NewLine)),
                             new(font, "Mask")
-                        };
+                        ];
                         for (int i = 0; i < vultureGraf.vulture.tentacles.Length; i++)
                         {
                             list.Add(new(font, "W"));
@@ -52,7 +52,7 @@ namespace WordWorld
                             list.Add(new(font, "Tusk"));
                             list.Add(new(font, "Tusk"));
                         }
-                        return list.ToArray();
+                        return [.. list];
                     }
                     else if (self.drawableObject is CentipedeGraphics centiGraf)
                     {
@@ -64,7 +64,7 @@ namespace WordWorld
                         var chars = type.value.ToCharArray();
                         int numOfEs = numChunks - chars.Length;
                         
-                        List<FLabel> list = new();
+                        List<FLabel> list = [];
                         if (numChunks >= type.value.Length)
                         {
                             for (int i = 0; i < numChunks; i++)
@@ -81,7 +81,7 @@ namespace WordWorld
                             }
                         }
 
-                        return list.ToArray();
+                        return [.. list];
                     }
                     else if (self.drawableObject is EggBugGraphics)
                     {
@@ -90,13 +90,13 @@ namespace WordWorld
                         else if (ModManager.MSC && type == MoreSlugcatsEnums.CreatureTemplateType.FireBug) str = "Firebug";
                         else str = pascalRegex.Replace(type.value, Environment.NewLine);
 
-                        List<FLabel> list = new() { new(font, str) };
+                        List<FLabel> list = [new(font, str)];
                         
                         // Eggs
                         for (int i = 0; i < 6; i++)
                             list.Add(new(font, "Egg"));
                         
-                        return list.ToArray();
+                        return [.. list];
                     }
                     else if (self.drawableObject is DaddyGraphics daddyGraf)
                     {
@@ -107,7 +107,7 @@ namespace WordWorld
                             if (type == MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy) shortname = "Hunter";
                             else if (type == MoreSlugcatsEnums.CreatureTemplateType.TerrorLongLegs) shortname = $"Your{Environment.NewLine}Mother";
                         }
-                        List<FLabel> list = new() { new(font, shortname) };
+                        List<FLabel> list = [new(font, shortname)];
 
                         for (int i = 0; i < daddyGraf.daddy.tentacles.Length; i++)
                         {
@@ -120,23 +120,23 @@ namespace WordWorld
                                 list.Add(new(font, "LongLeg"[k].ToString()));
                             }
                         }
-                        return list.ToArray();
+                        return [.. list];
                     }
                     else if (self.drawableObject is DeerGraphics)
                     {
-                        return new FLabel[] { new(font, "Deer"), new(font, "Antlers") };
+                        return [new(font, "Deer"), new(font, "Antlers")];
                     }
                     else if (self.drawableObject is MirosBirdGraphics)
                     {
-                        return new FLabel[] { new(font, $"Miros{Environment.NewLine}Bird"), new(font, "Eye") };
+                        return [new(font, $"Miros{Environment.NewLine}Bird"), new(font, "Eye")];
                     }
                     else if (self.drawableObject is LizardGraphics lizGraf)
                     {
                         string name = pascalRegex.Replace(type.value, " ");
                         if (lizGraf.tongue != null)
                         {
-                            return new FLabel[]
-                            {
+                            return
+                            [
                                 new(font, name),
                                 new(font, "T"),
                                 new(font, "o"),
@@ -144,20 +144,20 @@ namespace WordWorld
                                 new(font, "g"),
                                 new(font, "u"),
                                 new(font, "e"),
-                            };
+                            ];
                         }
-                        return new FLabel[] { new(font, name) };
+                        return [new(font, name)];
                     }
                     else if (ModManager.MSC && self.drawableObject is InspectorGraphics inspGraf)
                     {
-                        List<FLabel> list = new() { new(font, "Inspector") };
+                        List<FLabel> list = [new(font, "Inspector")];
                         for (int i = 0; i < inspGraf.myInspector.heads.Length; i++)
                             list.Add(new(font, "Head"));
-                        return list.ToArray();
+                        return [.. list];
                     }
                     else if (ModManager.MSC && self.drawableObject is StowawayBugGraphics stowawayGraf)
                     {
-                        List<FLabel> list = new() { new(font, "Stowaway") };
+                        List<FLabel> list = [new(font, "Stowaway")];
                         for (int i = 0; i < stowawayGraf.myBug.heads.Length; i++)
                         {
                             foreach (var c in "Tentacle")
@@ -165,7 +165,7 @@ namespace WordWorld
                                 list.Add(new(font, c.ToString()));
                             }
                         }
-                        return list.ToArray();
+                        return [.. list];
                     }
                     else if (
                         type == CreatureTemplate.Type.BigNeedleWorm ||
@@ -210,7 +210,7 @@ namespace WordWorld
                         else
                             str = pascalRegex.Replace(str, Environment.NewLine);
                         
-                        return new FLabel[] { new(font, str) };
+                        return [new(font, str)];
                     }
                 }
                 else if (module.drawableObject is OracleGraphics)
@@ -223,20 +223,20 @@ namespace WordWorld
                     else if (id == Oracle.OracleID.SS) str = "Five Pebbles";
                     else if (ModManager.MSC) {
                         if (id == MoreSlugcatsEnums.OracleID.CL) str = "Five Pebbles";
-                        else if (id == MoreSlugcatsEnums.OracleID.DM) str = "Five Pebbles";
+                        else if (id == MoreSlugcatsEnums.OracleID.DM) str = "Looks to the Moon";
                         else if (id == MoreSlugcatsEnums.OracleID.ST) str = "Sliver of Straw";
                     }
 
                     // Iterators have 4 arm segments
-                    return new FLabel[] { new(font, str), new(font, "Arm"), new(font, "Arm"), new(font, "Arm"), new(font, "Arm") };
+                    return [new(font, str), new(font, "Arm"), new(font, "Arm"), new(font, "Arm"), new(font, "Arm")];
                 }
                 else if (module.drawableObject is JellyFish)
                 {
-                    return new FLabel[] { new(font, "Jellyfish") };
+                    return [new(font, "Jellyfish")];
                 }
                 else if (ModManager.MSC && module.drawableObject is BigJellyFish)
                 {
-                    return new FLabel[] { new(font, "Big Jellyfish") };
+                    return [new(font, "Big Jellyfish")];
                 }
                 else
                 {

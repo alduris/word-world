@@ -6,7 +6,7 @@ namespace WordWorld
 {
     public class WordAPI
     {
-        internal static Dictionary<Type, (Func<IDrawable, string[]>, Action<IDrawable, FLabel[]>, Action<IDrawable, FLabel[], Vector2>)> RegisteredClasses = new();
+        internal static Dictionary<Type, (Func<IDrawable, string[]>, Action<IDrawable, FLabel[]>, Action<IDrawable, FLabel[], Vector2>)> RegisteredClasses = [];
 
         /// <summary>
         /// Registers an IDrawable with the mod to replace with text.
@@ -18,7 +18,7 @@ namespace WordWorld
         /// <exception cref="ArgumentException">Throws if the type passed into the function is not an IDrawable.</exception>
         public static void RegisterItem(Type type, Func<IDrawable, string[]> createLabelsFunc, Action<IDrawable, FLabel[]> initLabelsFunc, Action<IDrawable, FLabel[], Vector2> drawLabelsFunc)
         {
-            if (!type.IsInstanceOfType(typeof(IDrawable)))
+            if (!typeof(IDrawable).IsAssignableFrom(type))
             {
                 throw new ArgumentException("Type must implement IDrawable!");
             }
