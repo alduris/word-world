@@ -167,21 +167,25 @@ namespace WordWorld
                         }
                         return [.. list];
                     }
+                    else if (self.drawableObject is NeedleWormGraphics needleGraf)
+                    {
+                        int cut = type.value.IndexOf("Needle");
+                        if (cut == -1) cut = type.value.IndexOf("Noodle");
+                        if (cut == -1) cut = type.value.IndexOf("Noot");
+                        if (cut == -1) cut = type.value.Length;
+
+                        return [.. (type.value.Substring(0, cut) + "Noot").ToCharArray().Select(c => new FLabel(font, c.ToString()))];
+                    }
                     else if (
-                        type == CreatureTemplate.Type.BigNeedleWorm ||
-                        type == CreatureTemplate.Type.SmallNeedleWorm ||
                         type == CreatureTemplate.Type.PoleMimic ||
                         type == CreatureTemplate.Type.TentaclePlant ||
                         type == CreatureTemplate.Type.GarbageWorm ||
-                        type == CreatureTemplate.Type.Overseer ||
-                        type == CreatureTemplate.Type.Snail ||
-                        type == CreatureTemplate.Type.BigEel
+                        // type == CreatureTemplate.Type.Overseer ||
+                        type == CreatureTemplate.Type.Snail
                     )
                     {
                         // Long bendy creature; create many FLabels for individual chars
                         var chars = type.value.ToCharArray();
-                        if (type == CreatureTemplate.Type.BigEel)
-                            chars = "Leviathan".ToCharArray();
 
                         var arr = new FLabel[chars.Length];
                         for(int i = 0; i < chars.Length; i++)
@@ -205,6 +209,8 @@ namespace WordWorld
                             str = "Dropwig";
                         else if (type == CreatureTemplate.Type.JetFish)
                             str = "Jetfish";
+                        else if (type == CreatureTemplate.Type.LanternMouse)
+                            str = "Mouse";
                         else if (self.drawableObject is LeechGraphics)
                             str = pascalRegex.Replace(str, " ");
                         else

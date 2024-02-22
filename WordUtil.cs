@@ -121,7 +121,7 @@ namespace WordWorld
         /// <param name="chunks">The body chunks</param>
         /// <param name="timeStacker">The current time stacker</param>
         /// <returns>The input array position mapped to a position between two body chunks.</returns>
-        public static Vector2 LerpChunkPos(int i, int len, BodyChunk[] chunks, float timeStacker)
+        public static Vector2 PointAlongChunks(int i, int len, BodyChunk[] chunks, float timeStacker)
         {
             float x = Custom.LerpMap(i, 0, len - 1, 0, chunks.Length - 1);
             if (Mathf.Approximately(x, Mathf.Round(x)))
@@ -146,7 +146,7 @@ namespace WordWorld
         /// <param name="parts">The body parts</param>
         /// <param name="timeStacker">The current time stacker</param>
         /// <returns>The input array position mapped to a position between two body parts.</returns>
-        public static Vector2 LerpPartPos(int i, int len, BodyPart[] parts, float timeStacker)
+        public static Vector2 PointAlongParts(int i, int len, BodyPart[] parts, float timeStacker)
         {
             float x = Custom.LerpMap(i, 0, len - 1, 0, parts.Length - 1);
             if (Mathf.Approximately(x, Mathf.Round(x)))
@@ -171,7 +171,7 @@ namespace WordWorld
         /// <param name="rope">The rope</param>
         /// <param name="timeStacker">The current time stacker</param>
         /// <returns>The input array position mapped to a position between two rope segments.</returns>
-        public static Vector2 LerpRopePos(int i, int len, RopeGraphic rope, float timeStacker)
+        public static Vector2 PointAlongRope(int i, int len, RopeGraphic rope, float timeStacker)
         {
             float x = Custom.LerpMap(i, 0, len - 1, 0, rope.segments.Length - 1);
             if (Mathf.Approximately(x, Mathf.Round(x)))
@@ -197,7 +197,7 @@ namespace WordWorld
         /// <param name="tentacle">The tentacle</param>
         /// <param name="timeStacker">The current time stacker</param>
         /// <returns>The input array position mapped to a position between the tentacle chunks.</returns>
-        public static Vector2 LerpTentaclePos(int i, int len, Tentacle tentacle, float timeStacker)
+        public static Vector2 PointAlongTentacle(int i, int len, Tentacle tentacle, float timeStacker)
         {
             float x = Custom.LerpMap(i, 0, len - 1, 0, tentacle.tChunks.Length - 1);
             if (Mathf.Approximately(x, Mathf.Round(x)))
@@ -225,7 +225,7 @@ namespace WordWorld
         /// <param name="sprites">All the sprites</param>
         /// <param name="lambda">A function mapping a number between 0 and numSprites to a specific sprite index</param>
         /// <returns>A position pointing from one sprite to the other</returns>
-        public static float LerpRotation(int i, int len, int numSprites, FSprite[] sprites, Func<int, int> lambda)
+        public static float RotationAlongSprites(int i, int len, int numSprites, FSprite[] sprites, Func<int, int> lambda)
         {
             float x = Custom.LerpMap(i, 0, len - 1, 0, numSprites - 1);
             if (Mathf.Approximately(x, Mathf.Round(x)))

@@ -264,16 +264,26 @@ namespace WordWorld
                             break;
                         }
                         case MouseGraphics mouseGraf: {
-                            break;
-                        } // *
-                        case NeedleWormGraphics nootGraf: {
+                            labels[0].scale = (mouseGraf.mouse.bodyChunks.Sum(x => x.rad) + mouseGraf.mouse.bodyChunkConnections[0].distance) / TextWidth(labels[0].text);
                             break;
                         }
-                        case OverseerGraphics overseerGraf: {
+                        case NeedleWormGraphics nootGraf: {
+                            for (int i = 0; i < labels.Length; i++)
+                            {
+                                labels[i].scale = nootGraf.worm.OnBodyRad(0) * 8f / FontSize;
+                            }
+                            break;
+                        }
+                        case OverseerGraphics overseerGraf:
+                        {
+                            for (int i = 0; i < labels.Length; i++)
+                            {
+                                labels[i].color = overseerGraf.MainColor;
+                            }
                             break;
                         }
                         case PlayerGraphics playerGraf: {
-                            labels[0].scale = (playerGraf.player.bodyChunks[0].rad + playerGraf.player.bodyChunks[1].rad + playerGraf.player.bodyChunkConnections[0].distance) / TextWidth(labels[0].text);
+                            labels[0].scale = (playerGraf.player.bodyChunks.Sum(x => x.rad) + playerGraf.player.bodyChunkConnections[0].distance) / TextWidth(labels[0].text);
                             labels[0].color = playerGraf.player.isNPC ? playerGraf.player.ShortCutColor() : PlayerGraphics.SlugcatColor(playerGraf.CharacterForColor);
                             break;
                         }
@@ -469,8 +479,8 @@ namespace WordWorld
                             var chunks = bigEelGraf.eel.bodyChunks;
                             for (int i = 0; i < labels.Length; i++)
                             {
-                                labels[i].SetPosition(LerpChunkPos(i, labels.Length, chunks, timeStacker) - camPos);
-                                labels[i].rotation = LerpRotation(i, labels.Length, chunks.Length, self.sprites, bigEelGraf.BodyChunksSprite);
+                                labels[i].SetPosition(PointAlongChunks(i, labels.Length, chunks, timeStacker) - camPos);
+                                labels[i].rotation = RotationAlongSprites(i, labels.Length, chunks.Length, self.sprites, bigEelGraf.BodyChunksSprite);
                             }
                             break;
                         }
@@ -488,8 +498,8 @@ namespace WordWorld
                             {
                                 if (fit)
                                 {
-                                    labels[i].SetPosition(LerpChunkPos(i, labels.Length, chunks, timeStacker) - camPos);
-                                    labels[i].rotation = LerpRotation(i, labels.Length, chunks.Length, self.sprites, x => x);
+                                    labels[i].SetPosition(PointAlongChunks(i, labels.Length, chunks, timeStacker) - camPos);
+                                    labels[i].rotation = RotationAlongSprites(i, labels.Length, chunks.Length, self.sprites, x => x);
                                 }
                                 else
                                 {
@@ -520,8 +530,8 @@ namespace WordWorld
                                 for (int j = 0; j < length; j++, k++)
                                 {
                                     // Offset position by 1 to move away from center a bit
-                                    var pos = LerpRopePos(j + 1, length + 1, daddyGraf.legGraphics[i], timeStacker);
-                                    var prevPos = LerpRopePos(j, length + 1, daddyGraf.legGraphics[i], timeStacker);
+                                    var pos = PointAlongRope(j + 1, length + 1, daddyGraf.legGraphics[i], timeStacker);
+                                    var prevPos = PointAlongRope(j, length + 1, daddyGraf.legGraphics[i], timeStacker);
                                     labels[k].SetPosition(pos - camPos);
                                     labels[k].rotation = AngleBtwn(pos, prevPos);
                                 }
@@ -569,7 +579,7 @@ namespace WordWorld
                         case GarbageWormGraphics gWormGraf: {
                             for (int i = 0; i < labels.Length; i++)
                             {
-                                labels[i].SetPosition(LerpTentaclePos(labels.Length - i - 1, labels.Length, gWormGraf.worm.tentacle, timeStacker) - camPos);
+                                labels[i].SetPosition(PointAlongTentacle(labels.Length - i - 1, labels.Length, gWormGraf.worm.tentacle, timeStacker) - camPos);
                                 labels[i].isVisible = gWormGraf.worm.extended > 0f;
                             }
                             labels[0].color = self.sprites[0].color;
@@ -606,7 +616,7 @@ namespace WordWorld
                                 for (int i = 0; i < 6; i++)
                                 {
                                     var label = labels[i + 1];
-                                    label.SetPosition(LerpPartPos(i, 6, lizGraf.tongue, timeStacker) - camPos);
+                                    label.SetPosition(PointAlongParts(i, 6, lizGraf.tongue, timeStacker) - camPos);
                                     label.isVisible = lizGraf.lizard.tongue.Out;
                                     // future thing maybe: cyan lizards have custom tongue color depending on tongue vertex
                                 }
@@ -653,8 +663,8 @@ namespace WordWorld
                                 for (int j = 0; j < 8; j++)
                                 {
                                     var label = labels[i * 8 + j + 1];
-                                    var pos = LerpTentaclePos(j + 1, 9, head, timeStacker);
-                                    var prevPos = LerpTentaclePos(j, 9, head, timeStacker);
+                                    var pos = PointAlongTentacle(j + 1, 9, head, timeStacker);
+                                    var prevPos = PointAlongTentacle(j, 9, head, timeStacker);
                                     label.SetPosition(pos - camPos);
                                     label.rotation = AngleBtwn(pos, prevPos);
                                     label.isVisible = stowawayGraf.myBug.headFired[i];
@@ -669,12 +679,31 @@ namespace WordWorld
                             break;
                         }
                         case MouseGraphics mouseGraf: {
-                            break;
-                        } // *
-                        case NeedleWormGraphics nootGraf: {
+                            labels[0].SetPosition(AvgBodyChunkPos(mouseGraf.mouse.bodyChunks[0], mouseGraf.mouse.bodyChunks[1], timeStacker) - camPos);
+                            labels[0].rotation = AngleBtwnParts(mouseGraf.head, mouseGraf.tail, timeStacker) + 90f;
+                            labels[0].color = mouseGraf.BodyColor;
                             break;
                         }
-                        case OverseerGraphics overseerGraf: {
+                        case NeedleWormGraphics nootGraf: {
+                            for (int i = 0; i < labels.Length; i++)
+                            {
+                                labels[i].SetPosition(nootGraf.worm.OnBodyPos((float)i / labels.Length, timeStacker) - camPos);
+                                labels[i].rotation = AngleBtwn(Vector2.zero, nootGraf.worm.OnBodyDir((float)i / labels.Length, timeStacker));
+                                labels[i].color = Color.Lerp(nootGraf.bodyColor, Color.white, Mathf.Lerp(nootGraf.lastFangOut, nootGraf.fangOut, timeStacker));
+                            }
+                            break;
+                        }
+                        case OverseerGraphics overseerGraf:
+                        {
+                            labels[0].SetPosition(AvgVectors(overseerGraf.DrawPosOfSegment(0f, timeStacker), overseerGraf.DrawPosOfSegment(1f, timeStacker)) - camPos);
+                            labels[0].rotation = AngleBtwn(overseerGraf.DrawPosOfSegment(0f, timeStacker), overseerGraf.DrawPosOfSegment(1f, timeStacker)) + 90f;
+                            labels[0].scale = (overseerGraf.DrawPosOfSegment(0f, timeStacker) - overseerGraf.DrawPosOfSegment(1f, timeStacker)).magnitude / TextWidth(labels[0].text);
+                            labels[0].isVisible = overseerGraf.holoLensUp != 0f || overseerGraf.lastHoloLensUp != 0f;
+                            /*for (int i = 0; i < labels.Length; i++)
+                            {
+                                labels[i].SetPosition(overseerGraf.DrawPosOfSegment((float)i / labels.Length, timeStacker) - camPos);
+                                labels[i].scale = overseerGraf.RadOfSegment((float)i / labels.Length, timeStacker) * 4f / FontSize;
+                            }*/
                             break;
                         }
                         case PlayerGraphics playerGraf: {
@@ -732,7 +761,7 @@ namespace WordWorld
                                 var tentacle = tentacles[k++];
                                 for (int j = i; j < i + 4; j++) // 4 letters per wing
                                 {
-                                    var pos = LerpTentaclePos(j - i, 4, tentacle, timeStacker);
+                                    var pos = PointAlongTentacle(j - i, 4, tentacle, timeStacker);
                                     labels[j].SetPosition(pos - camPos);
                                     labels[j].rotation = FixRotation(AngleBtwn(pos, GetPos(tentacle.connectedChunk, timeStacker)));
                                 }
