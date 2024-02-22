@@ -14,7 +14,7 @@
   </PropertyGroup>-->
 
   <ItemGroup>
-    <Reference Include="../REFERENCES/*.*">
+    <Reference Include="../REFERENCES/*.dll">
       <Private>false</Private>
     </Reference>
   </ItemGroup>
@@ -22,6 +22,7 @@
   <Target Name="GenerateMod" AfterTargets="PostBuildEvent">
     <ItemGroup>
       <RemovePlugins Include="./output/plugins/*.dll" />
+      <RemovePlugins Include="./output/plugins/*.pdb" />
     </ItemGroup>
     <ItemGroup>
       <CopyPlugins Include="$(TargetPath)" />

@@ -42,6 +42,7 @@ namespace WordWorld
         internal static bool DoThings = true;
         internal static bool ShowSprites = false;
         internal static bool YeekFix = false;
+        internal static bool ClownLongLegs = false;
 
         private void OnEnable()
         {
@@ -81,6 +82,7 @@ namespace WordWorld
         {
             orig(self);
             YeekFix = ModManager.ActiveMods.Exists(mod => mod.id == "vigaro.yeekfix");
+            ClownLongLegs = ModManager.ActiveMods.Exists(mod => mod.id == "clownlonglegs");
         }
 
         private static void SpriteLeaser_ctor(On.RoomCamera.SpriteLeaser.orig_ctor orig, SpriteLeaser self, IDrawable obj, RoomCamera rCam)
@@ -139,25 +141,33 @@ namespace WordWorld
                             break;
                         }
                         case DaddyGraphics daddyGraf: {
+                            // Colors
+                            Random.State state = Random.state;
+                            Random.InitState(daddyGraf.daddy.abstractCreature.ID.RandomSeed);
+                            Color blinkColor = ClownLongLegs ? Custom.HSL2RGB(Random.value, 1f, 0.5f) : daddyGraf.daddy.eyeColor;
+                            Color bodyColor = ClownLongLegs ? Color.white : daddyGraf.blackColor;
+
                             // Main body chunk
                             labels[0].scale = Mathf.Sqrt(daddyGraf.daddy.bodyChunks.Length) * daddyGraf.daddy.bodyChunks.Average(c => c.rad) * 2f / FontSize;
-                            labels[0].color = daddyGraf.daddy.eyeColor;
+                            labels[0].color = blinkColor;
 
                             // Tentacles
                             var tentacles = daddyGraf.daddy.tentacles;
                             int k = 1;
+
                             for (int i = 0; i < tentacles.Length; i++)
                             {
                                 // len("Tentacle") = 8
                                 var tentacle = tentacles[i];
                                 int length = (int)(tentacle.idealLength / 20f);
+                                Color tipColor = ClownLongLegs ? Custom.HSL2RGB(Random.value, 1f, 0.625f) : daddyGraf.daddy.eyeColor;
                                 for (int j = 0; j < length; j++, k++)
                                 {
                                     labels[k].scale = 1.5f;
-                                    labels[k].color = Color.Lerp(daddyGraf.blackColor, daddyGraf.daddy.eyeColor, Custom.LerpMap(j, 0, length, 0f, 1f, 1.5f));
-                                    // labels[i * 8 + j + 1].shader = whiteOutlineShader;
+                                    labels[k].color = Color.Lerp(bodyColor, tipColor, Custom.LerpMap(j, 0, length, 0f, 1f, 1.5f));
                                 }
                             }
+                            Random.state = state;
                             break;
                         }
                         case DeerGraphics deerGraf: {
@@ -276,10 +286,7 @@ namespace WordWorld
                         }
                         case OverseerGraphics overseerGraf:
                         {
-                            for (int i = 0; i < labels.Length; i++)
-                            {
-                                labels[i].color = overseerGraf.MainColor;
-                            }
+                            labels[0].color = overseerGraf.MainColor;
                             break;
                         }
                         case PlayerGraphics playerGraf: {
@@ -288,6 +295,10 @@ namespace WordWorld
                             break;
                         }
                         case PoleMimicGraphics poleMimicGraf: {
+                            foreach (var label in labels)
+                            {
+                                label.scale = 1.5f;
+                            }
                             break;
                         }
                         case ScavengerGraphics scavGraf: {
@@ -515,9 +526,15 @@ namespace WordWorld
                             break;
                         }
                         case DaddyGraphics daddyGraf: {
+                            // Colors n stuff
+                            Random.State state = Random.state;
+                            Random.InitState(daddyGraf.daddy.abstractCreature.ID.RandomSeed);
+                            Color eyeColor = ClownLongLegs ? Custom.HSL2RGB(Random.value, 1f, 0.5f) : daddyGraf.daddy.eyeColor;
+                            Color bodyColor = ClownLongLegs ? Color.white : daddyGraf.blackColor;
+
                             // Main body chunk
                             labels[0].SetPosition(daddyGraf.daddy.MiddleOfBody - camPos);
-                            labels[0].color = Color.LerpUnclamped(daddyGraf.daddy.eyeColor, daddyGraf.blackColor, Mathf.Lerp(daddyGraf.eyes[0].lastClosed, daddyGraf.eyes[0].closed, timeStacker));
+                            labels[0].color = Color.LerpUnclamped(eyeColor, bodyColor, Mathf.Lerp(daddyGraf.eyes[0].lastClosed, daddyGraf.eyes[0].closed, timeStacker));
 
                             // Tentacles
                             var tentacles = daddyGraf.daddy.tentacles;
@@ -536,6 +553,7 @@ namespace WordWorld
                                     labels[k].rotation = AngleBtwn(pos, prevPos);
                                 }
                             }
+                            Random.state = state;
                             break;
                         }
                         case DeerGraphics deerGraf: {
@@ -698,7 +716,6 @@ namespace WordWorld
                             labels[0].SetPosition(AvgVectors(overseerGraf.DrawPosOfSegment(0f, timeStacker), overseerGraf.DrawPosOfSegment(1f, timeStacker)) - camPos);
                             labels[0].rotation = AngleBtwn(overseerGraf.DrawPosOfSegment(0f, timeStacker), overseerGraf.DrawPosOfSegment(1f, timeStacker)) + 90f;
                             labels[0].scale = (overseerGraf.DrawPosOfSegment(0f, timeStacker) - overseerGraf.DrawPosOfSegment(1f, timeStacker)).magnitude / TextWidth(labels[0].text);
-                            labels[0].isVisible = overseerGraf.holoLensUp != 0f || overseerGraf.lastHoloLensUp != 0f;
                             /*for (int i = 0; i < labels.Length; i++)
                             {
                                 labels[i].SetPosition(overseerGraf.DrawPosOfSegment((float)i / labels.Length, timeStacker) - camPos);
@@ -711,7 +728,21 @@ namespace WordWorld
                             labels[0].rotation = AngleBtwnChunks(playerGraf.player.bodyChunks[0], playerGraf.player.bodyChunks[1], timeStacker) + 90f;
                             break;
                         }
-                        case PoleMimicGraphics poleMimicGraf: {
+                        case PoleMimicGraphics poleMimicGraf:
+                        {
+                            for (int i = 0; i < labels.Length; i++)
+                            {
+                                var label = labels[i];
+                                label.SetPosition(PointAlongTentacle(labels.Length - i, labels.Length + 1, poleMimicGraf.pole.tentacle, timeStacker) - camPos);
+
+                                int leafPair = Mathf.RoundToInt((1f - (float)i / labels.Length) * (poleMimicGraf.leafPairs - 1));
+                                label.color = Color.Lerp(poleMimicGraf.blackColor, poleMimicGraf.mimicColor, Mathf.Lerp(poleMimicGraf.lastLookLikeAPole, poleMimicGraf.lookLikeAPole, timeStacker));
+                                if (leafPair < poleMimicGraf.decoratedLeafPairs)
+                                {
+                                    FSprite sprite = self.sprites[poleMimicGraf.LeafDecorationSprite(leafPair, 0)];
+                                    label.color = Color.Lerp(label.color, sprite.color, Mathf.Lerp(poleMimicGraf.leavesMimic[leafPair, 0, 4], poleMimicGraf.leavesMimic[leafPair, 0, 3], timeStacker));
+                                }
+                            }
                             break;
                         }
                         case ScavengerGraphics scavGraf: {
