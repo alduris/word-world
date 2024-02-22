@@ -478,7 +478,7 @@ namespace WordWorld
                 if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs))
                 {
                     // Deal with API stuff
-                    funcs.Item3.Invoke(obj, labels, timeStacker, camPos);
+                    funcs.Item3.Invoke(obj, labels, self, timeStacker, camPos);
                 }
                 else
                 {
@@ -730,18 +730,30 @@ namespace WordWorld
                         }
                         case PoleMimicGraphics poleMimicGraf:
                         {
+                            float poleAlpha = Mathf.Lerp(poleMimicGraf.lastLookLikeAPole, poleMimicGraf.lookLikeAPole, timeStacker);
+                            // Move labels
                             for (int i = 0; i < labels.Length; i++)
                             {
                                 var label = labels[i];
                                 label.SetPosition(PointAlongTentacle(labels.Length - i, labels.Length + 1, poleMimicGraf.pole.tentacle, timeStacker) - camPos);
 
                                 int leafPair = Mathf.RoundToInt((1f - (float)i / labels.Length) * (poleMimicGraf.leafPairs - 1));
-                                label.color = Color.Lerp(poleMimicGraf.blackColor, poleMimicGraf.mimicColor, Mathf.Lerp(poleMimicGraf.lastLookLikeAPole, poleMimicGraf.lookLikeAPole, timeStacker));
+                                label.color = Color.Lerp(poleMimicGraf.blackColor, poleMimicGraf.mimicColor, poleAlpha);
+                                label.alpha = 1f - poleAlpha;
                                 if (leafPair < poleMimicGraf.decoratedLeafPairs)
                                 {
                                     FSprite sprite = self.sprites[poleMimicGraf.LeafDecorationSprite(leafPair, 0)];
-                                    label.color = Color.Lerp(label.color, sprite.color, Mathf.Lerp(poleMimicGraf.leavesMimic[leafPair, 0, 4], poleMimicGraf.leavesMimic[leafPair, 0, 3], timeStacker));
+                                    float revealAmt = Mathf.Lerp(poleMimicGraf.leavesMimic[leafPair, 0, 4], poleMimicGraf.leavesMimic[leafPair, 0, 3], timeStacker);
+                                    label.color = Color.Lerp(label.color, sprite.color, revealAmt);
+                                    // label.alpha = Mathf.Max(label.alpha, revealAmt);
                                 }
+                            }
+
+                            // Unhide all sprites but hide them differently
+                            foreach (var sprite in self.sprites)
+                            {
+                                sprite.isVisible = true;
+                                sprite.alpha = poleAlpha;
                             }
                             break;
                         }
