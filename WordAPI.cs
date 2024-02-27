@@ -14,6 +14,7 @@ namespace WordWorld
     public class WordAPI
     {
         internal static Dictionary<Type, CustomCase> RegisteredClasses = [];
+        internal static Dictionary<Oracle.OracleID, string> RegisteredIterators = [];
 
         /// <summary>
         /// Registers an IDrawable with the mod to replace with text.
@@ -36,10 +37,30 @@ namespace WordWorld
         /// Unregisters the item from the mod. Unsure why you'd need to do this but it's here if you need to.
         /// </summary>
         /// <param name="type">The type to unregister.</param>
-        /// <returns>Whether or not it was actually unregistered.</returns>
+        /// <returns>If it was fond and successfully removed</returns>
         public static bool UnregisterItem(Type type)
         {
             return RegisteredClasses.Remove(type);
+        }
+
+        /// <summary>
+        /// Registers an iterator name with the mod.
+        /// </summary>
+        /// <param name="id">The id of the iterator</param>
+        /// <param name="name">The name of the iterator</param>
+        public static void RegisterIterator(Oracle.OracleID id, string name)
+        {
+            RegisteredIterators.Add(id, name);
+        }
+
+        /// <summary>
+        /// Unregisters an iterator name from the mod.
+        /// </summary>
+        /// <param name="id">The iterator id</param>
+        /// <returns>If it was found and successfully removed</returns>
+        public static bool UnregisterIterator(Oracle.OracleID id)
+        {
+            return RegisteredIterators.Remove(id);
         }
     }
 }

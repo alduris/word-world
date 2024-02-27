@@ -233,22 +233,49 @@ namespace WordWorld
                         return [new(font, str)];
                     }
                 }
-                else if (module.drawableObject is OracleGraphics)
+                else if (module.drawableObject is OracleGraphics oracleGraf)
                 {
+                    List<FLabel> labels = [];
                     var str = "Iterator";
 
                     // Figure out the name of the iterator
-                    var id = (module.drawableObject as OracleGraphics).oracle.ID;
-                    if (id == Oracle.OracleID.SL) str = "Looks to the Moon";
-                    else if (id == Oracle.OracleID.SS) str = "Five Pebbles";
+                    var id = oracleGraf.oracle.ID;
+                    if (WordAPI.RegisteredIterators.ContainsKey(id))
+                        str = WordAPI.RegisteredIterators[id];
+                    else if (id == Oracle.OracleID.SL)
+                        str = "Looks to the Moon";
+                    else if (id == Oracle.OracleID.SS)
+                        str = "Five Pebbles";
                     else if (ModManager.MSC) {
-                        if (id == MoreSlugcatsEnums.OracleID.CL) str = "Five Pebbles";
-                        else if (id == MoreSlugcatsEnums.OracleID.DM) str = "Looks to the Moon";
-                        else if (id == MoreSlugcatsEnums.OracleID.ST) str = "Sliver of Straw";
+                        if (id == MoreSlugcatsEnums.OracleID.CL)
+                            str = "Five Pebbles";
+                        else if (id == MoreSlugcatsEnums.OracleID.DM)
+                            str = "Looks to the Moon";
+                        else if (id == MoreSlugcatsEnums.OracleID.ST)
+                            str = "Sliver of Straw";
+                    }
+                    labels.Add(new(font, string.Join(Environment.NewLine, str.Split(' '))));
+
+                    // Arm
+                    if (oracleGraf.oracle.arm != null)
+                    {
+                        for (int i = 0; i < oracleGraf.oracle.arm.joints.Length; i++)
+                        {
+                            labels.Add(new(font, "Joint"));
+                            labels.Add(new(font, "Arm"));
+                        }
                     }
 
-                    // Iterators have 4 arm segments
-                    return [new(font, str), new(font, "Arm"), new(font, "Arm"), new(font, "Arm"), new(font, "Arm")];
+                    // Umbilical cord
+                    if (oracleGraf.umbCord != null)
+                    {
+                        foreach (char letter in "UmbilicalCord".ToCharArray())
+                        {
+                            labels.Add(new(font, letter.ToString()));
+                        }
+                    }
+
+                    return [..labels];
                 }
                 else if (module.drawableObject is JellyFish)
                 {

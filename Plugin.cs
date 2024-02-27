@@ -74,10 +74,7 @@ namespace WordWorld
         private static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
         {
             orig(self);
-            if (self.devToolsActive && self.IsArenaSession && Input.GetKeyDown(KeyCode.Backslash))
-            {
-                ShowSprites = !ShowSprites;
-            }
+            ShowSprites = self.devToolsActive;
         }
 
         private static void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
@@ -422,6 +419,22 @@ namespace WordWorld
                         // Things that are not Creatures
                         case OracleGraphics oracleGraf:
                             {
+                                labels[0].color = self.sprites[oracleGraf.HeadSprite].color;
+                                labels[0].scale = 1.25f;
+                                
+                                // Arm
+                                int armStop = (oracleGraf.umbCord != null) ? labels.Length - "UmbilicalCord".Length : labels.Length;
+                                for (int i = 1; i < armStop; i++)
+                                {
+                                    labels[i].color = i % 2 == 0 ? oracleGraf.GenericJointBaseColor() : oracleGraf.GenericJointHighLightColor();
+                                }
+
+                                // Umbilical
+                                for (int i = armStop; i < labels.Length; i++)
+                                {
+                                    labels[i].color = oracleGraf.GenericJointBaseColor();
+                                    labels[i].scale = 0.75f;
+                                }
                                 break;
                             }
                         case VoidSpawnGraphics voidSpawnGraphics:
@@ -815,9 +828,13 @@ namespace WordWorld
                             }
                         case OverseerGraphics overseerGraf:
                             {
-                                labels[0].SetPosition(AvgVectors(overseerGraf.DrawPosOfSegment(0f, timeStacker), overseerGraf.DrawPosOfSegment(1f, timeStacker)) - camPos);
-                                labels[0].rotation = AngleBtwn(overseerGraf.DrawPosOfSegment(0f, timeStacker), overseerGraf.DrawPosOfSegment(1f, timeStacker)) + 90f;
-                                labels[0].scale = (overseerGraf.DrawPosOfSegment(0f, timeStacker) - overseerGraf.DrawPosOfSegment(1f, timeStacker)).magnitude / TextWidth(labels[0].text);
+                                labels[0].isVisible = overseerGraf.overseer.room != null;
+                                if (overseerGraf.overseer.room != null)
+                                {
+                                    labels[0].SetPosition(AvgVectors(overseerGraf.DrawPosOfSegment(0f, timeStacker), overseerGraf.DrawPosOfSegment(1f, timeStacker)) - camPos);
+                                    labels[0].rotation = AngleBtwn(overseerGraf.DrawPosOfSegment(0f, timeStacker), overseerGraf.DrawPosOfSegment(1f, timeStacker)) + 90f;
+                                    labels[0].scale = (overseerGraf.DrawPosOfSegment(0f, timeStacker) - overseerGraf.DrawPosOfSegment(1f, timeStacker)).magnitude / TextWidth(labels[0].text);
+                                }
                                 /*for (int i = 0; i < labels.Length; i++)
                                 {
                                     labels[i].SetPosition(overseerGraf.DrawPosOfSegment((float)i / labels.Length, timeStacker) - camPos);
@@ -883,7 +900,7 @@ namespace WordWorld
                         case SnailGraphics snailGraf:
                             {
                                 var words = CWTs.pascalRegex.Split(snailGraf.snail.abstractCreature.creatureTemplate.type.value).Where(x => x.Length > 0).ToArray();
-                                var angle = AngleBtwnChunks(snailGraf.snail.bodyChunks[1], snailGraf.snail.bodyChunks[0], timeStacker); // + 90f; // readd +90f for head to end
+                                var angle = AngleBtwnChunks(snailGraf.snail.bodyChunks[0], snailGraf.snail.bodyChunks[1], timeStacker); // + 90f; // readd +90f for head to end
                                 var snailPos = GetPos(snailGraf.snail.bodyChunks[1], timeStacker);
                                 int k = 0;
                                 for (int i = 0; i < words.Length; i++)
@@ -1018,6 +1035,56 @@ namespace WordWorld
                         // Things that are not Creatures
                         case OracleGraphics oracleGraf:
                             {
+                                // Body
+                                //labels[0].SetPosition(AvgBodyChunkPos(oracleGraf.oracle.bodyChunks[0], oracleGraf.oracle.bodyChunks[1], timeStacker) - camPos);
+                                labels[0].SetPosition(self.sprites[oracleGraf.HeadSprite].GetPosition());
+                                labels[0].rotation = AngleBtwnChunks(oracleGraf.oracle.bodyChunks[1], oracleGraf.oracle.bodyChunks[0], timeStacker);
+
+                                // Arm stuff
+                                int armStop = (oracleGraf.umbCord != null || oracleGraf.discUmbCord != null) ? labels.Length - "UmbilicalCord".Length : labels.Length;
+                                for (int i = 1; i < armStop; i++)
+                                {
+                                    bool isArm = i % 2 == 0;
+                                    var arm = oracleGraf.oracle.arm.joints[(i - 1) / 2];
+                                    var armPos = Vector2.Lerp(arm.lastPos, arm.pos, timeStacker);
+                                    if (isArm)
+                                    {
+                                        Vector2 armNextPos = arm.next != null ? Vector2.Lerp(arm.next.lastPos, arm.next.pos, timeStacker) : GetPos(oracleGraf.oracle.bodyChunks[1], timeStacker);
+                                        labels[i].SetPosition(AvgVectors(armPos, armNextPos) - camPos);
+                                        labels[i].rotation = AngleBtwn(armPos, armNextPos);
+                                    }
+                                    else
+                                    {
+                                        labels[i].SetPosition(armPos - camPos);
+                                    }
+                                }
+
+                                // Umbilical stuff
+                                if (oracleGraf.umbCord != null)
+                                {
+                                    var cord = oracleGraf.umbCord.coord;
+                                    for (int i = armStop; i < labels.Length; i++)
+                                    {
+                                        // adds a padding of one space around it
+                                        var index = Custom.LerpMap(i, armStop - 1, labels.Length, 0, cord.GetLength(0));
+                                        var prevPos = Vector2.Lerp(cord[Mathf.FloorToInt(index), 1], cord[Mathf.FloorToInt(index), 0], timeStacker);
+                                        var nextPos = Vector2.Lerp(cord[Mathf.CeilToInt(index), 1], cord[Mathf.CeilToInt(index), 0], timeStacker);
+                                        var pos = Vector2.Lerp(prevPos, nextPos, index % 1f);
+                                        var rot = AngleBtwn(prevPos, nextPos) + 90f;
+                                        
+                                        labels[i].SetPosition(pos - camPos);
+                                        labels[i].rotation = rot;
+                                    }
+                                }
+
+                                // Show halo
+                                if (oracleGraf.halo != null)
+                                {
+                                    for (int i = oracleGraf.halo.firstSprite; i < oracleGraf.halo.firstSprite + oracleGraf.halo.totalSprites; i++)
+                                    {
+                                        self.sprites[i].isVisible = true;
+                                    }
+                                }
                                 break;
                             }
                         case VoidSpawnGraphics voidSpawnGraphics:
