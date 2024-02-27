@@ -435,6 +435,27 @@ namespace WordWorld
                                 break;
                             }
 
+                        case EggBugEgg eggBugEgg:
+                            {
+                                break;
+                            }
+                        case FireEgg fireEgg:
+                            {
+                                break;
+                            }
+                        case Ghost echo:
+                            {
+                                break;
+                            }
+                        case OracleSwarmer neuron:
+                            {
+                                break;
+                            }
+                        case MoreSlugcats.VultureMaskGraphics maskGraf:
+                            {
+                                break;
+                            }
+
                         // Default cases
                         case GraphicsModule module:
                             {
@@ -974,6 +995,27 @@ namespace WordWorld
                                 break;
                             }
                         case BigJellyFish bigJelly:
+                            {
+                                break;
+                            }
+
+                        case EggBugEgg eggBugEgg:
+                            {
+                                break;
+                            }
+                        case FireEgg fireEgg:
+                            {
+                                break;
+                            }
+                        case Ghost echo:
+                            {
+                                break;
+                            }
+                        case OracleSwarmer neuron:
+                            {
+                                break;
+                            }
+                        case MoreSlugcats.VultureMaskGraphics maskGraf:
                             {
                                 break;
                             }

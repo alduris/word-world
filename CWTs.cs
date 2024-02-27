@@ -259,6 +259,22 @@ namespace WordWorld
                 {
                     return [new(font, "Big Jellyfish")];
                 }
+                else if (module.drawableObject is EggBugEgg || module.drawableObject is FireEgg)
+                {
+                    return [new(font, "Egg")];
+                }
+                else if (module.drawableObject is Ghost)
+                {
+                    return [new(font, "Echo")];
+                }
+                else if (module.drawableObject is OracleSwarmer)
+                {
+                    return [new(font, "Neuron")];
+                }
+                else if (ModManager.MSC && module.drawableObject is VultureMaskGraphics)
+                {
+                    return [new(font, "Mask")];
+                }
                 else
                 {
                     return null;
