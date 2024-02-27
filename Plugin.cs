@@ -375,6 +375,8 @@ namespace WordWorld
                             }
                         case TubeWormGraphics wormGraf:
                             {
+                                labels[0].scale = (wormGraf.worm.bodyChunks[0].rad + wormGraf.worm.bodyChunks[1].rad + wormGraf.worm.bodyChunkConnections[0].distance) * 2f / TextWidth(labels[0].text);
+                                labels[0].color = wormGraf.color;
                                 break;
                             }
                         case VultureGraphics vultureGraf:
@@ -413,6 +415,7 @@ namespace WordWorld
                             }
                         case VultureGrubGraphics grubGraf:
                             {
+                                labels[0].scale = grubGraf.worm.bodyChunks.Sum(x => x.rad) * 3f / TextWidth(labels[0].text);
                                 break;
                             }
 
@@ -672,7 +675,7 @@ namespace WordWorld
                                     labels[i + 1].x = eggSprite.x;
                                     labels[i + 1].y = eggSprite.y;
                                     labels[i + 1].rotation = eggSprite.rotation;
-                                    if (eggBugGraf.bug.FireBug && i < eggBugGraf.bug.eggsLeft) labels[i + 1].isVisible = false;
+                                    if (eggBugGraf.bug.FireBug && i >= eggBugGraf.bug.eggsLeft) labels[i + 1].isVisible = false;
                                 }
                                 break;
                             }
@@ -938,6 +941,8 @@ namespace WordWorld
                             }
                         case TubeWormGraphics wormGraf:
                             {
+                                labels[0].SetPosition(AvgBodyChunkPos(wormGraf.worm.bodyChunks[0], wormGraf.worm.bodyChunks[1], timeStacker) - camPos);
+                                labels[0].rotation = FixRotation(AngleBtwnChunks(wormGraf.worm.bodyChunks[0], wormGraf.worm.bodyChunks[1], timeStacker)) - 90f;
                                 break;
                             }
                         case VultureGraphics vultureGraf:
@@ -1001,8 +1006,14 @@ namespace WordWorld
                             }
                         case VultureGrubGraphics grubGraf:
                             {
+                                labels[0].SetPosition(GetPos(grubGraf.worm.bodyChunks[0], timeStacker) - camPos);
+                                labels[0].rotation = FixRotation(AngleBtwnChunks(grubGraf.worm.bodyChunks[1], grubGraf.worm.bodyChunks[2], timeStacker)) - 90f;
+                                labels[0].color = self.sprites[grubGraf.MeshSprite].color;
+
+                                // Show laser sprite
+                                self.sprites[grubGraf.LaserSprite].isVisible = Mathf.Lerp(grubGraf.lastLaserActive, grubGraf.laserActive, timeStacker) > 0f;
                                 break;
-                            } // * (?)
+                            }
 
                         // Things that are not Creatures
                         case OracleGraphics oracleGraf:
