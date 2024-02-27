@@ -367,6 +367,10 @@ namespace WordWorld
                             }
                         case TentaclePlantGraphics kelpGraf:
                             {
+                                foreach (var label in labels)
+                                {
+                                    label.scale = 1.25f;
+                                }
                                 break;
                             }
                         case TubeWormGraphics wormGraf:
@@ -894,6 +898,16 @@ namespace WordWorld
                             }
                         case TentaclePlantGraphics kelpGraf:
                             {
+                                for (int i = 0; i < labels.Length; i++)
+                                {
+                                    // Calculate position (we don't care about rotation lol)
+                                    labels[i].SetPosition(PointAlongRope(i, labels.Length, kelpGraf.ropeGraphic, timeStacker) - camPos);
+
+                                    // Calculate color
+                                    float colorIndex = Custom.LerpMap(i, 0, labels.Length - 1, 0, kelpGraf.danglers.Length - 1);
+                                    Color color = Color.Lerp(self.sprites[Mathf.FloorToInt(colorIndex)].color, self.sprites[Mathf.CeilToInt(colorIndex)].color, colorIndex % 1f);
+                                    labels[i].color = UndoColorLerp(color, rCam.currentPalette.blackColor, rCam.room.Darkness(kelpGraf.plant.rootPos));
+                                }
                                 break;
                             }
                         case TubeWormGraphics wormGraf:
