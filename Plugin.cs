@@ -99,7 +99,7 @@ namespace WordWorld
                 if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs))
                 {
                     // Deal with API stuff
-                    funcs.Item2.Invoke(obj, labels);
+                    funcs.StyleLabels.Invoke(obj, labels);
                 }
                 else
                 {
@@ -379,13 +379,13 @@ namespace WordWorld
                             }
                         case VultureGraphics vultureGraf:
                             {
-                                // Labels: 0 -> body, 1 -> mask, [2,2+len(tentacles)*4] -> wings, the rest -> tusks (may not be present)
+                                // Labels: 0 -> body, 1 -> head, [2,2+len(tentacles)*4] -> wings, the rest -> tusks (may not be present)
 
                                 var tentacles = vultureGraf.vulture.tentacles; // vulture wings
                                 labels[0].scale = vultureGraf.vulture.bodyChunks[0].rad * 4f / FontSize; // 4f because 2 chunks and 2*radius=diameter
                                 labels[0].color = self.sprites[vultureGraf.BodySprite].color;
                                 labels[1].scale = vultureGraf.vulture.bodyChunks[4].rad * 4f / FontSize;
-                                labels[1].color = self.sprites[vultureGraf.MaskSprite].color;
+                                labels[1].color = self.sprites[vultureGraf.EyesSprite].color;
 
                                 // Vulture wings
                                 for (int i = 0; i < tentacles.Length; i++)
@@ -448,10 +448,6 @@ namespace WordWorld
                                 break;
                             }
                         case OracleSwarmer neuron:
-                            {
-                                break;
-                            }
-                        case MoreSlugcats.VultureMaskGraphics maskGraf:
                             {
                                 break;
                             }
@@ -561,7 +557,7 @@ namespace WordWorld
                 if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs))
                 {
                     // Deal with API stuff
-                    funcs.Item3.Invoke(obj, labels, self, timeStacker, camPos);
+                    funcs.DrawLabels.Invoke(obj, labels, self, timeStacker, camPos);
                 }
                 else
                 {
@@ -870,6 +866,15 @@ namespace WordWorld
                                 labels[1].SetPosition(GetPos(scavGraf.scavenger.bodyChunks[2], timeStacker) - camPos);
                                 labels[1].rotation = FixRotation(AngleBtwn(GetPos(scavGraf.scavenger.bodyChunks[2], timeStacker), scavGraf.lookPoint)) - 90f;
                                 labels[1].scale = scavGraf.scavenger.bodyChunks[2].rad * Mathf.Lerp(4f, 8f, Mathf.Lerp(scavGraf.lastEyesPop, scavGraf.eyesPop, timeStacker)) / TextWidth("Head");
+
+                                // Reenable mask (elites/chieftan)
+                                if (scavGraf.maskGfx != null)
+                                {
+                                    for (int i = scavGraf.MaskSprite; i < scavGraf.MaskSprite + scavGraf.maskGfx.TotalSprites; i++)
+                                    {
+                                        self.sprites[i].isVisible = true;
+                                    }
+                                }
                                 break;
                             }
                         case SnailGraphics snailGraf:
@@ -911,7 +916,7 @@ namespace WordWorld
                                 labels[0].rotation = self.sprites[guardGraf.HeadSprite].rotation - 180f;
                                 labels[0].color = self.sprites[guardGraf.EyeSprite(1)].color;
 
-                                for (int i = guardGraf.FirstHaloSprite; i < guardGraf.halo.totalSprites; i++)
+                                for (int i = guardGraf.FirstHaloSprite; i < guardGraf.FirstHaloSprite + guardGraf.halo.totalSprites; i++)
                                 {
                                     self.sprites[i].isVisible = true;
                                 }
@@ -943,12 +948,20 @@ namespace WordWorld
 
                                 // Body sprite
                                 labels[0].SetPosition(GetPos(chunks[0], timeStacker) - camPos);
-                                labels[0].rotation = AngleBtwnChunks(chunks[1], chunks[3], timeStacker);
+                                // labels[0].rotation = AngleBtwnChunks(chunks[1], chunks[3], timeStacker);
 
                                 // Mask sprite
                                 labels[1].SetPosition(chunks[4].pos - camPos);
                                 labels[1].rotation = self.sprites[vultureGraf.HeadSprite].rotation;
-                                labels[1].isVisible = (vultureGraf.vulture.State as Vulture.VultureState).mask;
+                                //labels[1].isVisible = (vultureGraf.vulture.State as Vulture.VultureState).mask;
+                                if ((vultureGraf.vulture.State as Vulture.VultureState).mask)
+                                {
+                                    self.sprites[vultureGraf.MaskSprite].isVisible = true;
+                                    if (vultureGraf.IsKing)
+                                    {
+                                        self.sprites[vultureGraf.MaskArrowSprite].isVisible = true;
+                                    }
+                                }
 
                                 // Vulture wings
                                 int k = 0;
@@ -966,12 +979,23 @@ namespace WordWorld
                                 // Tusks
                                 if (vultureGraf.vulture.kingTusks != null)
                                 {
+                                    var tusks = vultureGraf.vulture.kingTusks;
+
                                     int offset = 2 + tentacles.Length * 4;
                                     for (int i = 0; i < vultureGraf.tusks.Length; i++)
                                     {
-                                        labels[i + offset].SetPosition(vultureGraf.tusks[i].pos - camPos);
-                                        labels[i + offset].rotation = vultureGraf.tuskRotations[i] + (i % 2 == 0 ? -90f : 90f);
+                                        labels[i + offset].SetPosition(AvgVectors(tusks.tusks[i].chunkPoints[0,0], tusks.tusks[i].chunkPoints[1,0]) - camPos);
+                                        labels[i + offset].rotation = AngleBtwn(tusks.tusks[i].chunkPoints[0, 0], tusks.tusks[i].chunkPoints[1, 0]) + 90f;
+                                        //labels[i + offset].SetPosition(vultureGraf.tusks[i].pos - camPos);
+                                        //labels[i + offset].rotation = vultureGraf.tuskRotations[i] + (i % 2 == 0 ? -90f : 90f);
+                                        self.sprites[tusks.tusks[i].LaserSprite(vultureGraf)].isVisible = true;
                                     }
+                                }
+
+                                // Miros laser
+                                if (vultureGraf.IsMiros)
+                                {
+                                    self.sprites[vultureGraf.LaserSprite()].isVisible = Mathf.Lerp(vultureGraf.lastLaserActive, vultureGraf.laserActive, timeStacker) > 0f;
                                 }
                                 break;
                             }
@@ -1012,10 +1036,6 @@ namespace WordWorld
                                 break;
                             }
                         case OracleSwarmer neuron:
-                            {
-                                break;
-                            }
-                        case MoreSlugcats.VultureMaskGraphics maskGraf:
                             {
                                 break;
                             }

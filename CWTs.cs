@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using DevInterface;
 using MoreSlugcats;
 using RWCustom;
 using UnityEngine;
@@ -25,7 +24,7 @@ namespace WordWorld
                 // Test API stuff first
                 if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs))
                 {
-                    var strs = funcs.Item1.Invoke(self.drawableObject);
+                    var strs = funcs.CreateLabels.Invoke(self.drawableObject);
                     return strs.Select(x => new FLabel(font, x)).ToArray();
                 }
 
@@ -39,7 +38,7 @@ namespace WordWorld
                         // Vultures get extra sprites
                         List<FLabel> list = [
                             new(font, pascalRegex.Replace(type.value, Environment.NewLine)),
-                            new(font, "Mask")
+                            new(font, "Head")
                         ];
                         for (int i = 0; i < vultureGraf.vulture.tentacles.Length; i++)
                         {
@@ -271,10 +270,10 @@ namespace WordWorld
                 {
                     return [new(font, "Neuron")];
                 }
-                else if (ModManager.MSC && module.drawableObject is VultureMaskGraphics)
+                /*else if (module.drawableObject is VultureMask)
                 {
                     return [new(font, "Mask")];
-                }
+                }*/
                 else
                 {
                     return null;
