@@ -164,7 +164,6 @@ namespace WordWorld
 
                                 for (int i = 0; i < tentacles.Length; i++)
                                 {
-                                    // len("Tentacle") = 8
                                     var tentacle = tentacles[i];
                                     int length = (int)(tentacle.idealLength / 20f);
                                     Color tipColor = ClownLongLegs ? Custom.HSL2RGB(Random.value, 1f, 0.625f) : daddyGraf.daddy.eyeColor;
@@ -327,12 +326,31 @@ namespace WordWorld
                             }
                         case ScavengerGraphics scavGraf:
                             {
-                                labels[0].scale = scavGraf.scavenger.bodyChunks[0].rad * 3f / TextWidth(labels[0].text);
+                                labels[0].scale = (scavGraf.scavenger.bodyChunks[0].rad + scavGraf.scavenger.bodyChunks[1].rad) * 3f / TextWidth(labels[0].text);
                                 labels[0].color = scavGraf.bodyColor.rgb;
+                                labels[1].color = scavGraf.eyeColor.rgb;
                                 break;
                             }
                         case SnailGraphics snailGraf:
                             {
+                                var snailWidth = snailGraf.snail.bodyChunks.Sum(x => x.rad) + snailGraf.snail.bodyChunkConnections.Sum(x => x.distance);
+                                var words = CWTs.pascalRegex.Split(snailGraf.snail.abstractCreature.creatureTemplate.type.value).Where(x => x.Length > 0).ToArray();
+                                var maxWidth = words.Max(TextWidth);
+                                var fontSize = snailWidth * 2f / maxWidth;
+                                int j = 0;
+                                foreach (var word in words)
+                                {
+                                    if (word.Length == 0) continue;
+                                    var thisWidth = TextWidth(word);
+                                    var invlerpMax = thisWidth - TextWidth(word[word.Length - 1].ToString());
+                                    for (int i = 0; i < word.Length; i++, j++)
+                                    {
+                                        var blendAmt = Mathf.InverseLerp(0f, invlerpMax, (i == 0 ? 0f : TextWidth(word.Substring(0, i))) + (maxWidth - thisWidth));
+                                        var colorBlend = Color.Lerp(snailGraf.snail.shellColor[0], snailGraf.snail.shellColor[1], blendAmt);
+                                        labels[j].scale = fontSize;
+                                        labels[j].color = colorBlend;
+                                    }
+                                }
                                 break;
                             }
                         case SpiderGraphics spiderGraf:
@@ -818,12 +836,36 @@ namespace WordWorld
                             }
                         case ScavengerGraphics scavGraf:
                             {
+                                // Body chunk guide: 0 -> body, 1 -> hips, 2 -> head
                                 labels[0].SetPosition(GetPos(scavGraf.scavenger.bodyChunks[0], timeStacker) - camPos);
-                                labels[0].rotation = self.sprites[scavGraf.ChestSprite].rotation;
+                                labels[0].rotation = AngleBtwnChunks(scavGraf.scavenger.bodyChunks[1], scavGraf.scavenger.bodyChunks[0], timeStacker);
+
+                                labels[1].SetPosition(GetPos(scavGraf.scavenger.bodyChunks[2], timeStacker) - camPos);
+                                labels[1].rotation = FixRotation(AngleBtwn(GetPos(scavGraf.scavenger.bodyChunks[2], timeStacker), scavGraf.lookPoint)) - 90f;
+                                labels[1].scale = scavGraf.scavenger.bodyChunks[2].rad * Mathf.Lerp(4f, 8f, Mathf.Lerp(scavGraf.lastEyesPop, scavGraf.eyesPop, timeStacker)) / TextWidth("Head");
                                 break;
                             }
                         case SnailGraphics snailGraf:
                             {
+                                var words = CWTs.pascalRegex.Split(snailGraf.snail.abstractCreature.creatureTemplate.type.value).Where(x => x.Length > 0).ToArray();
+                                var angle = AngleBtwnChunks(snailGraf.snail.bodyChunks[1], snailGraf.snail.bodyChunks[0], timeStacker); // + 90f; // readd +90f for head to end
+                                var snailPos = GetPos(snailGraf.snail.bodyChunks[1], timeStacker);
+                                int k = 0;
+                                for (int i = 0; i < words.Length; i++)
+                                {
+                                    // Negative because positive = up and we want later words to be below if custom creature uses Snail as base
+                                    var yPos = -FontSize * (i - (words.Length - 1f) / 2f);
+                                    for (int j = 0; j < words[i].Length; j++, k++)
+                                    {
+                                        var xPos = (TextWidth(words[i].Substring(0, j)) - TextWidth(words[i]) / 2f + TextWidth(words[i][j].ToString())) * labels[k].scale;
+                                        var angleOff = Mathf.Atan2(yPos, xPos);
+                                        var dist = Mathf.Sqrt(xPos * xPos + yPos * yPos);
+
+                                        var pos = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad + angleOff), -Mathf.Sin(angle * Mathf.Deg2Rad + angleOff)) * dist + snailPos - camPos;
+                                        labels[k].SetPosition(pos);
+                                        labels[k].rotation = angle;
+                                    }
+                                }
                                 break;
                             }
                         case SpiderGraphics spiderGraf:

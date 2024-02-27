@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using DevInterface;
 using MoreSlugcats;
 using RWCustom;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace WordWorld
     internal static class CWTs
     {
         // https://stackoverflow.com/questions/3216085/split-a-pascalcase-string-into-separate-words
-        private static readonly Regex pascalRegex = new(@"(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
+        internal static readonly Regex pascalRegex = new(@"(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
         
         private static readonly ConditionalWeakTable<RoomCamera.SpriteLeaser, FLabel[]> graphicsCWT = new();
         public static FLabel[] GetLabels(this RoomCamera.SpriteLeaser module) => graphicsCWT.GetValue(module, self => {
@@ -176,12 +177,26 @@ namespace WordWorld
 
                         return [.. (type.value.Substring(0, cut) + "Noot").ToCharArray().Select(c => new FLabel(font, c.ToString()))];
                     }
+                    else if (self.drawableObject is ScavengerGraphics)
+                    {
+                        return [new(font, pascalRegex.Replace(type.value, Environment.NewLine)), new(font, "Head")];
+                    }
+                    else if (self.drawableObject is SnailGraphics)
+                    {
+                        var list = new List<FLabel>();
+                        foreach (var word in pascalRegex.Split(type.value).Where(x => x.Length > 0))
+                        {
+                            for (int i = 0; i < word.Length; i++)
+                            {
+                                list.Add(new(font, word[i].ToString()));
+                            }
+                        }
+                        return [.. list];
+                    }
                     else if (
-                        type == CreatureTemplate.Type.PoleMimic ||
-                        type == CreatureTemplate.Type.TentaclePlant ||
-                        type == CreatureTemplate.Type.GarbageWorm ||
-                        // type == CreatureTemplate.Type.Overseer ||
-                        type == CreatureTemplate.Type.Snail
+                        self.drawableObject is PoleMimicGraphics ||
+                        self.drawableObject is TentaclePlantGraphics ||
+                        self.drawableObject is GarbageWormGraphics
                     )
                     {
                         // Long bendy creature; create many FLabels for individual chars
