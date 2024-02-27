@@ -361,6 +361,8 @@ namespace WordWorld
                             }
                         case TempleGuardGraphics guardGraf:
                             {
+                                labels[0].scale = self.sprites[guardGraf.HeadSprite].element.sourcePixelSize.x / TextWidth(labels[0].text);
+                                labels[0].color = RainWorld.SaturatedGold;
                                 break;
                             }
                         case TentaclePlantGraphics kelpGraf:
@@ -880,6 +882,14 @@ namespace WordWorld
                             }
                         case TempleGuardGraphics guardGraf:
                             {
+                                labels[0].SetPosition(self.sprites[guardGraf.HeadSprite].GetPosition());
+                                labels[0].rotation = self.sprites[guardGraf.HeadSprite].rotation - 180f;
+                                labels[0].color = self.sprites[guardGraf.EyeSprite(1)].color;
+
+                                for (int i = guardGraf.FirstHaloSprite; i < guardGraf.halo.totalSprites; i++)
+                                {
+                                    self.sprites[i].isVisible = true;
+                                }
                                 break;
                             }
                         case TentaclePlantGraphics kelpGraf:

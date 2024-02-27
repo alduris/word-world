@@ -24,12 +24,9 @@
       <RemovePlugins Include="./output/plugins/*.dll" />
       <RemovePlugins Include="./output/plugins/*.pdb" />
     </ItemGroup>
-    <ItemGroup>
-      <CopyPlugins Include="$(TargetPath)" />
-    </ItemGroup>
         
     <Delete Files="@(RemovePlugins)" />
-    <Copy SourceFiles="@(CopyPlugins)" DestinationFolder="./output/plugins/" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="./output/plugins/" />
   </Target>
 
 </Project>
