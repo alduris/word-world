@@ -48,7 +48,7 @@ namespace WordWorld
         /// </summary>
         /// <param name="id">The id of the iterator</param>
         /// <param name="name">The name of the iterator</param>
-        public static void RegisterIterator(Oracle.OracleID id, string name)
+        public static void RegisterIteratorName(Oracle.OracleID id, string name)
         {
             RegisteredIterators.Add(id, name);
         }
@@ -58,7 +58,7 @@ namespace WordWorld
         /// </summary>
         /// <param name="id">The iterator id</param>
         /// <returns>If it was found and successfully removed</returns>
-        public static bool UnregisterIterator(Oracle.OracleID id)
+        public static bool UnregisterIteratorName(Oracle.OracleID id)
         {
             return RegisteredIterators.Remove(id);
         }

@@ -22,7 +22,7 @@ namespace WordWorld
                 var font = Custom.GetFont();
 
                 // Test API stuff first
-                if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs))
+                if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs) && funcs.CreateLabels != null)
                 {
                     var strs = funcs.CreateLabels.Invoke(self.drawableObject);
                     return strs.Select(x => new FLabel(font, x)).ToArray();

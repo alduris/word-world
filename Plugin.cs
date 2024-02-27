@@ -93,7 +93,7 @@ namespace WordWorld
 
             try
             {
-                if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs))
+                if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs) && funcs.StyleLabels != null)
                 {
                     // Deal with API stuff
                     funcs.StyleLabels.Invoke(obj, labels);
@@ -570,7 +570,7 @@ namespace WordWorld
 
             try
             {
-                if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs))
+                if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs) && funcs.DrawLabels != null)
                 {
                     // Deal with API stuff
                     funcs.DrawLabels.Invoke(obj, labels, self, timeStacker, camPos);
