@@ -319,6 +319,10 @@ namespace WordWorld
                 {
                     return [new(font, "Egg")];
                 }
+                else if (module.drawableObject is FlareBomb)
+                {
+                    return [new(font, "F")];
+                }
                 else if (module.drawableObject is GlowWeed)
                 {
                     return [new(font, $"Glow{Environment.NewLine}Weed")];
@@ -346,6 +350,10 @@ namespace WordWorld
                 else if (module.drawableObject is ScavengerBomb || module.drawableObject is Bullet)
                 {
                     return [new(font, "B")];
+                }
+                else if (module.drawableObject is SingularityBomb)
+                {
+                    return [new(font, "S")];
                 }
                 else if (module.drawableObject is SlimeMold slime)
                 {

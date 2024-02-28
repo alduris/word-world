@@ -103,6 +103,7 @@ namespace WordWorld
                     // Built-in stuff
                     switch (obj)
                     {
+                        // Creatures
                         case BigEelGraphics bigEelGraf:
                             {
                                 var scale = bigEelGraf.eel.bodyChunks.Max(c => c.rad) * 2.5f / FontSize;
@@ -416,7 +417,7 @@ namespace WordWorld
                                 break;
                             }
 
-                        // Things that are not Creatures
+                        // Graphics modules
                         case OracleGraphics oracleGraf:
                             {
                                 labels[0].color = self.sprites[oracleGraf.HeadSprite].color;
@@ -448,6 +449,7 @@ namespace WordWorld
                                 break;
                             }
 
+                        // Misc I guess
                         case JellyFish jelly:
                             {
                                 labels[0].scale = jelly.bodyChunks[0].rad * 1.5f / FontSize;
@@ -469,7 +471,7 @@ namespace WordWorld
                         case Ghost echo:
                             {
                                 labels[0].color = echo.goldColor;
-                                labels[0].scale = 3f * echo.scale;
+                                labels[0].scale = 5f * echo.scale;
                                 break;
                             }
                         case NSHSwarmer greenNeuron: // why don't you extend OracleSwarmer...
@@ -484,6 +486,7 @@ namespace WordWorld
                                 break;
                             }
 
+                        // Items
                         /*case BubbleGrass grass:
                             {
                                 break;
@@ -510,6 +513,12 @@ namespace WordWorld
                             {
                                 labels[0].scale = fireEgg.firstChunk.rad * 3f / TextWidth(labels[0].text);
                                 labels[0].color = fireEgg.eggColors[1];
+                                break;
+                            }
+                        case FlareBomb flare:
+                            {
+                                labels[0].scale = flare.firstChunk.rad / TextWidth(labels[0].text); // the lack of a multiplier is intentional
+                                labels[0].color = Color.Lerp(flare.color, new(1f, 1f, 1f), 0.9f);
                                 break;
                             }
                         /*case GlowWeed glowWeed:
@@ -548,6 +557,12 @@ namespace WordWorld
                                 labels[0].scale = bomb.firstChunk.rad * 3f / FontSize;
                                 break;
                             }
+                        case SingularityBomb sBomb:
+                            {
+                                labels[0].scale = sBomb.firstChunk.rad * 3f / FontSize;
+                                labels[0].color = Custom.HSL2RGB(0.6638889f, 1f, 0.35f);
+                                break;
+                            }
                         case SlimeMold slime:
                             {
                                 bool isSeed = ModManager.MSC && slime.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed; // why the hell are seeds slime mold
@@ -555,6 +570,8 @@ namespace WordWorld
                                 labels[0].color = isSeed ? self.sprites[0].color : slime.color;
                                 break;
                             }
+
+                        // Room effects
 
                         // Default cases
                         case GraphicsModule module:
@@ -1322,6 +1339,12 @@ namespace WordWorld
                                 labels[0].color = self.sprites[1].color;
                                 break;
                             }
+                        case FlareBomb flare:
+                            {
+                                labels[0].SetPosition(GetPos(flare.firstChunk, timeStacker) - camPos);
+                                self.sprites[2].isVisible = true;
+                                break;
+                            }
                         /*case GlowWeed glowWeed:
                             {
                                 labels[0].SetPosition(GetPos(glowWeed.firstChunk, timeStacker) - camPos);
@@ -1361,6 +1384,11 @@ namespace WordWorld
                                 labels[0].color = self.sprites[0].color;
                                 break;
                             }
+                        /*case SingularityBomb sBomb:
+                            {
+                                labels[0].SetPosition(GetPos(sBomb.firstChunk, timeStacker) - camPos);
+                                break;
+                            }*/
                         case SlimeMold slime:
                             {
                                 bool isSeed = ModManager.MSC && slime.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed;
