@@ -366,7 +366,7 @@ namespace WordWorld
                             {
                                 foreach (var label in labels)
                                 {
-                                    label.scale = 1.25f;
+                                    label.scale = 1.75f;
                                 }
                                 break;
                             }
@@ -1071,8 +1071,8 @@ namespace WordWorld
                                     if (isArm)
                                     {
                                         Vector2 armNextPos = arm.next != null ? Vector2.Lerp(arm.next.lastPos, arm.next.pos, timeStacker) : GetPos(oracleGraf.oracle.bodyChunks[1], timeStacker);
-                                        labels[i].SetPosition(AvgVectors(armPos, armNextPos) - camPos);
-                                        labels[i].rotation = AngleBtwn(armPos, armNextPos);
+                                        // labels[i].SetPosition(AvgVectors(armPos, armNextPos) - camPos);
+                                        labels[i].SetPosition(arm.ElbowPos(timeStacker, armNextPos));
                                     }
                                     else
                                     {
@@ -1115,8 +1115,13 @@ namespace WordWorld
                                 {
                                     labels[i].SetPosition(PointAlongChunks(i, labels.Length, chunks, timeStacker) - camPos);
                                     var index = Custom.LerpMap(i, 0, labels.Length - 1, 0, chunks.Length - 1);
-                                    labels[i].rotation = AngleBtwnChunks(chunks[Mathf.FloorToInt(index)], chunks[Mathf.CeilToInt(index)], timeStacker);
+                                    // labels[i].rotation = AngleBtwnChunks(chunks[Mathf.FloorToInt(index)], chunks[Mathf.CeilToInt(index)], timeStacker);
+
+                                    labels[i].alpha = 1 - spawnGraf.AlphaFromGlowDist(labels[i].GetPosition(), spawnGraf.glowPos);
                                 }
+                                self.sprites[spawnGraf.GlowSprite].isVisible = true;
+                                if (spawnGraf.hasOwnGoldEffect)
+                                    self.sprites[spawnGraf.EffectSprite].isVisible = true;
                                 break;
                             }
 
