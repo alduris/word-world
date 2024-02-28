@@ -678,13 +678,14 @@ namespace WordWorld
                             }
                         case EggBugGraphics eggBugGraf:
                             {
-                                // Labels: 0 -> body, everything else -> eggs
+                                // Body
                                 labels[0].SetPosition(eggBugGraf.bug.bodyChunks[1].pos - camPos);
                                 labels[0].rotation = FixRotation(self.sprites[eggBugGraf.HeadSprite].rotation) + 90f;
+
+                                // Eggs
                                 for (int i = 0; i < 6; i++)
                                 {
-                                    var eggSprite = self.sprites[eggBugGraf.BackEggSprite(i % 2, i / 2, 2)]; // todo: verify part
-                                                                                                             // var egg = eggBugGraf.eggs[i / 2, i % 2];
+                                    var eggSprite = self.sprites[eggBugGraf.BackEggSprite(i % 2, i / 2, 2)];
                                     labels[i + 1].x = eggSprite.x;
                                     labels[i + 1].y = eggSprite.y;
                                     labels[i + 1].rotation = eggSprite.rotation;
@@ -700,11 +701,14 @@ namespace WordWorld
                             }
                         case GarbageWormGraphics gWormGraf:
                             {
+                                // Place letters along body
                                 for (int i = 0; i < labels.Length; i++)
                                 {
                                     labels[i].SetPosition(PointAlongTentacle(labels.Length - i - 1, labels.Length, gWormGraf.worm.tentacle, timeStacker) - camPos);
                                     labels[i].isVisible = gWormGraf.worm.extended > 0f;
                                 }
+
+                                // Set first letter to eye color
                                 labels[0].color = self.sprites[0].color;
                                 break;
                             }
@@ -768,8 +772,12 @@ namespace WordWorld
                         case MoreSlugcats.InspectorGraphics inspGraf:
                             {
                                 var insp = inspGraf.myInspector;
+
+                                // Body
                                 labels[0].SetPosition(GetPos(insp.bodyChunks[0], timeStacker) - camPos);
                                 labels[0].color = insp.bodyColor;
+
+                                // Heads
                                 var heads = insp.heads;
                                 for (int i = 0; i < heads.Length; i++)
                                 {
@@ -822,6 +830,8 @@ namespace WordWorld
                                 {
                                     labels[i].SetPosition(nootGraf.worm.OnBodyPos((float)i / labels.Length, timeStacker) - camPos);
                                     labels[i].rotation = AngleBtwn(Vector2.zero, nootGraf.worm.OnBodyDir((float)i / labels.Length, timeStacker));
+
+                                    // Color = body color if not angry, white if fang out as warning
                                     labels[i].color = Color.Lerp(nootGraf.bodyColor, Color.white, Mathf.Lerp(nootGraf.lastFangOut, nootGraf.fangOut, timeStacker));
                                 }
                                 break;
@@ -829,17 +839,14 @@ namespace WordWorld
                         case OverseerGraphics overseerGraf:
                             {
                                 labels[0].isVisible = overseerGraf.overseer.room != null;
+
+                                // Fixes a crash moving rooms in safari, which was where I discovered it. No clue if it existed in normal gameplay, didn't happen in arena.
                                 if (overseerGraf.overseer.room != null)
                                 {
                                     labels[0].SetPosition(AvgVectors(overseerGraf.DrawPosOfSegment(0f, timeStacker), overseerGraf.DrawPosOfSegment(1f, timeStacker)) - camPos);
                                     labels[0].rotation = AngleBtwn(overseerGraf.DrawPosOfSegment(0f, timeStacker), overseerGraf.DrawPosOfSegment(1f, timeStacker)) + 90f;
                                     labels[0].scale = (overseerGraf.DrawPosOfSegment(0f, timeStacker) - overseerGraf.DrawPosOfSegment(1f, timeStacker)).magnitude / TextWidth(labels[0].text);
                                 }
-                                /*for (int i = 0; i < labels.Length; i++)
-                                {
-                                    labels[i].SetPosition(overseerGraf.DrawPosOfSegment((float)i / labels.Length, timeStacker) - camPos);
-                                    labels[i].scale = overseerGraf.RadOfSegment((float)i / labels.Length, timeStacker) * 4f / FontSize;
-                                }*/
                                 break;
                             }
                         case PlayerGraphics playerGraf:
@@ -899,6 +906,8 @@ namespace WordWorld
                             }
                         case SnailGraphics snailGraf:
                             {
+                                // This one is a bit weird, I wanted the letters to be colored individually as a gradient because snails have two colors.
+                                // So this code basically manually positions and rotates all letters.
                                 var words = CWTs.pascalRegex.Split(snailGraf.snail.abstractCreature.creatureTemplate.type.value).Where(x => x.Length > 0).ToArray();
                                 var angle = AngleBtwnChunks(snailGraf.snail.bodyChunks[0], snailGraf.snail.bodyChunks[1], timeStacker); // + 90f; // readd +90f for head to end
                                 var snailPos = GetPos(snailGraf.snail.bodyChunks[1], timeStacker);
@@ -932,10 +941,12 @@ namespace WordWorld
                             }
                         case TempleGuardGraphics guardGraf:
                             {
+                                // Head, color = eye color
                                 labels[0].SetPosition(self.sprites[guardGraf.HeadSprite].GetPosition());
                                 labels[0].rotation = self.sprites[guardGraf.HeadSprite].rotation - 180f;
                                 labels[0].color = self.sprites[guardGraf.EyeSprite(1)].color;
 
+                                // Re-enable halo
                                 for (int i = guardGraf.FirstHaloSprite; i < guardGraf.FirstHaloSprite + guardGraf.halo.totalSprites; i++)
                                 {
                                     self.sprites[i].isVisible = true;
@@ -949,10 +960,10 @@ namespace WordWorld
                                     // Calculate position (we don't care about rotation lol)
                                     labels[i].SetPosition(PointAlongRope(i, labels.Length, kelpGraf.ropeGraphic, timeStacker) - camPos);
 
-                                    // Calculate color
+                                    // Calculate color since it can vary
                                     float colorIndex = Custom.LerpMap(i, 0, labels.Length - 1, 0, kelpGraf.danglers.Length - 1);
                                     Color color = Color.Lerp(self.sprites[Mathf.FloorToInt(colorIndex)].color, self.sprites[Mathf.CeilToInt(colorIndex)].color, colorIndex % 1f);
-                                    labels[i].color = UndoColorLerp(color, rCam.currentPalette.blackColor, rCam.room.Darkness(kelpGraf.plant.rootPos));
+                                    labels[i].color = color; // UndoColorLerp(color, rCam.currentPalette.blackColor, rCam.room.Darkness(kelpGraf.plant.rootPos));
                                 }
                                 break;
                             }
@@ -970,11 +981,13 @@ namespace WordWorld
 
                                 // Body sprite
                                 labels[0].SetPosition(GetPos(chunks[0], timeStacker) - camPos);
-                                // labels[0].rotation = AngleBtwnChunks(chunks[1], chunks[3], timeStacker);
+                                // labels[0].rotation = AngleBtwnChunks(chunks[1], chunks[3], timeStacker); // doesn't work
 
-                                // Mask sprite
+                                // Head
                                 labels[1].SetPosition(chunks[4].pos - camPos);
                                 labels[1].rotation = self.sprites[vultureGraf.HeadSprite].rotation;
+
+                                // Mask (reenable)
                                 //labels[1].isVisible = (vultureGraf.vulture.State as Vulture.VultureState).mask;
                                 if ((vultureGraf.vulture.State as Vulture.VultureState).mask)
                                 {
@@ -1023,6 +1036,7 @@ namespace WordWorld
                             }
                         case VultureGrubGraphics grubGraf:
                             {
+                                // Body
                                 labels[0].SetPosition(GetPos(grubGraf.worm.bodyChunks[0], timeStacker) - camPos);
                                 labels[0].rotation = FixRotation(AngleBtwnChunks(grubGraf.worm.bodyChunks[1], grubGraf.worm.bodyChunks[2], timeStacker)) - 90f;
                                 labels[0].color = self.sprites[grubGraf.MeshSprite].color;
@@ -1087,7 +1101,7 @@ namespace WordWorld
                                 }
                                 break;
                             }
-                        case VoidSpawnGraphics voidSpawnGraphics:
+                        case VoidSpawnGraphics spawnGraf:
                             {
                                 break;
                             }
