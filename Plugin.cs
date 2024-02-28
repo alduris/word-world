@@ -471,7 +471,7 @@ namespace WordWorld
                         case Ghost echo:
                             {
                                 labels[0].color = echo.goldColor;
-                                labels[0].scale = 5f * echo.scale;
+                                labels[0].scale = 8f * echo.scale;
                                 break;
                             }
                         case NSHSwarmer greenNeuron: // why don't you extend OracleSwarmer...
@@ -539,6 +539,7 @@ namespace WordWorld
                         case LillyPuck lillyPuck:
                             {
                                 labels[0].scale = lillyPuck.firstChunk.rad * 3f / FontSize;
+                                //labels[0].scale = self.sprites[0].element.sourcePixelSize.y / TextWidth(labels[0].text);
                                 labels[0].color = lillyPuck.flowerColor;
                                 break;
                             }
@@ -568,6 +569,23 @@ namespace WordWorld
                                 bool isSeed = ModManager.MSC && slime.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed; // why the hell are seeds slime mold
                                 labels[0].scale = slime.firstChunk.rad * 3f / FontSize * (slime.JellyfishMode ? 2.4f : (slime.big ? 1.3f : 1f));
                                 labels[0].color = isSeed ? self.sprites[0].color : slime.color;
+                                break;
+                            }
+                        case Spear spear:
+                            {
+                                bool explosive = spear is ExplosiveSpear;
+                                labels[0].color = spear.color;
+                                labels[0].scale = self.sprites[spear.bugSpear || explosive ? 1 : 0].element.sourcePixelSize.y  * 0.9f / TextWidth(labels[0].text);
+                                labels[0].scaleY /= 1.75f;
+
+                                if (explosive)
+                                {
+                                    labels[0].color = (spear as ExplosiveSpear).redColor;
+                                }
+                                else if (spear.bugSpear)
+                                {
+                                    labels[0].color = self.sprites[0].color;
+                                }
                                 break;
                             }
 
@@ -1365,12 +1383,13 @@ namespace WordWorld
                         case LillyPuck lillyPuck:
                             {
                                 labels[0].SetPosition(GetPos(lillyPuck.firstChunk, timeStacker) - camPos);
-                                labels[0].rotation = self.sprites[0].rotation;
+                                labels[0].rotation = FixRotation(self.sprites[0].rotation) - 90f;
                                 break;
                             }
                         case MoonCloak cloak:
                             {
                                 labels[0].SetPosition(AvgBodyChunkPos(cloak.bodyChunks[0], cloak.bodyChunks[1], timeStacker) - camPos);
+                                labels[0].rotation = AngleBtwnChunks(cloak.bodyChunks[0], cloak.bodyChunks[1], timeStacker);
                                 break;
                             }
                         /*case Rock rock:
@@ -1398,6 +1417,21 @@ namespace WordWorld
                                 {
                                     self.sprites[slime.LightSprite].isVisible = slime.darkMode > 0f;
                                     self.sprites[slime.BloomSprite].isVisible = slime.darkMode > 0f;
+                                }
+                                break;
+                            }
+                        case Spear spear:
+                            {
+                                labels[0].SetPosition(GetPos(spear.firstChunk, timeStacker) - camPos);
+                                labels[0].rotation = FixRotation(self.sprites[spear.bugSpear || spear is ExplosiveSpear ? 1 : 0].rotation) - 90f;
+
+                                if (spear.IsNeedle)
+                                {
+                                    labels[0].color = self.sprites[0].color;
+                                }
+                                else if (spear is ElectricSpear)
+                                {
+                                    labels[0].color = self.sprites[1].color;
                                 }
                                 break;
                             }

@@ -57,6 +57,11 @@ namespace WordWorld
                     else if (self.drawableObject is CentipedeGraphics centiGraf)
                     {
                         // Thanks several users on RW Main discord for this idea
+                        if (type == CreatureTemplate.Type.SmallCentipede)
+                        {
+                            return "Babypede".ToCharArray().Select(c => new FLabel(font, c.ToString())).ToArray();
+                        }
+
                         int numChunks = centiGraf.centipede.bodyChunks.Length;
                         int nameE = type.value.IndexOf("Centi") + 1;
                         if (nameE == 0) nameE = type.value.IndexOf("pede") + 1;
@@ -124,11 +129,11 @@ namespace WordWorld
                     }
                     else if (self.drawableObject is DeerGraphics)
                     {
-                        return [new(font, "Deer"), new(font, "Antlers")];
+                        return [new(font, pascalRegex.Replace(type.value, Environment.NewLine)), new(font, "Antlers")];
                     }
                     else if (self.drawableObject is MirosBirdGraphics)
                     {
-                        return [new(font, $"Miros{Environment.NewLine}Bird"), new(font, "Eye")];
+                        return [new(font, pascalRegex.Replace(type.value, Environment.NewLine)), new(font, "Eye")];
                     }
                     else if (self.drawableObject is LizardGraphics lizGraf)
                     {
@@ -363,6 +368,10 @@ namespace WordWorld
                         return [new(font, "Seed")];
                     else
                         return [new(font, "Mold")];
+                }
+                else if (module.drawableObject is Spear)
+                {
+                    return [new(font, "Spear")];
                 }
                 /*else if (module.drawableObject is VultureMask)
                 {
