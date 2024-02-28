@@ -285,9 +285,18 @@ namespace WordWorld
                 {
                     return [new(font, $"Jelly{Environment.NewLine}fish")];
                 }
-                else if (ModManager.MSC && module.drawableObject is BigJellyFish)
+                else if (ModManager.MSC && module.drawableObject is BigJellyFish bigJelly)
                 {
-                    return [new(font, "Big Jellyfish")];
+                    List<FLabel> labels = [new(font, "Big Jellyfish"), new(font, "Core")];
+                    for (int i = 0; i < bigJelly.tentacles.Length; i++)
+                    {
+                        foreach (var c in "Tentacle".ToCharArray())
+                        {
+                            labels.Add(new(font, c.ToString()));
+                        }
+                    }
+
+                    return [.. labels];
                 }
                 else if (module.drawableObject is EggBugEgg || module.drawableObject is FireEgg)
                 {

@@ -455,6 +455,15 @@ namespace WordWorld
                             }
                         case BigJellyFish bigJelly:
                             {
+                                foreach (var label in labels)
+                                {
+                                    label.color = bigJelly.color;
+                                }
+                                var chunks = bigJelly.bodyChunks;
+                                //labels[0].scale = (chunks[0].rad + chunks[bigJelly.leftHoodChunk].rad + chunks[bigJelly.rightHoodChunk].rad) * 2f / TextWidth(labels[0].text);
+                                labels[0].scale = (chunks.Sum(x => x.rad) - chunks[bigJelly.CoreChunk].rad) * 2f / TextWidth(labels[0].text);
+                                labels[1].color = bigJelly.coreColor;
+                                labels[1].scale = chunks[bigJelly.CoreChunk].rad * 2f / TextWidth(labels[1].text);
                                 break;
                             }
 
@@ -561,6 +570,13 @@ namespace WordWorld
         }
         private static void SpriteLeaser_Update(On.RoomCamera.SpriteLeaser.orig_Update orig, SpriteLeaser self, float timeStacker, RoomCamera rCam, Vector2 camPos)
         {
+            if (ShowSprites)
+            {
+                foreach (var sprite in self.sprites)
+                {
+                    sprite.isVisible = true;
+                }
+            }
             orig(self, timeStacker, rCam, camPos);
 
             var labels = CWTs.GetLabels(self);
@@ -1134,6 +1150,26 @@ namespace WordWorld
                             }
                         case BigJellyFish bigJelly:
                             {
+                                // Main and core
+                                labels[0].SetPosition(GetPos(bigJelly.mainBodyChunk, timeStacker) - camPos);
+                                labels[1].SetPosition(GetPos(bigJelly.bodyChunks[bigJelly.CoreChunk], timeStacker) - camPos);
+
+                                // Tentacles
+                                for (int i = 0; i < bigJelly.tentacles.Length; i++)
+                                {
+                                    var tentacle = bigJelly.tentacles[i];
+                                    // 8 = "Tentacle".Length
+                                    for (int j = 0; j < 8; j++)
+                                    {
+                                        int k = 2 + i * 8 + j;
+                                        var index = Custom.LerpMap(j, -1, 7, 0, tentacle.GetLength(0) - 1);
+                                        var prevPos = Vector2.Lerp(tentacle[Mathf.FloorToInt(index), 1], tentacle[Mathf.FloorToInt(index), 0], timeStacker);
+                                        var nextPos = Vector2.Lerp(tentacle[Mathf.CeilToInt(index), 1], tentacle[Mathf.CeilToInt(index), 0], timeStacker);
+
+                                        labels[k].SetPosition(Vector2.Lerp(prevPos, nextPos, index % 1) - camPos);
+                                        labels[k].rotation = AngleBtwn(nextPos, prevPos);
+                                    }
+                                }
                                 break;
                             }
 
