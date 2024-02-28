@@ -437,13 +437,20 @@ namespace WordWorld
                                 }
                                 break;
                             }
-                        case VoidSpawnGraphics voidSpawnGraphics:
+                        case VoidSpawnGraphics spawnGraf:
                             {
+                                var scale = spawnGraf.spawn.bodyChunks.Sum(x => x.rad) * 1.75f / TextWidth(string.Join("", labels.Select(x => x.text)));
+                                for (int i = 0; i < labels.Length; i++)
+                                {
+                                    labels[i].scale = scale;
+                                    labels[i].color = RainWorld.SaturatedGold;
+                                }
                                 break;
                             }
 
                         case JellyFish jelly:
                             {
+                                labels[0].scale = jelly.bodyChunks[0].rad * 1.5f / FontSize;
                                 break;
                             }
                         case BigJellyFish bigJelly:
@@ -1103,11 +1110,21 @@ namespace WordWorld
                             }
                         case VoidSpawnGraphics spawnGraf:
                             {
+                                var chunks = spawnGraf.spawn.bodyChunks;
+                                for (int i = 0; i < labels.Length; i++)
+                                {
+                                    labels[i].SetPosition(PointAlongChunks(i, labels.Length, chunks, timeStacker) - camPos);
+                                    var index = Custom.LerpMap(i, 0, labels.Length - 1, 0, chunks.Length - 1);
+                                    labels[i].rotation = AngleBtwnChunks(chunks[Mathf.FloorToInt(index)], chunks[Mathf.CeilToInt(index)], timeStacker);
+                                }
                                 break;
                             }
 
                         case JellyFish jelly:
                             {
+                                labels[0].SetPosition(GetPos(jelly.bodyChunks[0], timeStacker) - camPos);
+                                labels[0].rotation = AngleBtwn(Vector2.zero, jelly.rotation);
+                                labels[0].color = self.sprites[jelly.BodySprite(1)].color;
                                 break;
                             }
                         case BigJellyFish bigJelly:

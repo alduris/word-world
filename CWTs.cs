@@ -277,9 +277,13 @@ namespace WordWorld
 
                     return [..labels];
                 }
+                else if (module.drawableObject is VoidSpawnGraphics)
+                {
+                    return "VoidSpawn".ToCharArray().Select(x => new FLabel(font, x.ToString())).ToArray();
+                }
                 else if (module.drawableObject is JellyFish)
                 {
-                    return [new(font, "Jellyfish")];
+                    return [new(font, $"Jelly{Environment.NewLine}fish")];
                 }
                 else if (ModManager.MSC && module.drawableObject is BigJellyFish)
                 {
