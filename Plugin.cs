@@ -220,7 +220,7 @@ namespace WordWorld
                             }
                         case HazerGraphics hazerGraf:
                             {
-                                labels[0].scale = hazerGraf.bug.mainBodyChunk.rad * 2f / FontSize;
+                                labels[0].scale = hazerGraf.bug.mainBodyChunk.rad * 4f / FontSize;
                                 break;
                             }
                         case JetFishGraphics jetfishGraf:
@@ -486,27 +486,15 @@ namespace WordWorld
                                 break;
                             }
 
-                        // Items
-                        /*case BubbleGrass grass:
-                            {
-                                break;
-                            }
-                        case Bullet bullet:
-                            {
-                                break;
-                            }
-                        case DataPearl pearl:
-                            {
-                                break;
-                            }
-                        case DandelionPeach peach:
-                            {
-                                break;
-                            }*/
+                        // Items and physical objects
                         case EggBugEgg eggBugEgg:
                             {
                                 labels[0].scale = eggBugEgg.firstChunk.rad * 3f / TextWidth(labels[0].text);
                                 labels[0].color = eggBugEgg.eggColors[1];
+                                break;
+                            }
+                        case FirecrackerPlant cherrybomb:
+                            {
                                 break;
                             }
                         case FireEgg fireEgg:
@@ -521,10 +509,6 @@ namespace WordWorld
                                 labels[0].color = Color.Lerp(flare.color, new(1f, 1f, 1f), 0.9f);
                                 break;
                             }
-                        /*case GlowWeed glowWeed:
-                            {
-                                break;
-                            }*/
                         case GooieDuck gooieduck:
                             {
                                 labels[0].color = gooieduck.CoreColor;
@@ -543,16 +527,17 @@ namespace WordWorld
                                 labels[0].color = lillyPuck.flowerColor;
                                 break;
                             }
+                        case LizardSpit spit:
+                            {
+                                labels[0].color = Color.Lerp(self.sprites[spit.DotSprite].color, self.sprites[spit.JaggedSprite].color, 0.4f);
+                                break;
+                            }
                         case MoonCloak cloak:
                             {
                                 labels[0].scale = cloak.firstChunk.rad * 2f / FontSize;
                                 labels[0].color = cloak.Color(0.25f);
                                 break;
                             }
-                        /*case Rock rock:
-                            {
-                                break;
-                            }*/
                         case ScavengerBomb bomb:
                             {
                                 labels[0].scale = bomb.firstChunk.rad * 3f / FontSize;
@@ -576,7 +561,7 @@ namespace WordWorld
                                 bool explosive = spear is ExplosiveSpear;
                                 labels[0].color = spear.color;
                                 labels[0].scale = self.sprites[spear.bugSpear || explosive ? 1 : 0].element.sourcePixelSize.y  * 0.9f / TextWidth(labels[0].text);
-                                labels[0].scaleY /= 1.75f;
+                                labels[0].scaleY /= 2f;
 
                                 if (explosive)
                                 {
@@ -586,6 +571,10 @@ namespace WordWorld
                                 {
                                     labels[0].color = self.sprites[0].color;
                                 }
+                                break;
+                            }
+                        case SporePlant beehive:
+                            {
                                 break;
                             }
 
@@ -629,53 +618,11 @@ namespace WordWorld
                     }
                 }
 
-                // Assign colors and container
-                // NOTE: items with * need to be updated at runtime
-                /*Color colorA = module switch {
-                    BigEelGraphics bigEelGraf => bigEelGraf.eel.iVars.patternColorA.rgb,
-                    BigSpiderGraphics bigSpiderGraf => bigSpiderGraf.yellowCol,
-                    CentipedeGraphics centiGraf => centiGraf.ShellColor, // * (maybe)
-                    CicadaGraphics cicadaGraf => cicadaGraf.shieldColor,
-                    DaddyGraphics daddyGraf => daddyGraf.EffectColor, // * (probably)
-                    DeerGraphics deerGraf => deerGraf.bodyColor,
-                    DropBugGraphics dropBugGraf => dropBugGraf.currSkinColor,
-                    EggBugGraphics eggBugGraf => eggBugGraf.blackColor,
-                    HazerGraphics hazerGraf => self.sprites[hazerGraf.BodySprite].color, // *
-                    LeechGraphics => self.sprites[0].color, // *
-                    LizardGraphics lizGraf => lizGraf.HeadColor(0), // *
-                    MirosBirdGraphics mirosGraf => mirosGraf.EyeColor, // *
-                    MoreSlugcats.InspectorGraphics inspGraf => inspGraf.myInspector.bodyColor, // *
-                    MoreSlugcats.StowawayBugGraphics stowawayGraf => stowawayGraf.bodyColor,
-                    MoreSlugcats.YeekGraphics yeekGraf => yeekGraf.HeadfurColor,
-                    MouseGraphics mouseGraf => mouseGraf.BodyColor, // *
-                    NeedleWormGraphics nootGraf => nootGraf.bodyColor,
-                    OverseerGraphics overseerGraf => overseerGraf.MainColor,
-                    PlayerGraphics playerGraf => playerGraf.player.isNPC ? playerGraf.player.ShortCutColor() : PlayerGraphics.SlugcatColor(playerGraf.CharacterForColor),
-                    PoleMimicGraphics poleMimicGraf => poleMimicGraf.mimicColor,
-                    ScavengerGraphics scavGraf => scavGraf.bodyColor.rgb,
-                    SnailGraphics snailGraf => snailGraf.snail.shellColor[0],
-                    SpiderGraphics spiderGraf => spiderGraf.blackColor,
-                    TempleGuardGraphics => RainWorld.SaturatedGold,
-                    TentaclePlantGraphics kelpGraf => UndoColorLerp(self.sprites[1].color, rCam.currentPalette.blackColor, rCam.room.Darkness(kelpGraf.plant.rootPos)),
-                    TubeWormGraphics wormGraf => wormGraf.color,
-                    VultureGraphics vultureGraf => vultureGraf.ColorA.rgb,
-                    VultureGrubGraphics grubGraf => self.sprites[grubGraf.MeshSprite].color, // * (?)
-                    OracleGraphics oracleGraf => self.sprites[oracleGraf.HeadSprite].color,
-                    FlyGraphics or GarbageWormGraphics or JetFishGraphics => rCam.currentPalette.blackColor,
-                    _ => self.sprites[0].color
-                };
-                Color? colorB = module switch {
-                    BigEelGraphics beg => beg.eel.iVars.patternColorB.rgb,
-                    SnailGraphics snailGraf => snailGraf.snail.shellColor[1],
-                    VultureGraphics vultureGraf => vultureGraf.ColorB.rgb,
-                    OracleGraphics oracleGraf => oracleGraf.GenericJointBaseColor(),
-                    _ => null
-                };*/
+                // Assign container
                 for (int i = 0; i < labels.Length; i++)
                 {
                     var label = labels[i];
                     label.alignment = FLabelAlignment.Center;
-                    // label.color = colorB != null ? Color.LerpUnclamped(colorA, (Color)colorB, (float)i / (labels.Length - 1)) : colorA;
                     (self.sprites[0].container ?? rCam.ReturnFContainer("Midground")).AddChild(label);
                 }
             }
@@ -856,8 +803,8 @@ namespace WordWorld
                         case HazerGraphics hazerGraf:
                             {
                                 FSprite bodySprite = self.sprites[hazerGraf.BodySprite];
-                                labels[0].SetPosition(bodySprite.GetPosition());
-                                labels[0].rotation = FixRotation(bodySprite.rotation);
+                                labels[0].SetPosition(self.sprites[hazerGraf.EyeSprite].GetPosition());
+                                labels[0].rotation = FixRotation(bodySprite.rotation) - 90f;
                                 labels[0].color = bodySprite.color;
                                 break;
                             }
@@ -1324,32 +1271,31 @@ namespace WordWorld
                                 var oxygen = Mathf.Lerp(bubbleWeed.lastOxygen, bubbleWeed.oxygen, timeStacker);
                                 var end = bubbleWeed.stalk.Length - 1;
                                 labels[0].SetPosition(GetPos(bubbleWeed.firstChunk, timeStacker) - camPos);
-                                labels[0].color = Color.Lerp(bubbleWeed.color, bubbleWeed.blackColor, oxygen);
+                                labels[0].color = Color.Lerp(bubbleWeed.blackColor, bubbleWeed.color, oxygen);
                                 labels[0].scale = Vector2.Lerp(bubbleWeed.stalk[end].lastPos - bubbleWeed.stalk[0].lastPos, bubbleWeed.stalk[end].pos - bubbleWeed.stalk[0].pos, timeStacker).magnitude
-                                    / FontSize * Mathf.Lerp(0.75f, 1f, oxygen);
+                                    / FontSize * Mathf.Lerp(0.5f, 0.75f, oxygen);
                                 break;
                             }
-                        /*case Bullet bullet:
+                        case DartMaggot maggot:
                             {
-                                labels[0].SetPosition(GetPos(bullet.firstChunk, timeStacker) - camPos);
+                                labels[0].SetPosition(GetPos(maggot.firstChunk, timeStacker) - camPos);
+                                // this rotation thing doesn't work as intended but oh well /shrug
+                                labels[0].rotation = FixRotation(AngleBtwn(
+                                    Vector2.Lerp(maggot.body[0,1], maggot.body[0,0], timeStacker),
+                                    Vector2.Lerp(maggot.body[maggot.body.GetLength(0)-1,1], maggot.body[maggot.body.GetLength(0)-1, 0], timeStacker))) - 90f;
+                                labels[0].color = maggot.yellow;
                                 break;
-                            }*/
+                            }
                         case DataPearl pearl:
                             {
                                 labels[0].SetPosition(GetPos(pearl.firstChunk, timeStacker) - camPos);
                                 labels[0].color = Color.Lerp(pearl.color, pearl.highlightColor ?? pearl.color, Mathf.Lerp(pearl.lastGlimmer, pearl.glimmer, timeStacker));
                                 break;
                             }
-                        /*case DandelionPeach peach:
+                        case FirecrackerPlant cherrybomb:
                             {
-                                labels[0].SetPosition(GetPos(peach.firstChunk, timeStacker) - camPos);
                                 break;
                             }
-                        case EggBugEgg egg:
-                            {
-                                labels[0].SetPosition(GetPos(egg.firstChunk, timeStacker) - camPos);
-                                break;
-                            }*/
                         case FireEgg fireEgg:
                             {
                                 labels[0].SetPosition(GetPos(fireEgg.firstChunk, timeStacker) - camPos);
@@ -1363,11 +1309,6 @@ namespace WordWorld
                                 self.sprites[2].isVisible = true;
                                 break;
                             }
-                        /*case GlowWeed glowWeed:
-                            {
-                                labels[0].SetPosition(GetPos(glowWeed.firstChunk, timeStacker) - camPos);
-                                break;
-                            }*/
                         case GooieDuck gooieduck:
                             {
                                 labels[0].SetPosition(GetPos(gooieduck.firstChunk, timeStacker) - camPos);
@@ -1386,33 +1327,28 @@ namespace WordWorld
                                 labels[0].rotation = FixRotation(self.sprites[0].rotation) - 90f;
                                 break;
                             }
+                        case LizardSpit spit:
+                            {
+                                labels[0].SetPosition(Vector2.Lerp(spit.lastPos, spit.pos, timeStacker) - camPos);
+                                labels[0].scale = spit.Rad * 4f / FontSize;
+                                break;
+                            }
                         case MoonCloak cloak:
                             {
                                 labels[0].SetPosition(AvgBodyChunkPos(cloak.bodyChunks[0], cloak.bodyChunks[1], timeStacker) - camPos);
                                 labels[0].rotation = AngleBtwnChunks(cloak.bodyChunks[0], cloak.bodyChunks[1], timeStacker);
                                 break;
                             }
-                        /*case Rock rock:
-                            {
-                                labels[0].SetPosition(GetPos(rock.firstChunk, timeStacker) - camPos);
-                                break;
-                            }*/
                         case ScavengerBomb bomb:
                             {
                                 labels[0].SetPosition(GetPos(bomb.firstChunk, timeStacker) - camPos);
                                 labels[0].color = self.sprites[0].color;
                                 break;
                             }
-                        /*case SingularityBomb sBomb:
-                            {
-                                labels[0].SetPosition(GetPos(sBomb.firstChunk, timeStacker) - camPos);
-                                break;
-                            }*/
                         case SlimeMold slime:
                             {
                                 bool isSeed = ModManager.MSC && slime.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed;
                                 labels[0].SetPosition(GetPos(slime.firstChunk, timeStacker) - camPos);
-                                labels[0].rotation = Mathf.Lerp(AngleFrom(slime.lastRotation), AngleFrom(slime.rotation), timeStacker);
                                 if (!isSeed)
                                 {
                                     self.sprites[slime.LightSprite].isVisible = slime.darkMode > 0f;
@@ -1433,6 +1369,10 @@ namespace WordWorld
                                 {
                                     labels[0].color = self.sprites[1].color;
                                 }
+                                break;
+                            }
+                        case SporePlant beehive:
+                            {
                                 break;
                             }
 

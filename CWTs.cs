@@ -312,13 +312,17 @@ namespace WordWorld
                     return [new(font, "N")];
                 }
 
-                else if (module.drawableObject is DataPearl || module.drawableObject is DandelionPeach)
-                {
-                    return [new(font, "P")];
-                }
                 else if (module.drawableObject is BubbleGrass)
                 {
                     return [new(font, $"Bubble{Environment.NewLine}Weed")];
+                }
+                else if (module.drawableObject is DartMaggot)
+                {
+                    return [new(font, "Maggot")];
+                }
+                else if (module.drawableObject is DataPearl || module.drawableObject is DandelionPeach)
+                {
+                    return [new(font, "P")];
                 }
                 else if (module.drawableObject is EggBugEgg || module.drawableObject is FireEgg)
                 {
@@ -344,9 +348,17 @@ namespace WordWorld
                 {
                     return [new(font, "Lillypuck")];
                 }
+                else if (module.drawableObject is LizardSpit)
+                {
+                    return [new(font, "Spit")];
+                }
                 else if (module.drawableObject is MoonCloak)
                 {
                     return [new(font, "Cloak")];
+                }
+                else if (module.drawableObject is PuffBall)
+                {
+                    return [new(font, "Puff")];
                 }
                 else if (module.drawableObject is Rock)
                 {
@@ -373,14 +385,8 @@ namespace WordWorld
                 {
                     return [new(font, "Spear")];
                 }
-                /*else if (module.drawableObject is VultureMask)
-                {
-                    return [new(font, "Mask")];
-                }*/
-                else
-                {
-                    return null;
-                }
+                
+                return null;
             }
             catch(Exception e)
             {
