@@ -110,6 +110,12 @@ namespace WordWorld
         /// <param name="timeStacker">The current time stacker</param>
         /// <returns>The angle between the two body parts</returns>
         public static float AngleBtwnParts(BodyPart a, BodyPart b, float timeStacker) => AngleBtwn(GetPos(a, timeStacker), GetPos(b, timeStacker));
+        /// <summary>
+        /// Shorthand for AngleBtwn(Vector2.zero, v)
+        /// </summary>
+        /// <param name="v">The vector</param>
+        /// <returns>The angle of the vector</returns>
+        public static float AngleFrom(Vector2 v) => v.GetAngle() * Mathf.Rad2Deg; //AngleBtwn(Vector2.zero, v); // haha I lied
 
 
         /// <summary>

@@ -298,17 +298,63 @@ namespace WordWorld
 
                     return [.. labels];
                 }
-                else if (module.drawableObject is EggBugEgg || module.drawableObject is FireEgg)
-                {
-                    return [new(font, "Egg")];
-                }
                 else if (module.drawableObject is Ghost)
                 {
                     return [new(font, "Echo")];
                 }
-                else if (module.drawableObject is OracleSwarmer)
+                else if (module.drawableObject is OracleSwarmer || module.drawableObject is NSHSwarmer)
                 {
-                    return [new(font, "Neuron")];
+                    return [new(font, "N")];
+                }
+
+                else if (module.drawableObject is DataPearl || module.drawableObject is DandelionPeach)
+                {
+                    return [new(font, "P")];
+                }
+                else if (module.drawableObject is BubbleGrass)
+                {
+                    return [new(font, $"Bubble{Environment.NewLine}Weed")];
+                }
+                else if (module.drawableObject is EggBugEgg || module.drawableObject is FireEgg)
+                {
+                    return [new(font, "Egg")];
+                }
+                else if (module.drawableObject is GlowWeed)
+                {
+                    return [new(font, $"Glow{Environment.NewLine}Weed")];
+                }
+                else if (module.drawableObject is GooieDuck)
+                {
+                    return [new(font, $"Gooie{Environment.NewLine}duck")];
+                }
+                else if (module.drawableObject is Lantern)
+                {
+                    return [new(font, "L")];
+                }
+                else if (module.drawableObject is LillyPuck)
+                {
+                    return [new(font, "Lillypuck")];
+                }
+                else if (module.drawableObject is MoonCloak)
+                {
+                    return [new(font, "Cloak")];
+                }
+                else if (module.drawableObject is Rock)
+                {
+                    return [new(font, "R")];
+                }
+                else if (module.drawableObject is ScavengerBomb || module.drawableObject is Bullet)
+                {
+                    return [new(font, "B")];
+                }
+                else if (module.drawableObject is SlimeMold slime)
+                {
+                    if (slime.JellyfishMode)
+                        return [new(font, "Jelly")];
+                    else if (ModManager.MSC && slime.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed)
+                        return [new(font, "Seed")];
+                    else
+                        return [new(font, "Mold")];
                 }
                 /*else if (module.drawableObject is VultureMask)
                 {
