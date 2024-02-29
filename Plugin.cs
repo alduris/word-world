@@ -1,15 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security;
 using System.Security.Permissions;
 using BepInEx;
 using BepInEx.Logging;
-using RWCustom;
 using MoreSlugcats;
 using UnityEngine;
 using SpriteLeaser = RoomCamera.SpriteLeaser;
-using static WordWorld.WordUtil;
 using WordWorld.Creatures.MoreSlugcats;
 using WordWorld.Creatures;
 using WordWorld.Defaults;
@@ -44,7 +40,6 @@ namespace WordWorld
 
         internal static bool DoThings = true;
         internal static bool ShowSprites = false;
-        internal static bool YeekFix = false;
         internal static bool ClownLongLegs = false;
 
 #pragma warning disable IDE0051 // Remove unused private members
@@ -82,7 +77,6 @@ namespace WordWorld
         private static void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
         {
             orig(self);
-            YeekFix = ModManager.ActiveMods.Exists(mod => mod.id == "vigaro.yeekfix");
             ClownLongLegs = ModManager.ActiveMods.Exists(mod => mod.id == "clownlonglegs");
         }
 
@@ -156,24 +150,29 @@ namespace WordWorld
                         case YeekGraphics:         YeekWords.Draw(obj as YeekGraphics, labels, self, timeStacker, camPos); break;
 
                         // Items
-                        case BubbleGrass:     BubbleGrassWords.Draw(obj as BubbleGrass, labels, timeStacker, camPos); break;
-                        case DandelionPeach:  DandelionPeachWords.Draw(obj as DandelionPeach, labels, timeStacker, camPos); break;
-                        case DataPearl:       DataPearlWords.Draw(obj as DataPearl, labels, timeStacker, camPos); break;
-                        case EggBugEgg:       EggBugEggWords.Draw(obj as EggBugEgg, labels, timeStacker, camPos); break;
-                        case FireEgg:         FireEggWords.Draw(obj as FireEgg, labels, self, timeStacker, camPos); break;
-                        case GlowWeed:        GlowWeedWords.Draw(obj as GlowWeed, labels, timeStacker, camPos); break;
-                        case GooieDuck:       GooieDuckWords.Draw(obj as GooieDuck, labels, timeStacker, camPos); break;
-                        case Lantern:         LanternWords.Draw(obj as Lantern, labels, self, timeStacker, camPos); break;
-                        case LillyPuck:       LillyPuckWords.Draw(obj as LillyPuck, labels, self, timeStacker, camPos); break;
-                        case MoonCloak:       MoonCloakWords.Draw(obj as MoonCloak, labels, timeStacker, camPos); break;
-                        case NSHSwarmer:      NSHSwarmerWords.Draw(obj as NSHSwarmer, labels, self, timeStacker, camPos); break;
-                        case OracleSwarmer:   OracleSwarmerWords.Draw(obj as OracleSwarmer, labels, self, timeStacker, camPos); break;
-                        case PuffBall:        PuffBallWords.Draw(obj as PuffBall, labels, timeStacker, camPos); break;
-                        case Rock:            RockWords.Draw(obj as Rock, labels, timeStacker, camPos); break;
-                        case ScavengerBomb:   ScavengerBombWords.Draw(obj as ScavengerBomb, labels, self, timeStacker, camPos); break;
-                        case SingularityBomb: SingularityBombWords.Draw(obj as SingularityBomb, labels, timeStacker, camPos); break;
-                        case SlimeMold:       SlimeMoldWords.Draw(obj as SlimeMold, labels, self, timeStacker, camPos); break;
-                        case Spear:           SpearWords.Draw(obj as Spear, labels, self, timeStacker, camPos); break;
+                        case BubbleGrass:      BubbleGrassWords.Draw(obj as BubbleGrass, labels, timeStacker, camPos); break;
+                        case DandelionPeach:   DandelionPeachWords.Draw(obj as DandelionPeach, labels, timeStacker, camPos); break;
+                        case DataPearl:        DataPearlWords.Draw(obj as DataPearl, labels, timeStacker, camPos); break;
+                        case EggBugEgg:        EggBugEggWords.Draw(obj as EggBugEgg, labels, timeStacker, camPos); break;
+                        case FirecrackerPlant: FirecrackerPlantWords.Draw(obj as FirecrackerPlant, labels, self, timeStacker, camPos); break;
+                        case FireEgg:          FireEggWords.Draw(obj as FireEgg, labels, self, timeStacker, camPos); break;
+                        case GlowWeed:         GlowWeedWords.Draw(obj as GlowWeed, labels, timeStacker, camPos); break;
+                        case GooieDuck:        GooieDuckWords.Draw(obj as GooieDuck, labels, timeStacker, camPos); break;
+                        case Lantern:          LanternWords.Draw(obj as Lantern, labels, self, timeStacker, camPos); break;
+                        case LillyPuck:        LillyPuckWords.Draw(obj as LillyPuck, labels, self, timeStacker, camPos); break;
+                        case MoonCloak:        MoonCloakWords.Draw(obj as MoonCloak, labels, timeStacker, camPos); break;
+                        case NSHSwarmer:       NSHSwarmerWords.Draw(obj as NSHSwarmer, labels, self, timeStacker, camPos); break;
+                        case OracleSwarmer:    OracleSwarmerWords.Draw(obj as OracleSwarmer, labels, self, timeStacker, camPos); break;
+                        case PuffBall:         PuffBallWords.Draw(obj as PuffBall, labels, timeStacker, camPos); break;
+                        case Rock:             RockWords.Draw(obj as Rock, labels, timeStacker, camPos); break;
+                        case ScavengerBomb:    ScavengerBombWords.Draw(obj as ScavengerBomb, labels, self, timeStacker, camPos); break;
+                        case SingularityBomb:  SingularityBombWords.Draw(obj as SingularityBomb, labels, timeStacker, camPos); break;
+                        case SlimeMold:        SlimeMoldWords.Draw(obj as SlimeMold, labels, self, timeStacker, camPos); break;
+                        case Spear:            SpearWords.Draw(obj as Spear, labels, self, timeStacker, camPos); break;
+                        case SporePlant:       SporePlantWords.Draw(obj as SporePlant, labels, timeStacker, camPos); break;
+
+                        case SporePlant.Bee: SporePlantWords.BeeDraw(obj as SporePlant.Bee, labels, self, timeStacker, camPos); break;
+                        case SporePlant.AttachedBee: SporePlantWords.AttachedBeeDraw(obj as SporePlant.AttachedBee, labels, self, timeStacker, camPos); break;
 
                         // Misc
                         case BigJellyFish:      BigJellyFishWords.Draw(obj as BigJellyFish, labels, timeStacker, camPos); break;
@@ -184,7 +183,6 @@ namespace WordWorld
                         case LizardSpit:        LizardSpitWords.Draw(obj as LizardSpit, labels, timeStacker, camPos); break;
                         case OracleGraphics:    OracleWords.Draw(obj as OracleGraphics, labels, self, timeStacker, camPos); break;
                         case VoidSpawnGraphics: VoidSpawnWords.Draw(obj as VoidSpawnGraphics, labels, self, timeStacker, camPos); break;
-
 
                         // Defaults
                         case GraphicsModule:  GMWords.Draw(obj as GraphicsModule, labels, self, timeStacker, camPos); break;
@@ -199,6 +197,7 @@ namespace WordWorld
                 DoThings = false;
             }
         }
+
         private static void SpriteLeaser_CleanSpritesAndRemove(On.RoomCamera.SpriteLeaser.orig_CleanSpritesAndRemove orig, SpriteLeaser self)
         {
             orig(self);
