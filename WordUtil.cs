@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Menu.Remix.MixedUI;
 using RWCustom;
 using UnityEngine;
@@ -9,6 +11,14 @@ namespace WordWorld
     {
         public const float FontSize = 20f;
         public static float TextWidth(string text) => LabelTest.GetWidth(text, false);
+        public static string Font => Custom.GetFont();
+
+        // https://stackoverflow.com/questions/3216085/split-a-pascalcase-string-into-separate-words
+        public static readonly Regex PascalRegex = new(@"(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
+
+        public static FLabel[] LabelsFromLetters(string text) => [.. text.ToCharArray().Select(c => new FLabel(Font, c.ToString()))];
+        public static string Unpascal(string text) => PascalRegex.Replace(text, Environment.NewLine);
+        public static string Unpascal(CreatureTemplate.Type type) => Unpascal(type.value);
 
 
         /// <summary>

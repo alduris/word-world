@@ -11,232 +11,25 @@ namespace WordWorld
 {
     internal static class CWTs
     {
-        // https://stackoverflow.com/questions/3216085/split-a-pascalcase-string-into-separate-words
-        internal static readonly Regex pascalRegex = new(@"(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
         
         private static readonly ConditionalWeakTable<RoomCamera.SpriteLeaser, FLabel[]> graphicsCWT = new();
         public static FLabel[] GetLabels(this RoomCamera.SpriteLeaser module) => graphicsCWT.GetValue(module, self => {
             if (!Plugin.DoThings) return null;
             try
             {
-                var font = Custom.GetFont();
+                var Font = Custom.GetFont();
 
                 // Test API stuff first
                 if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs) && funcs.CreateLabels != null)
                 {
                     var strs = funcs.CreateLabels.Invoke(self.drawableObject);
-                    return strs.Select(x => new FLabel(font, x)).ToArray();
+                    return strs.Select(x => new FLabel(Font, x)).ToArray();
                 }
 
                 // Built-in stuff
                 if ((self.drawableObject as GraphicsModule)?.owner is Creature)
                 {
-                    var type = ((self.drawableObject as GraphicsModule).owner as Creature).abstractCreature.creatureTemplate.type;
-
-                    if (self.drawableObject is VultureGraphics vultureGraf)
-                    {
-                        // Vultures get extra sprites
-                        List<FLabel> list = [
-                            new(font, pascalRegex.Replace(type.value, Environment.NewLine)),
-                            new(font, "Head")
-                        ];
-                        for (int i = 0; i < vultureGraf.vulture.tentacles.Length; i++)
-                        {
-                            list.Add(new(font, "W"));
-                            list.Add(new(font, "i"));
-                            list.Add(new(font, "n"));
-                            list.Add(new(font, "g"));
-                        }
-                        if (vultureGraf.vulture.kingTusks != null)
-                        {
-                            list.Add(new(font, "Tusk"));
-                            list.Add(new(font, "Tusk"));
-                        }
-                        return [.. list];
-                    }
-                    else if (self.drawableObject is CentipedeGraphics centiGraf)
-                    {
-                        // Thanks several users on RW Main discord for this idea
-                        if (type == CreatureTemplate.Type.SmallCentipede)
-                        {
-                            return "Babypede".ToCharArray().Select(c => new FLabel(font, c.ToString())).ToArray();
-                        }
-
-                        int numChunks = centiGraf.centipede.bodyChunks.Length;
-                        int nameE = type.value.IndexOf("Centi") + 1;
-                        if (nameE == 0) nameE = type.value.IndexOf("pede") + 1;
-                        if (nameE == 0) nameE = type.value.IndexOf("e") + 1;
-                        var chars = type.value.ToCharArray();
-                        int numOfEs = numChunks - chars.Length;
-                        
-                        List<FLabel> list = [];
-                        if (numChunks >= type.value.Length)
-                        {
-                            for (int i = 0; i < numChunks; i++)
-                            {
-                                int j = (i >= nameE && i < nameE + numOfEs) ? nameE : (i < nameE ? i : i - numOfEs);
-                                list.Add(new(font, chars[j].ToString()));
-                            }
-                        }
-                        else
-                        {
-                            foreach (char c in chars)
-                            {
-                                list.Add(new(font, c.ToString()));
-                            }
-                        }
-
-                        return [.. list];
-                    }
-                    else if (self.drawableObject is EggBugGraphics)
-                    {
-                        string str;
-                        if (type == CreatureTemplate.Type.EggBug) str = "Eggbug";
-                        else if (ModManager.MSC && type == MoreSlugcatsEnums.CreatureTemplateType.FireBug) str = "Firebug";
-                        else str = pascalRegex.Replace(type.value, Environment.NewLine);
-
-                        List<FLabel> list = [new(font, str)];
-                        
-                        // Eggs
-                        for (int i = 0; i < 6; i++)
-                            list.Add(new(font, "Egg"));
-                        
-                        return [.. list];
-                    }
-                    else if (self.drawableObject is DaddyGraphics daddyGraf)
-                    {
-                        int cut = type.value.IndexOf("LongLegs");
-                        string shortname = cut <= 0 ? pascalRegex.Replace(type.value, Environment.NewLine) : type.value.Substring(0, cut);
-                        if (ModManager.MSC)
-                        {
-                            if (type == MoreSlugcatsEnums.CreatureTemplateType.HunterDaddy) shortname = "Hunter";
-                            else if (type == MoreSlugcatsEnums.CreatureTemplateType.TerrorLongLegs) shortname = $"Your{Environment.NewLine}Mother";
-                        }
-                        List<FLabel> list = [new(font, shortname)];
-
-                        for (int i = 0; i < daddyGraf.daddy.tentacles.Length; i++)
-                        {
-                            var tentacle = daddyGraf.daddy.tentacles[i];
-                            int length = (int)(tentacle.idealLength / 20f);
-                            int numOfOs = length - 7; // len("LongLegs") = 7
-                            for (int j = 0; j < length; j++)
-                            {
-                                int k = (j >= 1 && j < 1 + numOfOs) ? 1 : (j < 1 ? j : j - numOfOs);
-                                list.Add(new(font, "LongLeg"[k].ToString()));
-                            }
-                        }
-                        return [.. list];
-                    }
-                    else if (self.drawableObject is DeerGraphics)
-                    {
-                        return [new(font, pascalRegex.Replace(type.value, Environment.NewLine)), new(font, "Antlers")];
-                    }
-                    else if (self.drawableObject is MirosBirdGraphics)
-                    {
-                        return [new(font, pascalRegex.Replace(type.value, Environment.NewLine)), new(font, "Eye")];
-                    }
-                    else if (self.drawableObject is LizardGraphics lizGraf)
-                    {
-                        string name = pascalRegex.Replace(type.value, " ");
-                        if (lizGraf.tongue != null)
-                        {
-                            return
-                            [
-                                new(font, name),
-                                new(font, "T"),
-                                new(font, "o"),
-                                new(font, "n"),
-                                new(font, "g"),
-                                new(font, "u"),
-                                new(font, "e"),
-                            ];
-                        }
-                        return [new(font, name)];
-                    }
-                    else if (ModManager.MSC && self.drawableObject is InspectorGraphics inspGraf)
-                    {
-                        List<FLabel> list = [new(font, "Inspector")];
-                        for (int i = 0; i < inspGraf.myInspector.heads.Length; i++)
-                            list.Add(new(font, "Head"));
-                        return [.. list];
-                    }
-                    else if (ModManager.MSC && self.drawableObject is StowawayBugGraphics stowawayGraf)
-                    {
-                        List<FLabel> list = [new(font, "Stowaway")];
-                        for (int i = 0; i < stowawayGraf.myBug.heads.Length; i++)
-                        {
-                            foreach (var c in "Tentacle")
-                            {
-                                list.Add(new(font, c.ToString()));
-                            }
-                        }
-                        return [.. list];
-                    }
-                    else if (self.drawableObject is NeedleWormGraphics needleGraf)
-                    {
-                        int cut = type.value.IndexOf("Needle");
-                        if (cut == -1) cut = type.value.IndexOf("Noodle");
-                        if (cut == -1) cut = type.value.IndexOf("Noot");
-                        if (cut == -1) cut = type.value.Length;
-
-                        return [.. (type.value.Substring(0, cut) + "Noot").ToCharArray().Select(c => new FLabel(font, c.ToString()))];
-                    }
-                    else if (self.drawableObject is ScavengerGraphics)
-                    {
-                        return [new(font, pascalRegex.Replace(type.value, Environment.NewLine)), new(font, "Head")];
-                    }
-                    else if (self.drawableObject is SnailGraphics)
-                    {
-                        var list = new List<FLabel>();
-                        foreach (var word in pascalRegex.Split(type.value).Where(x => x.Length > 0))
-                        {
-                            for (int i = 0; i < word.Length; i++)
-                            {
-                                list.Add(new(font, word[i].ToString()));
-                            }
-                        }
-                        return [.. list];
-                    }
-                    else if (
-                        self.drawableObject is PoleMimicGraphics ||
-                        self.drawableObject is TentaclePlantGraphics ||
-                        self.drawableObject is GarbageWormGraphics
-                    )
-                    {
-                        // Long bendy creature; create many FLabels for individual chars
-                        var chars = type.value.ToCharArray();
-
-                        var arr = new FLabel[chars.Length];
-                        for(int i = 0; i < chars.Length; i++)
-                        {
-                            arr[i] = new(font, chars[i].ToString());
-                        }
-                        return arr;
-                    }
-                    else
-                    {
-                        // Normal creature; will only have one FLabel
-                        var str = type.value;
-
-                        if (ModManager.MSC && type == MoreSlugcatsEnums.CreatureTemplateType.SlugNPC)
-                            str = "Slugpup";
-                        else if (type == CreatureTemplate.Type.CicadaA || type == CreatureTemplate.Type.CicadaB)
-                            str = "Squidcada";
-                        else if (type == CreatureTemplate.Type.BigSpider)
-                            str = "Big Spider";
-                        else if (type == CreatureTemplate.Type.DropBug)
-                            str = "Dropwig";
-                        else if (type == CreatureTemplate.Type.JetFish)
-                            str = "Jetfish";
-                        else if (type == CreatureTemplate.Type.LanternMouse)
-                            str = "Mouse";
-                        else if (self.drawableObject is LeechGraphics)
-                            str = pascalRegex.Replace(str, " ");
-                        else
-                            str = pascalRegex.Replace(str, Environment.NewLine);
-                        
-                        return [new(font, str)];
-                    }
+                    return null;
                 }
                 else if (module.drawableObject is OracleGraphics oracleGraf)
                 {
@@ -259,15 +52,15 @@ namespace WordWorld
                         else if (id == MoreSlugcatsEnums.OracleID.ST)
                             str = "Sliver of Straw";
                     }
-                    labels.Add(new(font, string.Join(Environment.NewLine, str.Split(' '))));
+                    labels.Add(new(Font, string.Join(Environment.NewLine, str.Split(' '))));
 
                     // Arm
                     if (oracleGraf.oracle.arm != null)
                     {
                         for (int i = 0; i < oracleGraf.oracle.arm.joints.Length; i++)
                         {
-                            labels.Add(new(font, "Joint"));
-                            labels.Add(new(font, "Arm"));
+                            labels.Add(new(Font, "Joint"));
+                            labels.Add(new(Font, "Arm"));
                         }
                     }
 
@@ -276,7 +69,7 @@ namespace WordWorld
                     {
                         foreach (char letter in "UmbilicalCord".ToCharArray())
                         {
-                            labels.Add(new(font, letter.ToString()));
+                            labels.Add(new(Font, letter.ToString()));
                         }
                     }
 
@@ -284,20 +77,20 @@ namespace WordWorld
                 }
                 else if (module.drawableObject is VoidSpawnGraphics)
                 {
-                    return "VoidSpawn".ToCharArray().Select(x => new FLabel(font, x.ToString())).ToArray();
+                    return "VoidSpawn".ToCharArray().Select(x => new FLabel(Font, x.ToString())).ToArray();
                 }
                 else if (module.drawableObject is JellyFish)
                 {
-                    return [new(font, $"Jelly{Environment.NewLine}fish")];
+                    return [new(Font, $"Jelly{Environment.NewLine}fish")];
                 }
                 else if (ModManager.MSC && module.drawableObject is BigJellyFish bigJelly)
                 {
-                    List<FLabel> labels = [new(font, "Big Jellyfish"), new(font, "Core")];
+                    List<FLabel> labels = [new(Font, "Big Jellyfish"), new(Font, "Core")];
                     for (int i = 0; i < bigJelly.tentacles.Length; i++)
                     {
                         foreach (var c in "Tentacle".ToCharArray())
                         {
-                            labels.Add(new(font, c.ToString()));
+                            labels.Add(new(Font, c.ToString()));
                         }
                     }
 
@@ -305,85 +98,85 @@ namespace WordWorld
                 }
                 else if (module.drawableObject is Ghost)
                 {
-                    return [new(font, "Echo")];
+                    return [new(Font, "Echo")];
                 }
                 else if (module.drawableObject is OracleSwarmer || module.drawableObject is NSHSwarmer)
                 {
-                    return [new(font, "N")];
+                    return [new(Font, "N")];
                 }
 
                 else if (module.drawableObject is BubbleGrass)
                 {
-                    return [new(font, $"Bubble{Environment.NewLine}Weed")];
+                    return [new(Font, $"Bubble{Environment.NewLine}Weed")];
                 }
                 else if (module.drawableObject is DartMaggot)
                 {
-                    return [new(font, "Maggot")];
+                    return [new(Font, "Maggot")];
                 }
                 else if (module.drawableObject is DataPearl || module.drawableObject is DandelionPeach)
                 {
-                    return [new(font, "P")];
+                    return [new(Font, "P")];
                 }
                 else if (module.drawableObject is EggBugEgg || module.drawableObject is FireEgg)
                 {
-                    return [new(font, "Egg")];
+                    return [new(Font, "Egg")];
                 }
                 else if (module.drawableObject is FlareBomb)
                 {
-                    return [new(font, "F")];
+                    return [new(Font, "F")];
                 }
                 else if (module.drawableObject is GlowWeed)
                 {
-                    return [new(font, $"Glow{Environment.NewLine}Weed")];
+                    return [new(Font, $"Glow{Environment.NewLine}Weed")];
                 }
                 else if (module.drawableObject is GooieDuck)
                 {
-                    return [new(font, $"Gooie{Environment.NewLine}duck")];
+                    return [new(Font, $"Gooie{Environment.NewLine}duck")];
                 }
                 else if (module.drawableObject is Lantern)
                 {
-                    return [new(font, "L")];
+                    return [new(Font, "L")];
                 }
                 else if (module.drawableObject is LillyPuck)
                 {
-                    return [new(font, "Lillypuck")];
+                    return [new(Font, "Lillypuck")];
                 }
                 else if (module.drawableObject is LizardSpit)
                 {
-                    return [new(font, "Spit")];
+                    return [new(Font, "Spit")];
                 }
                 else if (module.drawableObject is MoonCloak)
                 {
-                    return [new(font, "Cloak")];
+                    return [new(Font, "Cloak")];
                 }
                 else if (module.drawableObject is PuffBall)
                 {
-                    return [new(font, "Puff")];
+                    return [new(Font, "Puff")];
                 }
                 else if (module.drawableObject is Rock)
                 {
-                    return [new(font, "R")];
+                    return [new(Font, "R")];
                 }
                 else if (module.drawableObject is ScavengerBomb || module.drawableObject is Bullet)
                 {
-                    return [new(font, "B")];
+                    return [new(Font, "B")];
                 }
                 else if (module.drawableObject is SingularityBomb)
                 {
-                    return [new(font, "S")];
+                    return [new(Font, "S")];
                 }
                 else if (module.drawableObject is SlimeMold slime)
                 {
                     if (slime.JellyfishMode)
-                        return [new(font, "Jelly")];
+                        return [new(Font, "Jelly")];
                     else if (ModManager.MSC && slime.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed)
-                        return [new(font, "Seed")];
+                        return [new(Font, "Seed")];
                     else
-                        return [new(font, "Mold")];
+                        return [new(Font, "Mold")];
                 }
                 else if (module.drawableObject is Spear)
                 {
-                    return [new(font, "Spear")];
+                    return [new(Font, "Spear")];
                 }
                 
                 return null;
