@@ -1,27 +1,26 @@
 ﻿using RWCustom;
 using UnityEngine;
-using WordWorld.Defaults;
 using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class FirecrackerPlantWords
+    public static class FlyLureWords
     {
-        private const string WORD = "Cherrybomb";
+        private const string WORD = "Batnip";
 
         public static FLabel[] Init()
         {
             return LabelsFromLetters(WORD);
         }
 
-        public static void Draw(FirecrackerPlant plant, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public static void Draw(FlyLure plant, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
             var stalk = plant.stalk;
             var plantSize = 0f;
             for (int i = 0; i < stalk.Length - 1; i++)
                 plantSize += (Vector2.Lerp(stalk[i].lastPos, stalk[i].pos, timeStacker) - Vector2.Lerp(stalk[i + 1].lastPos, stalk[i + 1].pos, timeStacker)).magnitude;
 
-            var textScale = plantSize / TextWidth(WORD);
+            var textScale = plantSize / TextWidth(WORD) * 0.875f;
             var plantPos = GetPos(plant.firstChunk, timeStacker);
 
             for (int i = 0; i < labels.Length; i++)
@@ -45,8 +44,7 @@ namespace WordWorld.Items
                 label.SetPosition(pos - camPos);
 
                 // Color
-                var k = Mathf.RoundToInt(Custom.LerpMap(i, 0, labels.Length - 1, 0, plant.lumps.Length - 1));
-                label.color = plant.lumpsPopped[k] ? plant.color : sLeaser.sprites[plant.LumpSprite(k, 1)].color;
+                label.color = plant.StalkColor(Mathf.InverseLerp(0f, labels.Length - 1, i));
             }
         }
     }
