@@ -31,75 +31,6 @@ namespace WordWorld
                 {
                     return null;
                 }
-                else if (module.drawableObject is OracleGraphics oracleGraf)
-                {
-                    List<FLabel> labels = [];
-                    var str = "Iterator";
-
-                    // Figure out the name of the iterator
-                    var id = oracleGraf.oracle.ID;
-                    if (WordAPI.RegisteredIterators.ContainsKey(id))
-                        str = WordAPI.RegisteredIterators[id];
-                    else if (id == Oracle.OracleID.SL)
-                        str = "Looks to the Moon";
-                    else if (id == Oracle.OracleID.SS)
-                        str = "Five Pebbles";
-                    else if (ModManager.MSC) {
-                        if (id == MoreSlugcatsEnums.OracleID.CL)
-                            str = "Five Pebbles";
-                        else if (id == MoreSlugcatsEnums.OracleID.DM)
-                            str = "Looks to the Moon";
-                        else if (id == MoreSlugcatsEnums.OracleID.ST)
-                            str = "Sliver of Straw";
-                    }
-                    labels.Add(new(Font, string.Join(Environment.NewLine, str.Split(' '))));
-
-                    // Arm
-                    if (oracleGraf.oracle.arm != null)
-                    {
-                        for (int i = 0; i < oracleGraf.oracle.arm.joints.Length; i++)
-                        {
-                            labels.Add(new(Font, "Joint"));
-                            labels.Add(new(Font, "Arm"));
-                        }
-                    }
-
-                    // Umbilical cord
-                    if (oracleGraf.umbCord != null)
-                    {
-                        foreach (char letter in "UmbilicalCord".ToCharArray())
-                        {
-                            labels.Add(new(Font, letter.ToString()));
-                        }
-                    }
-
-                    return [..labels];
-                }
-                else if (module.drawableObject is VoidSpawnGraphics)
-                {
-                    return "VoidSpawn".ToCharArray().Select(x => new FLabel(Font, x.ToString())).ToArray();
-                }
-                else if (module.drawableObject is JellyFish)
-                {
-                    return [new(Font, $"Jelly{Environment.NewLine}fish")];
-                }
-                else if (ModManager.MSC && module.drawableObject is BigJellyFish bigJelly)
-                {
-                    List<FLabel> labels = [new(Font, "Big Jellyfish"), new(Font, "Core")];
-                    for (int i = 0; i < bigJelly.tentacles.Length; i++)
-                    {
-                        foreach (var c in "Tentacle".ToCharArray())
-                        {
-                            labels.Add(new(Font, c.ToString()));
-                        }
-                    }
-
-                    return [.. labels];
-                }
-                else if (module.drawableObject is Ghost)
-                {
-                    return [new(Font, "Echo")];
-                }
                 else if (module.drawableObject is OracleSwarmer || module.drawableObject is NSHSwarmer)
                 {
                     return [new(Font, "N")];
@@ -108,10 +39,6 @@ namespace WordWorld
                 else if (module.drawableObject is BubbleGrass)
                 {
                     return [new(Font, $"Bubble{Environment.NewLine}Weed")];
-                }
-                else if (module.drawableObject is DartMaggot)
-                {
-                    return [new(Font, "Maggot")];
                 }
                 else if (module.drawableObject is DataPearl || module.drawableObject is DandelionPeach)
                 {
@@ -143,7 +70,7 @@ namespace WordWorld
                 }
                 else if (module.drawableObject is LizardSpit)
                 {
-                    return [new(Font, "Spit")];
+                    
                 }
                 else if (module.drawableObject is MoonCloak)
                 {

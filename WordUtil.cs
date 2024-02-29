@@ -18,7 +18,7 @@ namespace WordWorld
 
         public static FLabel[] LabelsFromLetters(string text) => [.. text.ToCharArray().Select(c => new FLabel(Font, c.ToString()))];
         public static string Unpascal(string text) => PascalRegex.Replace(text, Environment.NewLine);
-        public static string Unpascal(CreatureTemplate.Type type) => Unpascal(type.value);
+        public static string Unpascal(global::CreatureTemplate.Type type) => Unpascal(type.value);
 
 
         /// <summary>
