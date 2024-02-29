@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿#pragma warning disable IDE0005 // Using directive is unnecessary
+#pragma warning disable IDE0060 // Remove unused parameter
+
+using UnityEngine;
 using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
@@ -16,3 +19,6 @@ namespace WordWorld.Creatures
         }
     }
 }
+
+#pragma warning restore IDE0005 // Using directive is unnecessary
+#pragma warning restore IDE0060 // Remove unused parameter

@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿// This is a template file not intended to be used normally, I think we can afford to shut up IntelliSense
+#pragma warning disable IDE0005 // Using directive is unnecessary
+#pragma warning disable IDE0060 // Remove unused parameter
+
+using UnityEngine;
 using static WordWorld.WordUtil;
 
 namespace WordWorld
@@ -16,3 +20,6 @@ namespace WordWorld
         }
     }
 }
+
+#pragma warning restore IDE0005 // Using directive is unnecessary
+#pragma warning restore IDE0060 // Remove unused parameter

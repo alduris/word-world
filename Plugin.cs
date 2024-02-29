@@ -5,12 +5,10 @@ using System.Security;
 using System.Security.Permissions;
 using BepInEx;
 using BepInEx.Logging;
-using Menu.Remix.MixedUI;
 using RWCustom;
 using MoreSlugcats;
 using UnityEngine;
 using SpriteLeaser = RoomCamera.SpriteLeaser;
-using Random = UnityEngine.Random;
 using static WordWorld.WordUtil;
 
 #pragma warning disable CS0618
@@ -107,100 +105,8 @@ namespace WordWorld
 
                         // Misc
 
-                        // Items and physical objects
-                        case EggBugEgg eggBugEgg:
-                            {
-                                labels[0].scale = eggBugEgg.firstChunk.rad * 3f / TextWidth(labels[0].text);
-                                labels[0].color = eggBugEgg.eggColors[1];
-                                break;
-                            }
-                        case FirecrackerPlant cherrybomb:
-                            {
-                                break;
-                            }
-                        case FireEgg fireEgg:
-                            {
-                                labels[0].scale = fireEgg.firstChunk.rad * 3f / TextWidth(labels[0].text);
-                                labels[0].color = fireEgg.eggColors[1];
-                                break;
-                            }
-                        case FlareBomb flare:
-                            {
-                                labels[0].scale = flare.firstChunk.rad / TextWidth(labels[0].text); // the lack of a multiplier is intentional
-                                labels[0].color = Color.Lerp(flare.color, new(1f, 1f, 1f), 0.9f);
-                                break;
-                            }
-                        case GooieDuck gooieduck:
-                            {
-                                labels[0].color = gooieduck.CoreColor;
-                                break;
-                            }
-                        case Lantern lantern:
-                            {
-                                labels[0].scale = lantern.firstChunk.rad * 3f / FontSize;
-                                labels[0].color = self.sprites[0].color;
-                                break;
-                            }
-                        case LillyPuck lillyPuck:
-                            {
-                                labels[0].scale = lillyPuck.firstChunk.rad * 3f / FontSize;
-                                //labels[0].scale = self.sprites[0].element.sourcePixelSize.y / TextWidth(labels[0].text);
-                                labels[0].color = lillyPuck.flowerColor;
-                                break;
-                            }
-                        case MoonCloak cloak:
-                            {
-                                labels[0].scale = cloak.firstChunk.rad * 2f / FontSize;
-                                labels[0].color = cloak.Color(0.25f);
-                                break;
-                            }
-                        case NSHSwarmer greenNeuron: // why don't you extend OracleSwarmer...
-                            {
-                                labels[0].scale = greenNeuron.firstChunk.rad * 3f / FontSize;
-                                labels[0].color = greenNeuron.myColor;
-                                break;
-                            }
-                        case OracleSwarmer neuron:
-                            {
-                                labels[0].scale = neuron.firstChunk.rad * 3f / FontSize;
-                                break;
-                            }
-                        case ScavengerBomb bomb:
-                            {
-                                labels[0].scale = bomb.firstChunk.rad * 3f / FontSize;
-                                break;
-                            }
-                        case SingularityBomb sBomb:
-                            {
-                                labels[0].scale = sBomb.firstChunk.rad * 3f / FontSize;
-                                labels[0].color = Custom.HSL2RGB(0.6638889f, 1f, 0.35f);
-                                break;
-                            }
-                        case SlimeMold slime:
-                            {
-                                bool isSeed = ModManager.MSC && slime.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed; // why the hell are seeds slime mold
-                                labels[0].scale = slime.firstChunk.rad * 3f / FontSize * (slime.JellyfishMode ? 2.4f : (slime.big ? 1.3f : 1f));
-                                labels[0].color = isSeed ? self.sprites[0].color : slime.color;
-                                break;
-                            }
+                        // Items
                         case Spear spear:
-                            {
-                                bool explosive = spear is ExplosiveSpear;
-                                labels[0].color = spear.color;
-                                labels[0].scale = self.sprites[spear.bugSpear || explosive ? 1 : 0].element.sourcePixelSize.y  * 0.9f / TextWidth(labels[0].text);
-                                labels[0].scaleY /= 2f;
-
-                                if (explosive)
-                                {
-                                    labels[0].color = (spear as ExplosiveSpear).redColor;
-                                }
-                                else if (spear.bugSpear)
-                                {
-                                    labels[0].color = self.sprites[0].color;
-                                }
-                                break;
-                            }
-                        case SporePlant beehive:
                             {
                                 break;
                             }
@@ -295,119 +201,6 @@ namespace WordWorld
                     // Built-in stuff
                     switch (obj)
                     {
-
-                        case BubbleGrass bubbleWeed:
-                            {
-                                var oxygen = Mathf.Lerp(bubbleWeed.lastOxygen, bubbleWeed.oxygen, timeStacker);
-                                var end = bubbleWeed.stalk.Length - 1;
-                                labels[0].SetPosition(GetPos(bubbleWeed.firstChunk, timeStacker) - camPos);
-                                labels[0].color = Color.Lerp(bubbleWeed.blackColor, bubbleWeed.color, oxygen);
-                                labels[0].scale = Vector2.Lerp(bubbleWeed.stalk[end].lastPos - bubbleWeed.stalk[0].lastPos, bubbleWeed.stalk[end].pos - bubbleWeed.stalk[0].pos, timeStacker).magnitude
-                                    / FontSize * Mathf.Lerp(0.5f, 0.75f, oxygen);
-                                break;
-                            }
-                        case DataPearl pearl:
-                            {
-                                labels[0].SetPosition(GetPos(pearl.firstChunk, timeStacker) - camPos);
-                                labels[0].color = Color.Lerp(pearl.color, pearl.highlightColor ?? pearl.color, Mathf.Lerp(pearl.lastGlimmer, pearl.glimmer, timeStacker));
-                                break;
-                            }
-                        case FirecrackerPlant cherrybomb:
-                            {
-                                break;
-                            }
-                        case FireEgg fireEgg:
-                            {
-                                labels[0].SetPosition(GetPos(fireEgg.firstChunk, timeStacker) - camPos);
-                                labels[0].scale = fireEgg.firstChunk.rad * 3f / TextWidth(labels[0].text);
-                                labels[0].color = self.sprites[1].color;
-                                break;
-                            }
-                        case FlareBomb flare:
-                            {
-                                labels[0].SetPosition(GetPos(flare.firstChunk, timeStacker) - camPos);
-                                self.sprites[2].isVisible = true;
-                                break;
-                            }
-                        case GooieDuck gooieduck:
-                            {
-                                labels[0].SetPosition(GetPos(gooieduck.firstChunk, timeStacker) - camPos);
-                                labels[0].scale = gooieduck.firstChunk.rad * 3f / FontSize + Mathf.Sin(gooieduck.PulserA) / 6f;
-                                break;
-                            }
-                        case Lantern lantern:
-                            {
-                                labels[0].SetPosition(GetPos(lantern.firstChunk, timeStacker) - camPos);
-                                self.sprites[3].isVisible = true;
-                                break;
-                            }
-                        case LillyPuck lillyPuck:
-                            {
-                                labels[0].SetPosition(GetPos(lillyPuck.firstChunk, timeStacker) - camPos);
-                                labels[0].rotation = FixRotation(self.sprites[0].rotation) - 90f;
-                                break;
-                            }
-                        case MoonCloak cloak:
-                            {
-                                labels[0].SetPosition(AvgBodyChunkPos(cloak.bodyChunks[0], cloak.bodyChunks[1], timeStacker) - camPos);
-                                labels[0].rotation = AngleBtwnChunks(cloak.bodyChunks[0], cloak.bodyChunks[1], timeStacker);
-                                break;
-                            }
-                        case NSHSwarmer greenNeuron:
-                            {
-                                labels[0].SetPosition(GetPos(greenNeuron.firstChunk, timeStacker) - camPos);
-                                var active = Custom.SCurve(Mathf.Lerp(greenNeuron.lastHoloFade, greenNeuron.holoFade, timeStacker), 0.65f) * greenNeuron.holoShape.Fade.SmoothValue(timeStacker);
-                                if (active > 0)
-                                {
-                                    for (int i = 5; i < self.sprites.Length; i++)
-                                    {
-                                        self.sprites[i].isVisible = true;
-                                    }
-                                }
-                                break;
-                            }
-                        case OracleSwarmer neuron:
-                            {
-                                labels[0].SetPosition(GetPos(neuron.firstChunk, timeStacker) - camPos);
-                                labels[0].color = self.sprites[0].color;
-                                break;
-                            }
-                        case ScavengerBomb bomb:
-                            {
-                                labels[0].SetPosition(GetPos(bomb.firstChunk, timeStacker) - camPos);
-                                labels[0].color = self.sprites[0].color;
-                                break;
-                            }
-                        case SlimeMold slime:
-                            {
-                                bool isSeed = ModManager.MSC && slime.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed;
-                                labels[0].SetPosition(GetPos(slime.firstChunk, timeStacker) - camPos);
-                                if (!isSeed)
-                                {
-                                    self.sprites[slime.LightSprite].isVisible = slime.darkMode > 0f;
-                                    self.sprites[slime.BloomSprite].isVisible = slime.darkMode > 0f;
-                                }
-                                break;
-                            }
-                        case Spear spear:
-                            {
-                                labels[0].SetPosition(GetPos(spear.firstChunk, timeStacker) - camPos);
-                                labels[0].rotation = FixRotation(self.sprites[spear.bugSpear || spear is ExplosiveSpear ? 1 : 0].rotation) - 90f;
-
-                                if (spear.IsNeedle)
-                                {
-                                    labels[0].color = self.sprites[0].color;
-                                }
-                                else if (spear is ElectricSpear)
-                                {
-                                    labels[0].color = self.sprites[1].color;
-                                }
-                                break;
-                            }
-                        case SporePlant beehive:
-                            {
-                                break;
-                            }
 
                         // Default cases
                         case GraphicsModule module:

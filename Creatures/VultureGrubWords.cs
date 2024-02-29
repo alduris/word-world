@@ -15,7 +15,7 @@ namespace WordWorld.Creatures
             }];
         }
 
-        public static void Draw(VultureGrubGraphics grubGraf,, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public static void Draw(VultureGrubGraphics grubGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
             // Body
             labels[0].SetPosition(GetPos(grubGraf.worm.bodyChunks[0], timeStacker) - camPos);
