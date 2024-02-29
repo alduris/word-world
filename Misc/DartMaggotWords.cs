@@ -10,7 +10,7 @@ namespace WordWorld.Misc
             return [new(Font, "Maggot")];
         }
 
-        public static void Draw(DartMaggot maggot, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public static void Draw(DartMaggot maggot, FLabel[] labels, float timeStacker, Vector2 camPos)
         {
             labels[0].SetPosition(GetPos(maggot.firstChunk, timeStacker) - camPos);
             // this rotation thing doesn't work as intended but oh well /shrug

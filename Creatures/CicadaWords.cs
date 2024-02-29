@@ -21,7 +21,7 @@ namespace WordWorld.Creatures
         {
             var cicada = cicadaGraf.cicada;
             labels[0].SetPosition(AvgBodyChunkPos(cicada.bodyChunks[0], cicada.bodyChunks[1], timeStacker) - camPos);
-            labels[0].rotation = AngleBtwnChunks(cicada.bodyChunks[0], cicada.bodyChunks[1], timeStacker);
+            labels[0].rotation = AngleBtwnChunks(cicada.bodyChunks[0], cicada.bodyChunks[1], timeStacker) - 90f;
         }
     }
 }

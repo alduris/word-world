@@ -48,7 +48,7 @@ namespace WordWorld.Creatures
             return [.. labels];
         }
 
-        public static void Draw(SnailGraphics snailGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public static void Draw(SnailGraphics snailGraf, FLabel[] labels, float timeStacker, Vector2 camPos)
         {
             // Get the words and calculate the angle/pos of the snail
             var words = PascalRegex.Split(snailGraf.snail.abstractCreature.creatureTemplate.type.value).Where(x => x.Length > 0).ToArray();

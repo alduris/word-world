@@ -7,9 +7,9 @@ namespace WordWorld.Creatures.MoreSlugcats
 {
     public static class InspectorWords
     {
-        public static FLabel[] Init(InspectorGraphics inspGraf)
+        public static FLabel[] Init(InspectorGraphics inspGraf, CreatureTemplate.Type type)
         {
-            List<FLabel> labels = [new(Font, "Inspector")];
+            List<FLabel> labels = [new(Font, Unpascal(type))];
             for (int i = 0; i < inspGraf.myInspector.heads.Length; i++)
                 labels.Add(new(Font, "Head"));
 

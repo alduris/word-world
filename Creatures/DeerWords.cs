@@ -25,7 +25,7 @@ namespace WordWorld.Creatures
             return [bodyLabel, antlerLabel];
         }
 
-        public static void Draw(DeerGraphics deerGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public static void Draw(DeerGraphics deerGraf, FLabel[] labels, float timeStacker, Vector2 camPos)
         {
             var bodyChunks = deerGraf.deer.bodyChunks;
             labels[0].SetPosition(

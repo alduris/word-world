@@ -7,11 +7,11 @@ namespace WordWorld.Creatures.MoreSlugcats
 {
     public static class StowawayBugWords
     {
-        public static FLabel[] Init(StowawayBugGraphics stowawayGraf, RoomCamera.SpriteLeaser sLeaser)
+        public static FLabel[] Init(StowawayBugGraphics stowawayGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser sLeaser)
         {
             // Main body
             List<FLabel> labels = [
-                new(Font, "Stowaway") {
+                new(Font, type == MoreSlugcatsEnums.CreatureTemplateType.StowawayBug ? "Stowaway" : Unpascal(type)) {
                     scale = (stowawayGraf.myBug.bodyChunks[0].rad + stowawayGraf.myBug.bodyChunks[1].rad) * 2f / FontSize,
                     color = stowawayGraf.bodyColor
                 }

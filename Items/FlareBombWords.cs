@@ -5,7 +5,7 @@ namespace WordWorld.Items
 {
     public static class FlareBombWords
     {
-        public static FLabel[] Init(FlareBomb flare, RoomCamera.SpriteLeaser sLeaser)
+        public static FLabel[] Init(FlareBomb flare)
         {
             var label = new FLabel(Font, "F")
             {

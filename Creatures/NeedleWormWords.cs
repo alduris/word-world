@@ -21,7 +21,7 @@ namespace WordWorld.Creatures
             return labels;
         }
 
-        public static void Draw(NeedleWormGraphics nootGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public static void Draw(NeedleWormGraphics nootGraf, FLabel[] labels, float timeStacker, Vector2 camPos)
         {
             for (int i = 0; i < labels.Length; i++)
             {

@@ -7,6 +7,7 @@ namespace WordWorld.Creatures
     {
         public static FLabel[] Init(TempleGuardGraphics guardGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser sLeaser)
         {
+            // TODO: robes?
             var text = Unpascal(type);
             return [new FLabel(Font, text)
             {

@@ -6,12 +6,12 @@ namespace WordWorld.Items
 {
     public static class LillyPuckWords
     {
-        public static FLabel[] Init(LillyPuck lillyPuck, RoomCamera.SpriteLeaser sLeaser)
+        public static FLabel[] Init(LillyPuck lillyPuck)
         {
             var label = new FLabel(Font, "Lillypuck")
             {
                 scale = lillyPuck.firstChunk.rad * 3f / FontSize,
-                // scale = self.sprites[0].element.sourcePixelSize.y / TextWidth("Lillypuck"),
+                // scale = sLeaser.sprites[0].element.sourcePixelSize.y / TextWidth("Lillypuck"),
                 color = lillyPuck.flowerColor
             };
             return [label];

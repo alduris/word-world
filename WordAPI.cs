@@ -6,8 +6,7 @@ namespace WordWorld
 {
     internal struct CustomCase
     {
-        public Func<IDrawable, string[]> CreateLabels;
-        public Action<IDrawable, FLabel[]> StyleLabels;
+        public Func<IDrawable, RoomCamera.SpriteLeaser, FLabel[]> InitLabels;
         public Action<IDrawable, FLabel[], RoomCamera.SpriteLeaser, float, Vector2> DrawLabels;
     }
 
@@ -20,17 +19,16 @@ namespace WordWorld
         /// Registers an IDrawable with the mod to replace with text.
         /// </summary>
         /// <param name="type">The type, which extends IDrawable.</param>
-        /// <param name="createLabelsFunc">Function to return the strings to turn into FLabels. Parameter: the corresponding IDrawable.</param>
-        /// <param name="styleLabelsFunc">Action that will be called after InitializeSprites, meant to style the labels. Parameters: the IDrawable and the FLabels.</param>
+        /// <param name="initLabelsFunc">Action called once before the first call to drawLabelsFunc. Parameters: the IDrawable, the sprite leaser. Returns: the labels.</param>
         /// <param name="drawLabelsFunc">Action that will be called after DrawSprites, meant to move/rotate the labels. Parameters: the IDrawable, the FLabels, the sprite leaser, timeStacker, and camPos.</param>
         /// <exception cref="ArgumentException">Throws if the type passed into the function is not an IDrawable.</exception>
-        public static void RegisterItem(Type type, Func<IDrawable, string[]> createLabelsFunc, Action<IDrawable, FLabel[]> styleLabelsFunc, Action<IDrawable, FLabel[], RoomCamera.SpriteLeaser, float, Vector2> drawLabelsFunc)
+        public static void RegisterItem(Type type, Func<IDrawable, RoomCamera.SpriteLeaser, FLabel[]> initLabelsFunc, Action<IDrawable, FLabel[], RoomCamera.SpriteLeaser, float, Vector2> drawLabelsFunc)
         {
             if (!typeof(IDrawable).IsAssignableFrom(type))
             {
                 throw new ArgumentException("Type must implement IDrawable!");
             }
-            RegisteredClasses.Add(type, new CustomCase { CreateLabels = createLabelsFunc, StyleLabels = styleLabelsFunc, DrawLabels = drawLabelsFunc });
+            RegisteredClasses.Add(type, new CustomCase { InitLabels = initLabelsFunc, DrawLabels = drawLabelsFunc });
         }
 
         /// <summary>

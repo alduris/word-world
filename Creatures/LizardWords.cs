@@ -31,7 +31,7 @@ namespace WordWorld.Creatures
             return [.. labels];
         }
 
-        public static void Draw(LizardGraphics lizGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public static void Draw(LizardGraphics lizGraf, FLabel[] labels, float timeStacker, Vector2 camPos)
         {
             // Main body
             var chunks = lizGraf.lizard.bodyChunks;
@@ -47,7 +47,12 @@ namespace WordWorld.Creatures
                     var label = labels[i + 1];
                     label.SetPosition(PointAlongParts(i, 6, lizGraf.tongue, timeStacker) - camPos);
                     label.isVisible = lizGraf.lizard.tongue.Out;
-                    // future thing maybe: cyan lizards have custom tongue color depending on tongue vertex
+                    
+                    // Cyans get special tongue color
+                    if (lizGraf.lizard.abstractCreature.creatureTemplate.type == CreatureTemplate.Type.CyanLizard)
+                    {
+                        label.color = Color.Lerp(lizGraf.HeadColor(timeStacker), lizGraf.palette.blackColor, Mathf.InverseLerp(0f, 5f, i));
+                    }
                 }
             }
         }

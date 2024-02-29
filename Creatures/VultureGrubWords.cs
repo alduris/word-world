@@ -6,7 +6,7 @@ namespace WordWorld.Creatures
 {
     public static class VultureGrubWords
     {
-        public static FLabel[] Init(VultureGrubGraphics grubGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser sLeaser)
+        public static FLabel[] Init(VultureGrubGraphics grubGraf, CreatureTemplate.Type type)
         {
             var text = Unpascal(type);
             return [new FLabel(Font, text)
