@@ -134,7 +134,7 @@ namespace WordWorld
                         case MouseGraphics:         MouseWords.Draw(obj as MouseGraphics, labels, timeStacker, camPos); break;
                         case NeedleWormGraphics:    NeedleWormWords.Draw(obj as NeedleWormGraphics, labels, timeStacker, camPos); break;
                         case OverseerGraphics:      OverseerWords.Draw(obj as OverseerGraphics, labels, timeStacker, camPos); break;
-                        case PlayerGraphics:        PlayerWords.Draw(obj as PlayerGraphics, labels, timeStacker, camPos); break;
+                        case PlayerGraphics:        PlayerWords.Draw(obj as PlayerGraphics, labels, self, timeStacker, camPos); break;
                         case PoleMimicGraphics:     PoleMimicWords.Draw(obj as PoleMimicGraphics, labels, self, timeStacker, camPos); break;
                         case ScavengerGraphics:     ScavengerWords.Draw(obj as ScavengerGraphics, labels, self, timeStacker, camPos); break;
                         case SnailGraphics:         SnailWords.Draw(obj as SnailGraphics, labels, timeStacker, camPos); break;
