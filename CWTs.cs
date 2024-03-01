@@ -6,6 +6,7 @@ using RWCustom;
 using WordWorld.Creatures;
 using WordWorld.Creatures.MoreSlugcats;
 using WordWorld.Defaults;
+using WordWorld.Effects;
 using WordWorld.Items;
 using WordWorld.Misc;
 
@@ -111,6 +112,9 @@ namespace WordWorld
                     // Misc parts
                     SporePlant.Bee => SporePlantWords.BeeInit(),
                     SporePlant.AttachedBee => SporePlantWords.AttachedBeeInit(self),
+
+                    // Effects
+                    GoldFlakes.GoldFlake => GoldFlakeWords.Init(obj as GoldFlakes.GoldFlake, self),
 
                     // Misc
                     BigJellyFish      => BigJellyFishWords.Init(obj as BigJellyFish),

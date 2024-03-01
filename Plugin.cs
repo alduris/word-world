@@ -9,6 +9,7 @@ using SpriteLeaser = RoomCamera.SpriteLeaser;
 using WordWorld.Creatures.MoreSlugcats;
 using WordWorld.Creatures;
 using WordWorld.Defaults;
+using WordWorld.Effects;
 using WordWorld.Items;
 using WordWorld.Misc;
 
@@ -186,6 +187,9 @@ namespace WordWorld
                         // Extra parts
                         case SporePlant.Bee: SporePlantWords.BeeDraw(obj as SporePlant.Bee, labels, self, timeStacker, camPos); break;
                         case SporePlant.AttachedBee: SporePlantWords.AttachedBeeDraw(obj as SporePlant.AttachedBee, labels, self, timeStacker, camPos); break;
+
+                        // Effects
+                        case GoldFlakes.GoldFlake: GoldFlakeWords.Draw(obj as GoldFlakes.GoldFlake, labels, self, timeStacker, camPos); break;
 
                         // Misc
                         case BigJellyFish:      BigJellyFishWords.Draw(obj as BigJellyFish, labels, timeStacker, camPos); break;

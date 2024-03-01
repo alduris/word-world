@@ -5,13 +5,13 @@
     <LangVersion>12</LangVersion>
   </PropertyGroup>
 
-  <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>none</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
-  </PropertyGroup>-->
+  </PropertyGroup><!---->
 
   <ItemGroup>
     <Reference Include="../REFERENCES/*.dll">
