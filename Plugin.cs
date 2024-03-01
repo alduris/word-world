@@ -72,7 +72,7 @@ namespace WordWorld
         private static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
         {
             orig(self);
-            ShowSprites = self.devToolsActive;
+            //ShowSprites = self.devToolsActive;
         }
 
         private static void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
@@ -83,13 +83,6 @@ namespace WordWorld
 
         private static void SpriteLeaser_Update(On.RoomCamera.SpriteLeaser.orig_Update orig, SpriteLeaser self, float timeStacker, RoomCamera rCam, Vector2 camPos)
         {
-            if (ShowSprites)
-            {
-                foreach (var sprite in self.sprites)
-                {
-                    sprite.isVisible = true;
-                }
-            }
             orig(self, timeStacker, rCam, camPos);
 
             var labels = CWTs.GetLabels(self, rCam);
@@ -159,6 +152,7 @@ namespace WordWorld
                         case EnergyCell:       EnergyCellWords.Draw(obj as EnergyCell, labels, self, timeStacker, camPos); break;
                         case FirecrackerPlant: FirecrackerPlantWords.Draw(obj as FirecrackerPlant, labels, self, timeStacker, camPos); break;
                         case FireEgg:          FireEggWords.Draw(obj as FireEgg, labels, self, timeStacker, camPos); break;
+                        case FlareBomb:        FlareBombWords.Draw(obj as FlareBomb, labels, self, timeStacker, camPos); break;
                         case FlyLure:          FlyLureWords.Draw(obj as FlyLure, labels, self, timeStacker, camPos); break;
                         case GlowWeed:         GlowWeedWords.Draw(obj as GlowWeed, labels, timeStacker, camPos); break;
                         case GooieDuck:        GooieDuckWords.Draw(obj as GooieDuck, labels, timeStacker, camPos); break;
@@ -168,6 +162,7 @@ namespace WordWorld
                         case LillyPuck:        LillyPuckWords.Draw(obj as LillyPuck, labels, self, timeStacker, camPos); break;
                         case MoonCloak:        MoonCloakWords.Draw(obj as MoonCloak, labels, timeStacker, camPos); break;
                         case Mushroom:         MushroomWords.Draw(obj as Mushroom, labels, self, timeStacker, camPos); break;
+                        case NeedleEgg:        NeedleEggWords.Draw(obj as NeedleEgg, labels, self, timeStacker, camPos); break;
                         case NSHSwarmer:       NSHSwarmerWords.Draw(obj as NSHSwarmer, labels, self, timeStacker, camPos); break;
                         case OracleSwarmer:    OracleSwarmerWords.Draw(obj as OracleSwarmer, labels, self, timeStacker, camPos); break;
                         case OverseerCarcass:  OverseerCarcassWords.Draw(obj as OverseerCarcass, labels, self, timeStacker, camPos); break;

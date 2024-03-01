@@ -9,7 +9,7 @@ namespace WordWorld.Items
         {
             var label = new FLabel(Font, "F")
             {
-                scale = flare.firstChunk.rad * 3f / FontSize,
+                scale = flare.firstChunk.rad * 4f / FontSize,
                 color = Color.Lerp(flare.color, new(1f, 1f, 1f), 0.9f)
             };
             return [label];

@@ -95,6 +95,14 @@ namespace WordWorld.Creatures
             // Main body
             labels[0].SetPosition(AvgBodyChunkPos(playerGraf.player.bodyChunks[0], playerGraf.player.bodyChunks[1], timeStacker) - camPos);
             labels[0].rotation = AngleBtwnChunks(playerGraf.player.bodyChunks[0], playerGraf.player.bodyChunks[1], timeStacker) + 90f;
+            labels[0].color = sLeaser.sprites[0].color; // playerGraf.player.isNPC ? playerGraf.player.ShortCutColor() : PlayerGraphics.SlugcatColor(playerGraf.CharacterForColor);
+            if (ModManager.MSC)
+            {
+                if (playerGraf.player.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Spear)
+                {
+                    labels[0].color = Color.Lerp(labels[0].color, new Color(1, 1, 1), Mathf.InverseLerp(0, 110, playerGraf.player.swallowAndRegurgitateCounter));
+                }
+            }
 
             // Tongue
             if (playerGraf.player.tongue != null)
@@ -124,12 +132,14 @@ namespace WordWorld.Creatures
                 }
             }
 
+            // The mark
+            sLeaser.sprites[10].isVisible = true;
+            sLeaser.sprites[11].isVisible = true;
+
             // Saint stuff
             if (playerGraf.player.room != null && ModManager.MSC && playerGraf.player.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Saint)
             {
                 // no clue if this works, this is based on stuff in PlayerGraphics.DrawSprites :monksilly:
-                sLeaser.sprites[10].isVisible = true;
-                sLeaser.sprites[11].isVisible = true;
                 sLeaser.sprites[14].isVisible = true;
                 sLeaser.sprites[13].isVisible = playerGraf.player.killFac > 0f || playerGraf.player.forceBurst;
                 sLeaser.sprites[15 + playerGraf.numGodPips + playerGraf.tentacles.Length * 2].isVisible = playerGraf.darkenFactor > 0f;

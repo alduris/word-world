@@ -76,8 +76,8 @@ namespace WordWorld.Misc
                 if (isArm)
                 {
                     Vector2 armNextPos = arm.next != null ? Vector2.Lerp(arm.next.lastPos, arm.next.pos, timeStacker) : GetPos(oracleGraf.oracle.bodyChunks[1], timeStacker);
-                    // labels[i].SetPosition(AvgVectors(armPos, armNextPos) - camPos);
-                    labels[i].SetPosition(arm.ElbowPos(timeStacker, armNextPos));
+                    labels[i].SetPosition(AvgVectors(armPos, armNextPos) - camPos);
+                    // labels[i].SetPosition(arm.ElbowPos(timeStacker, armNextPos));
                 }
                 else
                 {

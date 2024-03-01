@@ -59,10 +59,12 @@ namespace WordWorld.Creatures
             // Body sprite
             labels[0].SetPosition(GetPos(chunks[0], timeStacker) - camPos);
             labels[0].rotation = FixRotation(AngleBtwnChunks(chunks[0], chunks[2], timeStacker));
+            labels[0].color = sLeaser.sprites[vultureGraf.BodySprite].color;
 
             // Head
             labels[1].SetPosition(chunks[4].pos - camPos);
             labels[1].rotation = sLeaser.sprites[vultureGraf.HeadSprite].rotation;
+            labels[1].color = sLeaser.sprites[vultureGraf.EyesSprite].color;
 
             // Mask
             labels[2].isVisible = (vultureGraf.vulture.State as Vulture.VultureState).mask && !vultureGraf.IsMiros;
@@ -83,6 +85,7 @@ namespace WordWorld.Creatures
                     var pos = PointAlongTentacle(j - i, 4, tentacle, timeStacker);
                     labels[j].SetPosition(pos - camPos);
                     labels[j].rotation = FixRotation(AngleBtwn(pos, GetPos(tentacle.connectedChunk, timeStacker)));
+                    labels[j].color = HSLColor.Lerp(vultureGraf.ColorA, vultureGraf.ColorB, (j - i) / 3f).rgb;
                 }
             }
 
@@ -96,6 +99,7 @@ namespace WordWorld.Creatures
                 {
                     labels[i + offset].SetPosition(AvgVectors(tusks.tusks[i].chunkPoints[0, 0], tusks.tusks[i].chunkPoints[1, 0]) - camPos);
                     labels[i + offset].rotation = AngleBtwn(tusks.tusks[i].chunkPoints[0, 0], tusks.tusks[i].chunkPoints[1, 0]) + 90f;
+                    labels[i + offset].color = sLeaser.sprites[vultureGraf.MaskSprite].color;
                     //labels[i + offset].SetPosition(vultureGraf.tusks[i].pos - camPos);
                     //labels[i + offset].rotation = vultureGraf.tuskRotations[i] + (i % 2 == 0 ? -90f : 90f);
                     sLeaser.sprites[tusks.tusks[i].LaserSprite(vultureGraf)].isVisible = true;

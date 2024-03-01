@@ -34,7 +34,7 @@ namespace WordWorld.Creatures
                     AvgBodyChunkPos(bodyChunks[3], bodyChunks[4], timeStacker)
                 ) - camPos
             );
-            labels[1].SetPosition(GetPos(bodyChunks[5], timeStacker));
+            labels[1].SetPosition(GetPos(bodyChunks[5], timeStacker) - camPos);
             labels[1].rotation = Custom.VecToDeg(deerGraf.deer.HeadDir);
         }
     }

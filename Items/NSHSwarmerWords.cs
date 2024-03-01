@@ -11,6 +11,7 @@ namespace WordWorld.Items
         {
             var labels = POWords.Init(neuron, "N");
             labels[0].color = neuron.myColor;
+            labels[0].scale *= 1.5f;
             return labels;
         }
 

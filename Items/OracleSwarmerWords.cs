@@ -6,7 +6,12 @@ namespace WordWorld.Items
 {
     public static class OracleSwarmerWords
     {
-        public static FLabel[] Init(OracleSwarmer neuron) => POWords.Init(neuron, "N");
+        public static FLabel[] Init(OracleSwarmer neuron)
+        {
+            var labels = POWords.Init(neuron, "N");
+            labels[0].scale *= 1.5f;
+            return labels;
+        }
 
         public static void Draw(OracleSwarmer neuron, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {

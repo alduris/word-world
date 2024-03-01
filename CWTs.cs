@@ -84,6 +84,7 @@ namespace WordWorld
                     EnergyCell       => EnergyCellWords.Init(),
                     FirecrackerPlant => FirecrackerPlantWords.Init(),
                     FireEgg          => FireEggWords.Init(obj as FireEgg),
+                    FlareBomb        => FlareBombWords.Init(obj as FlareBomb),
                     FlyLure          => FlyLureWords.Init(),
                     GlowWeed         => GlowWeedWords.Init(obj as GlowWeed),
                     GooieDuck        => GooieDuckWords.Init(obj as GooieDuck),
@@ -91,8 +92,9 @@ namespace WordWorld
                     KarmaFlower      => KarmaFlowerWords.Init(obj as KarmaFlower),
                     Lantern          => LanternWords.Init(obj as Lantern, self),
                     LillyPuck        => LillyPuckWords.Init(obj as LillyPuck),
-                    Mushroom         => MushroomWords.Init(obj as Mushroom, self),
                     MoonCloak        => MoonCloakWords.Init(obj as MoonCloak),
+                    Mushroom         => MushroomWords.Init(obj as Mushroom, self),
+                    NeedleEgg        => NeedleEggWords.Init(obj as NeedleEgg),
                     NSHSwarmer       => NSHSwarmerWords.Init(obj as NSHSwarmer),
                     OracleSwarmer    => OracleSwarmerWords.Init(obj as OracleSwarmer),
                     OverseerCarcass  => OverseerCarcassWords.Init(obj as OverseerCarcass),
@@ -138,11 +140,13 @@ namespace WordWorld
                 // Assign container
                 if (labels != null)
                 {
+                    var container = self.sprites[0].container ?? rCam.ReturnFContainer("Midground");
+                    if (obj is Ghost || (ModManager.MSC && obj is EnergyCell)) container = rCam.ReturnFContainer("Items");
                     for (int i = 0; i < labels.Length; i++)
                     {
                         var label = labels[i];
                         label.alignment = FLabelAlignment.Center;
-                        (self.sprites[0].container ?? rCam.ReturnFContainer("Midground")).AddChild(label);
+                        container.AddChild(label);
                     }
                 }
 

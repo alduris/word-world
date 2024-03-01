@@ -15,9 +15,12 @@ namespace WordWorld.Items
         public static void Draw(EnergyCell cell, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
             POWords.Draw(cell, labels, timeStacker, camPos);
+
             var label = labels[0];
             label.scale = cell.scale * 2f / TextWidth("Cell");
             label.color = sLeaser.sprites[2].color;
+            if (label.color.b < 0.1f) label.color = new Color(0.1f, 0.1f, 0.1f);
+            
             sLeaser.sprites[2].isVisible = true;
             sLeaser.sprites[3].isVisible = true;
             sLeaser.sprites[4].isVisible = true;

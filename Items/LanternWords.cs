@@ -15,6 +15,7 @@ namespace WordWorld.Items
         public static void Draw(Lantern lantern, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
             POWords.Draw(lantern, labels, timeStacker, camPos);
+            labels[0].color = Color.Lerp(sLeaser.sprites[0].color, new Color(1f, 1f, 1f), 0.4f);
             sLeaser.sprites[3].isVisible = true;
         }
     }
