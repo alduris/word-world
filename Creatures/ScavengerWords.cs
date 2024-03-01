@@ -17,6 +17,10 @@ namespace WordWorld.Creatures
                 new(Font, "Head")
                 {
                     color = scavGraf.headColor.rgb
+                },
+                new(Font, "Mask")
+                {
+                    scale = 17.5f / FontSize / TextWidth("Mask")
                 }
             ];
         }
@@ -34,13 +38,12 @@ namespace WordWorld.Creatures
             labels[1].scale = chunks[2].rad * Mathf.Lerp(4f, 8f, eyesPop) / TextWidth("Head");
             labels[1].color = Color.Lerp(scavGraf.headColor.rgb, scavGraf.eyeColor.rgb, eyesPop);
 
-            // Reenable mask (elites/chieftan)
-            if (scavGraf.maskGfx != null)
+            var hasMask = scavGraf.maskGfx != null && !scavGraf.scavenger.readyToReleaseMask;
+            labels[2].isVisible = hasMask;
+            if (hasMask)
             {
-                for (int i = scavGraf.MaskSprite; i < scavGraf.MaskSprite + scavGraf.maskGfx.TotalSprites; i++)
-                {
-                    sLeaser.sprites[i].isVisible = true;
-                }
+                labels[2].SetPosition(labels[1].GetPosition());
+                labels[2].rotation = sLeaser.sprites[scavGraf.MaskSprite].rotation + 90f;
             }
         }
     }

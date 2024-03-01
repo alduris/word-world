@@ -152,6 +152,7 @@ namespace WordWorld
                         // Items
                         case BubbleGrass:      BubbleGrassWords.Draw(obj as BubbleGrass, labels, timeStacker, camPos); break;
                         case DandelionPeach:   DandelionPeachWords.Draw(obj as DandelionPeach, labels, timeStacker, camPos); break;
+                        case DangleFruit:      DangleFruitWords.Draw(obj as DangleFruit, labels, timeStacker, camPos); break;
                         case DataPearl:        DataPearlWords.Draw(obj as DataPearl, labels, timeStacker, camPos); break;
                         case EggBugEgg:        EggBugEggWords.Draw(obj as EggBugEgg, labels, timeStacker, camPos); break;
                         case EnergyCell:       EnergyCellWords.Draw(obj as EnergyCell, labels, self, timeStacker, camPos); break;
@@ -170,13 +171,19 @@ namespace WordWorld
                         case OracleSwarmer:    OracleSwarmerWords.Draw(obj as OracleSwarmer, labels, self, timeStacker, camPos); break;
                         case OverseerCarcass:  OverseerCarcassWords.Draw(obj as OverseerCarcass, labels, self, timeStacker, camPos); break;
                         case PuffBall:         PuffBallWords.Draw(obj as PuffBall, labels, timeStacker, camPos); break;
-                        case Rock:             RockWords.Draw(obj as Rock, labels, timeStacker, camPos); break;
                         case ScavengerBomb:    ScavengerBombWords.Draw(obj as ScavengerBomb, labels, self, timeStacker, camPos); break;
+                        case SeedCob:          SeedCobWords.Draw(obj as SeedCob, labels, self, timeStacker, camPos); break;
                         case SingularityBomb:  SingularityBombWords.Draw(obj as SingularityBomb, labels, timeStacker, camPos); break;
                         case SlimeMold:        SlimeMoldWords.Draw(obj as SlimeMold, labels, self, timeStacker, camPos); break;
                         case Spear:            SpearWords.Draw(obj as Spear, labels, self, timeStacker, camPos); break;
                         case SporePlant:       SporePlantWords.Draw(obj as SporePlant, labels, timeStacker, camPos); break;
+                        case SwollenWaterNut:  SwollenWaterNutWords.Draw(obj as SwollenWaterNut, labels, self, timeStacker, camPos); break;
+                        case VultureMask:      VultureMaskWords.Draw(obj as VultureMask, labels, self, timeStacker, camPos); break;
+                        case WaterNut:         WaterNutWords.Draw(obj as WaterNut, labels, self, timeStacker, camPos); break;
 
+                        case Rock:             RockWords.Draw(obj as Rock, labels, timeStacker, camPos); break; // this has to go down here because of WaterNut
+
+                        // Extra parts
                         case SporePlant.Bee: SporePlantWords.BeeDraw(obj as SporePlant.Bee, labels, self, timeStacker, camPos); break;
                         case SporePlant.AttachedBee: SporePlantWords.AttachedBeeDraw(obj as SporePlant.AttachedBee, labels, self, timeStacker, camPos); break;
 

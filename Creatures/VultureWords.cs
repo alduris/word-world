@@ -19,6 +19,10 @@ namespace WordWorld.Creatures
                 {
                     scale = vultureGraf.vulture.bodyChunks[4].rad * 4f / FontSize,
                     color = sLeaser.sprites[vultureGraf.EyesSprite].color
+                },
+                new(Font, "Mask")
+                {
+                    scale = 17.5f / FontSize * (vultureGraf.IsKing ? 1.15f : 1f)
                 }
             ];
             for (int i = 0; i < vultureGraf.vulture.tentacles.Length; i++)
@@ -60,20 +64,18 @@ namespace WordWorld.Creatures
             labels[1].SetPosition(chunks[4].pos - camPos);
             labels[1].rotation = sLeaser.sprites[vultureGraf.HeadSprite].rotation;
 
-            // Mask (reenable)
-            //labels[1].isVisible = (vultureGraf.vulture.State as Vulture.VultureState).mask;
-            if ((vultureGraf.vulture.State as Vulture.VultureState).mask)
+            // Mask
+            labels[2].isVisible = (vultureGraf.vulture.State as Vulture.VultureState).mask && !vultureGraf.IsMiros;
+            if (labels[2].isVisible)
             {
-                sLeaser.sprites[vultureGraf.MaskSprite].isVisible = true;
-                if (vultureGraf.IsKing)
-                {
-                    sLeaser.sprites[vultureGraf.MaskArrowSprite].isVisible = true;
-                }
+                labels[2].color = vultureGraf.vulture.kingTusks != null ? sLeaser.sprites[vultureGraf.MaskArrowSprite].color : sLeaser.sprites[vultureGraf.MaskSprite].color;
+                labels[2].SetPosition(chunks[4].pos - camPos);
+                labels[2].rotation = sLeaser.sprites[vultureGraf.HeadSprite].rotation + 90f;
             }
 
             // Vulture wings
             int k = 0;
-            for (int i = 2; i < 2 + tentacles.Length * 4; i += 4)
+            for (int i = 3; i < 3 + tentacles.Length * 4; i += 4)
             {
                 var tentacle = tentacles[k++];
                 for (int j = i; j < i + 4; j++) // 4 letters per wing
@@ -89,7 +91,7 @@ namespace WordWorld.Creatures
             {
                 var tusks = vultureGraf.vulture.kingTusks;
 
-                int offset = 2 + tentacles.Length * 4;
+                int offset = 3 + tentacles.Length * 4;
                 for (int i = 0; i < vultureGraf.tusks.Length; i++)
                 {
                     labels[i + offset].SetPosition(AvgVectors(tusks.tusks[i].chunkPoints[0, 0], tusks.tusks[i].chunkPoints[1, 0]) - camPos);

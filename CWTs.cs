@@ -77,6 +77,7 @@ namespace WordWorld
                     // Items
                     BubbleGrass      => BubbleGrassWords.Init(obj as BubbleGrass),
                     DandelionPeach   => DandelionPeachWords.Init(obj as DandelionPeach),
+                    DangleFruit      => DangleFruitWords.Init(obj as DangleFruit),
                     DataPearl        => DataPearlWords.Init(obj as DataPearl),
                     EggBugEgg        => EggBugEggWords.Init(obj as EggBugEgg),
                     EnergyCell       => EnergyCellWords.Init(),
@@ -95,13 +96,19 @@ namespace WordWorld
                     OracleSwarmer    => OracleSwarmerWords.Init(obj as OracleSwarmer),
                     OverseerCarcass  => OverseerCarcassWords.Init(obj as OverseerCarcass),
                     PuffBall         => PuffBallWords.Init(obj as PuffBall),
-                    Rock             => RockWords.Init(obj as Rock),
                     ScavengerBomb    => ScavengerBombWords.Init(obj as ScavengerBomb),
+                    SeedCob          => SeedCobWords.Init(),
                     SingularityBomb  => SingularityBombWords.Init(obj as SingularityBomb),
                     SlimeMold        => SlimeMoldWords.Init(obj as SlimeMold, self),
                     Spear            => SpearWords.Init(obj as Spear, self),
                     SporePlant       => SporePlantWords.Init(obj as SporePlant),
+                    SwollenWaterNut  => SwollenWaterNutWords.Init(obj as SwollenWaterNut),
+                    VultureMask      => VultureMaskWords.Init(obj as VultureMask),
+                    WaterNut         => WaterNutWords.Init(obj as WaterNut),
 
+                    Rock             => RockWords.Init(obj as Rock), // for priority reasons
+
+                    // Misc parts
                     SporePlant.Bee => SporePlantWords.BeeInit(),
                     SporePlant.AttachedBee => SporePlantWords.AttachedBeeInit(self),
 
