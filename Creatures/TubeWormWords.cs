@@ -44,7 +44,7 @@ namespace WordWorld.Creatures
                 int length = Length(tongue.idealRopeLength);
                 int numOfOs = length - 6;
 
-                for (int j = 0; j > length; j++)
+                for (int j = 0; j < length; j++)
                 {
                     int k = (j >= 1 && j < 1 + numOfOs) ? 1 : (j < 1 ? j : j - numOfOs);
                     float num = Mathf.Sin(Mathf.InverseLerp(0, length - 1, j) * Mathf.PI);
