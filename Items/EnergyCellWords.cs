@@ -19,7 +19,7 @@ namespace WordWorld.Items
             var label = labels[0];
             label.scale = cell.scale * 2f / TextWidth("Cell");
             label.color = sLeaser.sprites[2].color;
-            if (label.color.b < 0.1f) label.color = new Color(0.1f, 0.1f, 0.1f);
+            if (label.color.b < 0.01f) label.color = new Color(0.01f, 0.01f, 0.01f); // prevents disappearing for some reason
             
             sLeaser.sprites[2].isVisible = true;
             sLeaser.sprites[3].isVisible = true;

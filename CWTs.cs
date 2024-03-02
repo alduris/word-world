@@ -119,6 +119,7 @@ namespace WordWorld
                     GoldFlakes.GoldFlake => GoldFlakeWords.Init(obj as GoldFlakes.GoldFlake, self),
 
                     // Misc
+                    AncientBot        => AncientBotWords.Init(),
                     BigJellyFish      => BigJellyFishWords.Init(obj as BigJellyFish),
                     Bullet            => BulletWords.Init(obj as Bullet),
                     DartMaggot        => DartMaggotWords.Init(),

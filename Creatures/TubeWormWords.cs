@@ -44,9 +44,9 @@ namespace WordWorld.Creatures
                 int length = Length(tongue.idealRopeLength);
                 int numOfOs = length - 6;
 
-                for (int j = length - 1; j >= 0; j--)
+                for (int j = 0; j > length; j++)
                 {
-                    int k = (j >= 1 && j < numOfOs) ? 1 : (j < 1 ? j : j - numOfOs);
+                    int k = (j >= 1 && j < 1 + numOfOs) ? 1 : (j < 1 ? j : j - numOfOs);
                     float num = Mathf.Sin(Mathf.InverseLerp(0, length - 1, j) * Mathf.PI);
                     labels.Add(new(Font, "Tongue"[k].ToString())
                     {
@@ -85,7 +85,7 @@ namespace WordWorld.Creatures
                         labels[j].isVisible = true;
 
                         // Lerp along tongue
-                        var x = Mathf.InverseLerp(start, end - 1, j);
+                        var x = Mathf.InverseLerp(end - 1, start, j);
                         labels[j].SetPosition(PointAlongVectors(x, positions) - camPos);
                     }
                 }

@@ -187,6 +187,7 @@ namespace WordWorld
                         case GoldFlakes.GoldFlake: GoldFlakeWords.Draw(obj as GoldFlakes.GoldFlake, labels, self, timeStacker, camPos); break;
 
                         // Misc
+                        case AncientBot:        AncientBotWords.Draw(obj as AncientBot, labels, self, timeStacker, camPos); break;
                         case BigJellyFish:      BigJellyFishWords.Draw(obj as BigJellyFish, labels, timeStacker, camPos); break;
                         case Bullet:            BulletWords.Draw(obj as Bullet, labels, timeStacker, camPos); break;
                         case DartMaggot:        DartMaggotWords.Draw(obj as DartMaggot, labels, timeStacker, camPos); break;

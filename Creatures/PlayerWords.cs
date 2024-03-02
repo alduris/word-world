@@ -64,7 +64,7 @@ namespace WordWorld.Creatures
             List<FLabel> labels = [new FLabel(Font, str)
             {
                 scale = (playerGraf.player.bodyChunks.Sum(x => x.rad) + playerGraf.player.bodyChunkConnections[0].distance) / TextWidth(str),
-                color = playerGraf.player.isNPC ? playerGraf.player.ShortCutColor() : PlayerGraphics.SlugcatColor(playerGraf.CharacterForColor)
+                // color = playerGraf.player.isNPC ? playerGraf.player.ShortCutColor() : PlayerGraphics.SlugcatColor(playerGraf.CharacterForColor)
             }];
 
             // Tongue
@@ -75,9 +75,9 @@ namespace WordWorld.Creatures
                 int length = Math.Max((int)(tongue.idealRopeLength / (FontSize * 0.65f)), 6); // 0.65f is how much we scale it later
                 int numOfOs = length - 6;
                 
-                for (int i = length - 1; i >= 0; i--)
+                for (int i = 0; i < length; i++)
                 {
-                    int k = (i >= 1 && i < numOfOs) ? 1 : (i < 1 ? i : i - numOfOs);
+                    int k = (i >= 1 && i < 1 + numOfOs) ? 1 : (i < 1 ? i : i - numOfOs);
                     labels.Add(new(Font, "Tongue"[k].ToString())
                     {
                         scale = 0.65f,
@@ -95,13 +95,14 @@ namespace WordWorld.Creatures
             // Main body
             labels[0].SetPosition(AvgBodyChunkPos(playerGraf.player.bodyChunks[0], playerGraf.player.bodyChunks[1], timeStacker) - camPos);
             labels[0].rotation = AngleBtwnChunks(playerGraf.player.bodyChunks[0], playerGraf.player.bodyChunks[1], timeStacker) + 90f;
-            labels[0].color = sLeaser.sprites[0].color; // playerGraf.player.isNPC ? playerGraf.player.ShortCutColor() : PlayerGraphics.SlugcatColor(playerGraf.CharacterForColor);
-            if (ModManager.MSC)
+
+            if (ModManager.MSC && playerGraf.player.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Spear)
             {
-                if (playerGraf.player.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Spear)
-                {
-                    labels[0].color = Color.Lerp(labels[0].color, new Color(1, 1, 1), Mathf.InverseLerp(0, 110, playerGraf.player.swallowAndRegurgitateCounter));
-                }
+                labels[0].color = Color.Lerp(sLeaser.sprites[0].color, new Color(1f, 1f, 1f), playerGraf.tailSpecks.spearProg);
+            }
+            else
+            {
+                labels[0].color = sLeaser.sprites[0].color;
             }
 
             // Tongue
@@ -119,7 +120,7 @@ namespace WordWorld.Creatures
                         labels[i].isVisible = true;
 
                         // Lerp along tongue
-                        var x = Mathf.InverseLerp(1, labels.Length - 1, i);
+                        var x = Mathf.InverseLerp(labels.Length - 1, 1, i);
                         labels[i].SetPosition(PointAlongVectors(x, positions) - camPos);
                     }
                 }
