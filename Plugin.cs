@@ -21,7 +21,7 @@ using WordWorld.Misc;
 namespace WordWorld
 {
 
-    [BepInPlugin("alduris.wordworld", "Word World", "1.0.0")]
+    [BepInPlugin("alduris.wordworld", "Word World", "1.0.1")]
     internal class Plugin : BaseUnityPlugin
     {
         public static new ManualLogSource Logger;
