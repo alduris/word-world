@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordWorld", "WordWorld.csproj", "{A1ADED2E-D993-4FB3-9B63-EA8B3E023FEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordWorld", "src\WordWorld.csproj", "{A1ADED2E-D993-4FB3-9B63-EA8B3E023FEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -397,8 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-###############################################################################
-# My stuff
-output/*
-!output/modinfo.json
-!output/Thumbnail.png
+# Output
+mod/**/*.dll

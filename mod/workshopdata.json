@@ -1,0 +1,18 @@
+{
+  "Title": "Word World",
+  "Description": "Replaces things with words",
+  "ID": "alduris.wordworld",
+  "Version": "1.0.0",
+  "TargetGameVersion": "v1.9.14",
+  "Requirements": "",
+  "RequirementNames": "",
+  "Authors": "Alduris",
+  "Visibility": "Public",
+  "Tags": [
+    "Creatures",
+    "Items"
+  ],
+  "WorkshopID": 3171422590,
+  "UploadFilesOnly": true,
+  "UploadThumbnail": false
+}
