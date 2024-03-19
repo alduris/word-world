@@ -201,6 +201,7 @@ namespace WordWorld
                         case LizardSpit:        LizardSpitWords.Draw(obj as LizardSpit, labels, timeStacker, camPos); break;
                         case OracleGraphics:    OracleWords.Draw(obj as OracleGraphics, labels, self, timeStacker, camPos); break;
                         case VoidSpawnGraphics: VoidSpawnWords.Draw(obj as VoidSpawnGraphics, labels, self, timeStacker, camPos); break;
+                        case WormGrass.Worm:    WormGrassWords.Draw(obj as WormGrass.Worm, labels, self, timeStacker, camPos); break;
 
                         // Defaults
                         case GraphicsModule:  GMWords.Draw(obj as GraphicsModule, labels, self, timeStacker, camPos); break;

@@ -130,6 +130,7 @@ namespace WordWorld
                     LizardSpit        => LizardSpitWords.Init(obj as LizardSpit, self),
                     OracleGraphics    => OracleWords.Init(obj as OracleGraphics, self),
                     VoidSpawnGraphics => VoidSpawnWords.Init(obj as VoidSpawnGraphics),
+                    WormGrass.Worm    => WormGrassWords.Init(obj as WormGrass.Worm, self),
 
                     // Default
                     _ => null
