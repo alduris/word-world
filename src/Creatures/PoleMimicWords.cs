@@ -8,7 +8,7 @@ namespace WordWorld.Creatures
         public static FLabel[] Init(PoleMimicGraphics poleMimicGraf, CreatureTemplate.Type type)
         {
             // TODO: add extension trick like in centis and dlls with pole mimics, so that when hiding they are all l's or something to make a line and reveal letters sometimes
-            var labels = LabelsFromLetters(Unpascal(type));
+            var labels = LabelsFromLetters(type.value);
             foreach (var label in labels)
             {
                 label.scale = 1.5f;
