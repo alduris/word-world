@@ -55,7 +55,7 @@ namespace WordWorld
                 On.RoomCamera.SpriteLeaser.CleanSpritesAndRemove += SpriteLeaser_CleanSpritesAndRemove;
 
                 // This is literally only here for testing stuff
-                On.RainWorldGame.Update += RainWorldGame_Update;
+                // On.RainWorldGame.Update += RainWorldGame_Update;
 
                 // Mod compatibility
                 On.RainWorld.OnModsInit += RainWorld_OnModsInit;
@@ -72,7 +72,7 @@ namespace WordWorld
         private static void RainWorldGame_Update(On.RainWorldGame.orig_Update orig, RainWorldGame self)
         {
             orig(self);
-            //ShowSprites = self.devToolsActive;
+            ShowSprites = self.devToolsActive;
         }
 
         private static void RainWorld_OnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self)
@@ -184,12 +184,15 @@ namespace WordWorld
                         case SporePlant.AttachedBee: SporePlantWords.AttachedBeeDraw(obj as SporePlant.AttachedBee, labels, self, timeStacker, camPos); break;
 
                         // Effects
-                        case GoldFlakes.GoldFlake: GoldFlakeWords.Draw(obj as GoldFlakes.GoldFlake, labels, self, timeStacker, camPos); break;
+                        case GoldFlakes.GoldFlake:       GoldFlakeWords.Draw(obj as GoldFlakes.GoldFlake, labels, self, timeStacker, camPos); break;
+                        case GreenSparks.GreenSpark:     GreenSparkWords.Draw(obj as GreenSparks.GreenSpark, labels, self, timeStacker, camPos); break;
+                        case SkyDandelions.SkyDandelion: SkyDandelionWords.Draw(obj as SkyDandelions.SkyDandelion, labels, self, timeStacker, camPos); break;
 
                         // Misc
                         case AncientBot:        AncientBotWords.Draw(obj as AncientBot, labels, self, timeStacker, camPos); break;
                         case BigJellyFish:      BigJellyFishWords.Draw(obj as BigJellyFish, labels, timeStacker, camPos); break;
                         case Bullet:            BulletWords.Draw(obj as Bullet, labels, timeStacker, camPos); break;
+                        case CosmeticInsect:    CosmeticInsectWords.Draw(obj as CosmeticInsect, labels, self, timeStacker, camPos); break;
                         case DartMaggot:        DartMaggotWords.Draw(obj as DartMaggot, labels, timeStacker, camPos); break;
                         case Ghost:             GhostWords.Draw(obj as Ghost, labels, self, timeStacker, camPos); break;
                         case JellyFish:         JellyFishWords.Draw(obj as JellyFish, labels, self, timeStacker, camPos); break;

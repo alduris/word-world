@@ -115,12 +115,15 @@ namespace WordWorld
                     SporePlant.AttachedBee => SporePlantWords.AttachedBeeInit(self),
 
                     // Effects
-                    GoldFlakes.GoldFlake => GoldFlakeWords.Init(obj as GoldFlakes.GoldFlake, self),
+                    GoldFlakes.GoldFlake       => GoldFlakeWords.Init(obj as GoldFlakes.GoldFlake, self),
+                    GreenSparks.GreenSpark     => GreenSparkWords.Init(obj as GreenSparks.GreenSpark, self),
+                    SkyDandelions.SkyDandelion => SkyDandelionWords.Init(self),
 
                     // Misc
                     AncientBot        => AncientBotWords.Init(),
                     BigJellyFish      => BigJellyFishWords.Init(obj as BigJellyFish),
                     Bullet            => BulletWords.Init(obj as Bullet),
+                    CosmeticInsect    => CosmeticInsectWords.Init(obj as CosmeticInsect, self),
                     DartMaggot        => DartMaggotWords.Init(),
                     Ghost             => GhostWords.Init(obj as Ghost),
                     JellyFish         => JellyFishWords.Init(obj as JellyFish),
@@ -147,6 +150,11 @@ namespace WordWorld
                         var label = labels[i];
                         label.alignment = FLabelAlignment.Center;
                         container.AddChild(label);
+                    }
+                    if (obj is SkyDandelions.SkyDandelion && labels.Length == 2)
+                    {
+                        labels[1].RemoveFromContainer();
+                        rCam.ReturnFContainer("Shadows").AddChild(labels[1]);
                     }
                 }
 

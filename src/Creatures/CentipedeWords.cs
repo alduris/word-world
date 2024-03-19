@@ -48,7 +48,7 @@ namespace WordWorld.Creatures
             // Scale and color labels
             foreach (var label in labels)
             {
-                label.scale = scale;
+                label.scale = scale * 1.5f;
                 label.color = centiGraf.ShellColor;
             }
 

@@ -9,7 +9,7 @@ namespace WordWorld.Creatures
         public static FLabel[] Init(TentaclePlantGraphics kelpGraf, CreatureTemplate.Type type)
         {
             var labels = LabelsFromLetters(Unpascal(type));
-            var size = kelpGraf.plant.tentacle.idealLength / labels.Length / FontSize * 1.5f;
+            var size = kelpGraf.plant.tentacle.idealLength / labels.Length / FontSize * 2f;
             foreach (var label in labels)
             {
                 label.scale = size;
