@@ -17,6 +17,7 @@ You want the full list? Well, unless I forgot some or haven't updated the list i
 - Centipedes (all, including custom ones)
 - Cherrybombs
 - Coalescipedes
+- Cosmetic insects (all, including custom ones)
 - Dandelion peaches (MSC)
 - Dropwigs
 - Echoes
@@ -28,6 +29,7 @@ You want the full list? Well, unless I forgot some or haven't updated the list i
 - Gold flakes
 - Gooieducks (MSC)
 - Grapple worms
+- Green sparks
 - Guardians
 - Hanging fruit/blue fruit/whatever you call it
 - Hazers
@@ -67,6 +69,7 @@ You want the full list? Well, unless I forgot some or haven't updated the list i
 - Scavenger bombs
 - Seeds (MSC)
 - Singularity bombs (MSC)
+- Sky dandelions
 - Slime mold
 - Slugcats and slugpups (MSC)
 - Snails
@@ -79,6 +82,7 @@ You want the full list? Well, unless I forgot some or haven't updated the list i
 - Vultures (all)
 - Vulture grubs
 - Vulture masks
+- Worm grass
 - Yeeks (MSC)
 
 This is just the list of things that are fully supported, more things are to come. Most if not all custom creatures should have basic support too.
