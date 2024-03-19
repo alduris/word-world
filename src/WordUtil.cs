@@ -19,7 +19,7 @@ namespace WordWorld
 
         public static FLabel[] LabelsFromLetters(string text) => [.. text.ToCharArray().Select(c => new FLabel(Font, c.ToString()))];
         public static string Unpascal(string text) => PascalRegex.Replace(text, Environment.NewLine);
-        public static string Unpascal(global::CreatureTemplate.Type type) => Unpascal(type.value);
+        public static string Unpascal(CreatureTemplate.Type type) => Unpascal(type.value);
 
 
         /// <summary>
@@ -234,38 +234,6 @@ namespace WordWorld
         /// <summary>
         /// Gets a point along vectors
         /// </summary>
-        /// <param name="x">How far along the vectors to travel</param>
-        /// <param name="vectors">The vectors</param>
-        /// <returns>The point</returns>
-        public static Vector2 PointAlongVectors(float x, Vector2[] vectors)
-        {
-            if (vectors.Length == 1) return vectors[0];
-
-            // Calculate vector lengths
-            float totalLength = 0f;
-            float[] lengths = new float[vectors.Length];
-            for (int i = 0; i < vectors.Length - 1; i++)
-            {
-                float length = Vector2.Distance(vectors[i], vectors[i + 1]);
-                totalLength += length;
-                lengths[i] = length;
-            }
-
-            // Figure out where to travel to
-            float point = totalLength * x;
-            int curr = 0;
-            while (point - lengths[curr] > 0f && curr < lengths.Length - 1)
-            {
-                point -= lengths[curr];
-            }
-
-            // Return lerped vector
-            return Vector2.Lerp(vectors[curr], vectors[curr + 1], Mathf.InverseLerp(0, lengths[curr], point));
-        }
-
-        /// <summary>
-        /// Gets a point along vectors
-        /// </summary>
         /// <param name="x">How far along the vectors to travel, 0 to 1</param>
         /// <param name="vectors">The vectors</param>
         /// <returns>The point</returns>
@@ -317,6 +285,38 @@ namespace WordWorld
             {
                 return Mathf.LerpUnclamped(sprites[lambda((int)x)].rotation, sprites[lambda((int)x + 1)].rotation, x % 1f);
             }
+        }
+
+        /// <summary>
+        /// Returns the angle along vectors.
+        /// </summary>
+        /// <param name="x">How far along the vectors to travel</param>
+        /// <param name="vectors">The vectors</param>
+        /// <returns>The angle</returns>
+        public static float RotationAlongVectors(float x, List<Vector2> vectors)
+        {
+            if (vectors.Count <= 1) return 0f;
+
+            // Calculate vector lengths
+            float totalLength = 0f;
+            float[] lengths = new float[vectors.Count - 1];
+            for (int i = 0; i < lengths.Length; i++)
+            {
+                float length = Vector2.Distance(vectors[i], vectors[i + 1]);
+                totalLength += length;
+                lengths[i] = length;
+            }
+
+            // Figure out where to travel to
+            float point = totalLength * x;
+            int curr = 0;
+            while (point - lengths[curr] > 0f && curr < lengths.Length - 1)
+            {
+                point -= lengths[curr++];
+            }
+
+            // Return lerped vector
+            return AngleBtwn(vectors[curr], vectors[curr + 1]);
         }
     }
 }

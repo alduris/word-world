@@ -25,7 +25,7 @@ namespace WordWorld.Creatures
                 labels[i].SetPosition(PointAlongRope(i, labels.Length, kelpGraf.ropeGraphic, timeStacker) - camPos);
 
                 // Calculate color since it can vary
-                float colorIndex = Custom.LerpMap(i, 0, labels.Length - 1, 1, kelpGraf.danglers.Length - 1);
+                float colorIndex = Custom.LerpMap(i, 0, labels.Length - 1, 1, kelpGraf.danglers.Length);
                 Color color = Color.Lerp(sLeaser.sprites[Mathf.FloorToInt(colorIndex)].color, sLeaser.sprites[Mathf.CeilToInt(colorIndex)].color, colorIndex % 1f);
                 labels[i].color = color; // UndoColorLerp(color, rCam.currentPalette.blackColor, rCam.room.Darkness(kelpGraf.plant.rootPos));
             }

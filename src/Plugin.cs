@@ -55,7 +55,9 @@ namespace WordWorld
                 On.RoomCamera.SpriteLeaser.CleanSpritesAndRemove += SpriteLeaser_CleanSpritesAndRemove;
 
                 // This is literally only here for testing stuff
-                // On.RainWorldGame.Update += RainWorldGame_Update;
+                #if (DEBUG)
+                On.RainWorldGame.Update += RainWorldGame_Update;
+                #endif
 
                 // Mod compatibility
                 On.RainWorld.OnModsInit += RainWorld_OnModsInit;
