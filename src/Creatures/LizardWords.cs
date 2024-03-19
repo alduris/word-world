@@ -38,7 +38,7 @@ namespace WordWorld.Creatures
             var name = PascalRegex.Replace(lizGraf.lizard.abstractCreature.creatureTemplate.type.value, " ");
             var nameLen = TextWidth(name);
             var chunks = lizGraf.lizard.bodyChunks;
-            var headSize = Mathf.Max(0.2f, (lizGraf.head.rad + lizGraf.headConnectionRad) / (lizGraf.head.rad + lizGraf.headConnectionRad + lizGraf.BodyAndTailLength));
+            var headSize = Mathf.Max(0.3f, (lizGraf.head.rad + lizGraf.headConnectionRad) / (lizGraf.head.rad + lizGraf.headConnectionRad + lizGraf.BodyAndTailLength));
 
             bool side = GetPos(chunks[0], timeStacker).x < GetPos(chunks[2], timeStacker).x;
             var angle = FixRotation(AngleBtwnChunks(chunks[0], chunks[2], timeStacker)) - 90f;

@@ -24,7 +24,7 @@ namespace WordWorld.Misc
             var verticeColors = (sLeaser.sprites[0] as TriangleMesh).verticeColors;
             for (int i = 0; i < labels.Count; i++)
             {
-                labels[i].scale = (worm.length / labels.Count) / FontSize * 2f;
+                labels[i].scale = Mathf.Max(0.5f, (worm.length / labels.Count) / FontSize * 2f);
                 labels[i].color = verticeColors[Mathf.RoundToInt(Mathf.InverseLerp(0, labels.Count - 1, i) * (verticeColors.Length - 1))];
             }
 
