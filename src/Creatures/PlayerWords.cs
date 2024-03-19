@@ -92,9 +92,13 @@ namespace WordWorld.Creatures
 
         public static void Draw(PlayerGraphics playerGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
+            // Calculate pounce
+            bool readyToPounce = playerGraf.player.superLaunchJump > 19;
+            var offset = readyToPounce ? new Vector2(0f, 3f) : Vector2.zero;
+
             // Main body
-            labels[0].SetPosition(AvgBodyChunkPos(playerGraf.player.bodyChunks[0], playerGraf.player.bodyChunks[1], timeStacker) - camPos);
-            labels[0].rotation = AngleBtwnChunks(playerGraf.player.bodyChunks[0], playerGraf.player.bodyChunks[1], timeStacker) + 90f;
+            labels[0].SetPosition(AvgBodyChunkPos(playerGraf.player.bodyChunks[0], playerGraf.player.bodyChunks[1], timeStacker) - camPos + (readyToPounce ? new Vector2(0, 1.5f) : Vector2.zero));
+            labels[0].rotation = AngleBtwn(GetPos(playerGraf.player.bodyChunks[0], timeStacker), GetPos(playerGraf.player.bodyChunks[1], timeStacker) + offset) + 90f;
 
             if (ModManager.MSC && playerGraf.player.SlugCatClass == MoreSlugcatsEnums.SlugcatStatsName.Spear)
             {
