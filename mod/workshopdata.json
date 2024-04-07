@@ -1,9 +1,9 @@
 {
   "Title": "Word World",
-  "Description": "Replaces things with words",
+  "Description": "Replaces things with words. Lots of things.\r\n\r\nSecond video by Lolight2\r\n\r\nGitHub: https://github.com/alduris/word-world",
   "ID": "alduris.wordworld",
-  "Version": "1.0.0",
-  "TargetGameVersion": "v1.9.14",
+  "Version": "1.0.1",
+  "TargetGameVersion": "v1.9.15",
   "Requirements": "",
   "RequirementNames": "",
   "Authors": "Alduris",
