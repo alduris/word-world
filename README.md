@@ -2,7 +2,7 @@
 A Rain World mod that turns things into words. Lots of things. Download from the releases in the sidebar.
 
 ## Bugs and nasty things
-This mod will automatically shut off _all_ of its effects in the event something goes wrong. If everything starts showing up again like normal, you will know this happened. If you wish to report any issues, send a report in the issues section of this GitHub (account required) and upload the `LogOutput.log` (located in {Rain World installation folder}/BepInEx from the playthrough this happened (do not restart the game in between).
+This mod will automatically shut off the effects of anything that causes problems in the event something goes wrong. If something starts showing up again like normal, you will know this happened. If you wish to report any issues, send a report in the issues section of this GitHub (account required) and upload the `LogOutput.log` (located in {Rain World installation folder}/BepInEx from the playthrough this happened (do not restart the game in between).
 
 ## Things covered
 You want the full list? Well, unless I forgot some or haven't updated the list in the future:
