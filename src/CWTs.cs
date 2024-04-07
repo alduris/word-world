@@ -16,7 +16,9 @@ namespace WordWorld
         
         private static readonly ConditionalWeakTable<RoomCamera.SpriteLeaser, FLabel[]> graphicsCWT = new();
         public static FLabel[] GetLabels(this RoomCamera.SpriteLeaser module, RoomCamera rCam) => graphicsCWT.GetValue(module, self => {
-            if (!Plugin.DoThings || rCam == null) return null;
+            var obj = self.drawableObject;
+            if (!Plugin.DoThings || rCam == null || (Plugin.Disabled.Count > 0 && Plugin.Disabled.Contains(obj.GetType()))) return null;
+
             try
             {
                 var Font = Custom.GetFont();
@@ -28,7 +30,6 @@ namespace WordWorld
                 }
 
                 // Get thing to draw
-                IDrawable obj = self.drawableObject;
 
                 // If it's a creature, get its creature template type
                 CreatureTemplate.Type type = null;
@@ -163,9 +164,9 @@ namespace WordWorld
             }
             catch(Exception e)
             {
-                Plugin.Logger.LogError("Ran into error in CWT!");
+                Plugin.Disabled.Add(obj.GetType());
+                Plugin.Logger.LogError("Ran into error in CWT! Disabling future effects on cause. Cause: " + obj.GetType().FullName);
                 Plugin.Logger.LogError(e);
-                Plugin.DoThings = false;
                 return null;
             }
         });

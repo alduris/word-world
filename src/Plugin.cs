@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security;
 using System.Security.Permissions;
 using BepInEx;
@@ -42,10 +43,9 @@ namespace WordWorld
         internal static bool DoThings = true;
         internal static bool ShowSprites = false;
         internal static bool ClownLongLegs = false;
+        internal static HashSet<Type> Disabled = [];
 
-#pragma warning disable IDE0051 // Remove unused private members
         private void OnEnable()
-#pragma warning restore IDE0051 // Remove unused private members
         {
             Logger.LogInfo("Hooking");
             try
@@ -68,6 +68,7 @@ namespace WordWorld
             {
                 Logger.LogError("Ran into error hooking");
                 Logger.LogError(e);
+                DoThings = false;
             }
         }
 
@@ -88,8 +89,8 @@ namespace WordWorld
             orig(self, timeStacker, rCam, camPos);
 
             var labels = CWTs.GetLabels(self, rCam);
-            if (labels == null || !DoThings) return;
             var obj = self.drawableObject;
+            if (labels == null || !DoThings || (Disabled.Count > 0 && Disabled.Contains(obj.GetType()))) return;
 
             if (!ShowSprites)
             {
@@ -211,9 +212,9 @@ namespace WordWorld
             }
             catch (Exception e)
             {
-                Logger.LogError("Ran into error in SpriteLeaser.Update, disabling hook effects");
+                Disabled.Add(obj.GetType());
+                Logger.LogError("Ran into error in SpriteLeaser.Update! Disabling future effects on cause. Cause:" + obj.GetType().FullName);
                 Logger.LogError(e);
-                DoThings = false;
             }
         }
 
