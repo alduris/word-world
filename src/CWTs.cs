@@ -21,9 +21,11 @@ namespace WordWorld
 
             try
             {
+                // Something to create new thing here
+                throw new NotImplementedException();
 
                 // Test API stuff first
-                if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs) && funcs.InitLabels != null)
+                /*if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs) && funcs.InitLabels != null)
                 {
                     return funcs.InitLabels.Invoke(self.drawableObject, self);
                 }
@@ -159,7 +161,7 @@ namespace WordWorld
                     }
                 }
 
-                return labels;
+                return labels;*/
             }
             catch(Exception e)
             {
