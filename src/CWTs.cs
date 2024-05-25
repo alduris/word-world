@@ -14,14 +14,13 @@ namespace WordWorld
     internal static class CWTs
     {
         
-        private static readonly ConditionalWeakTable<RoomCamera.SpriteLeaser, FLabel[]> graphicsCWT = new();
-        public static FLabel[] GetLabels(this RoomCamera.SpriteLeaser module, RoomCamera rCam) => graphicsCWT.GetValue(module, self => {
+        private static readonly ConditionalWeakTable<RoomCamera.SpriteLeaser, IWordify> graphicsCWT = new();
+        public static IWordify GetWordify(this RoomCamera.SpriteLeaser module, RoomCamera rCam) => graphicsCWT.GetValue(module, self => {
             var obj = self.drawableObject;
             if (!Plugin.DoThings || rCam == null || (Plugin.Disabled.Count > 0 && Plugin.Disabled.Contains(obj.GetType()))) return null;
 
             try
             {
-                var Font = Custom.GetFont();
 
                 // Test API stuff first
                 if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs) && funcs.InitLabels != null)
@@ -170,10 +169,5 @@ namespace WordWorld
                 return null;
             }
         });
-
-        public static bool HasLabel(GraphicsModule gm)
-        {
-            return gm.owner is Creature || gm is OracleGraphics;
-        }
     }
 }

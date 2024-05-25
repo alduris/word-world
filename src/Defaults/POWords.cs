@@ -1,29 +1,42 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using static WordWorld.WordUtil;
 
 namespace WordWorld.Defaults
 {
-    internal static class POWords
+    public class POWords : Wordify<IDrawable>
     {
-        public static FLabel[] Init(PhysicalObject obj, string name)
+        public POWords() { }
+        public POWords(string text)
         {
-            var label = new FLabel(Font, name)
-            {
-                scale = obj.firstChunk.rad * 3f / FontSize
-            };
-
-            if (obj is PlayerCarryableItem)
-                label.color = (obj as PlayerCarryableItem).color;
-
-            return [label];
+            this.text = text;
         }
 
-        public static void Draw(PhysicalObject obj, FLabel[] labels, float timeStacker, Vector2 camPos)
-        {
-            labels[0].SetPosition(GetPos(obj.firstChunk, timeStacker) - camPos);
+        public string text = null;
+        public new PhysicalObject Obj;
 
-            if (obj is PlayerCarryableItem item)
-                labels[0].color = item.blink > 1 && Random.value > 0.5f ? item.blinkColor : item.color;
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
+        {
+            if (base.Obj is not PhysicalObject)
+            {
+                throw new ArgumentException("Cannot create a `POWords` without a `PhysicalObject`!");
+            }
+            Obj = base.Obj as PhysicalObject;
+
+            text ??= (Obj is Creature ? (Obj as Creature).abstractCreature.creatureTemplate.type.value : Obj.abstractPhysicalObject.type.value);
+            var label = new FLabel(Font, text)
+            {
+                scale = Obj.firstChunk.rad * 3f / FontSize
+            };
+            labels.Add(label);
+        }
+
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        {
+            labels[0].SetPosition(GetPos(Obj.firstChunk, timeStacker) - camPos);
+
+            if (Obj is PlayerCarryableItem item)
+                labels[0].color = item.blink > 1 && UnityEngine.Random.value > 0.5f ? item.blinkColor : item.color;
         }
     }
 }

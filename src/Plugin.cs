@@ -88,9 +88,9 @@ namespace WordWorld
         {
             orig(self, timeStacker, rCam, camPos);
 
-            var labels = CWTs.GetLabels(self, rCam);
+            var wordifier = CWTs.GetWordify(self, rCam);
             var obj = self.drawableObject;
-            if (labels == null || !DoThings || (Disabled.Count > 0 && Disabled.Contains(obj.GetType()))) return;
+            if (wordifier == null || !DoThings || (Disabled.Count > 0 && Disabled.Contains(obj.GetType()))) return;
 
             if (!ShowSprites)
             {
@@ -102,7 +102,10 @@ namespace WordWorld
 
             try
             {
-                if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs) && funcs.DrawLabels != null)
+                // TODO: how to make equivalent of switch-case thingy
+                wordifier.Draw(self, timeStacker, camPos);
+                
+                /*if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs) && funcs.DrawLabels != null)
                 {
                     // Deal with API stuff
                     funcs.DrawLabels.Invoke(obj, labels, self, timeStacker, camPos);
@@ -208,7 +211,7 @@ namespace WordWorld
                         case GraphicsModule:  GMWords.Draw(obj as GraphicsModule, labels, self, timeStacker, camPos); break;
                         case PhysicalObject:  POWords.Draw(obj as PhysicalObject, labels, timeStacker, camPos); break;
                     };
-                }
+                }*/
             }
             catch (Exception e)
             {
@@ -223,14 +226,7 @@ namespace WordWorld
             orig(self);
 
             // Remove labels
-            FLabel[] labels;
-            if ((labels = CWTs.GetLabels(self, null)) != null)
-            {
-                foreach (var label in labels)
-                {
-                    label.RemoveFromContainer();
-                }
-            }
+            CWTs.GetWordify(self, null)?.RemoveFromContainer();
         }
 
     }

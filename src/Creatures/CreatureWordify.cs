@@ -6,13 +6,13 @@ namespace WordWorld.Creatures
     {
         protected CreatureTemplate.Type Type = null;
 
-        public override void Init(T drawable, RoomCamera.SpriteLeaser sLeaser)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            if (drawable.owner is not Creature)
+            if (Obj.owner is not Creature)
             {
                 throw new ArgumentException("`CreatureWordify` must be used with a `GraphicsModule` that has a `Creature` owner!");
             }
-            Type = (drawable.owner as Creature).abstractCreature.creatureTemplate.type;
+            Type = (Obj.owner as Creature).abstractCreature.creatureTemplate.type;
         }
     }
 }
