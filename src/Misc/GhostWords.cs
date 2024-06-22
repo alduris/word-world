@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Misc
 {
-    public static class GhostWords
+    public class GhostWords : Wordify<Ghost>
     {
         public static FLabel[] Init(Ghost echo)
         {

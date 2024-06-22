@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class NSHSwarmerWords // why doesn't NSHSwarmer extend OracleSwarmer :(
+    public class NSHSwarmerWords : Wordify<NSHSwarmer> // why doesn't NSHSwarmer extend OracleSwarmer :(
     {
         public static FLabel[] Init(NSHSwarmer neuron)
         {

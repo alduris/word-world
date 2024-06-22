@@ -8,7 +8,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class PlayerWords
+    public class PlayerWords : Wordify<Player>
     {
         private static Color TongueColor(PlayerGraphics self, float x)
         {

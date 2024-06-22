@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class MouseWords
+    public class MouseWords : Wordify<Mouse>
     {
         public static FLabel[] Init(MouseGraphics mouseGraf, CreatureTemplate.Type type)
         {

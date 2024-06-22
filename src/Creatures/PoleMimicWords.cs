@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class PoleMimicWords
+    public class PoleMimicWords : Wordify<PoleMimic>
     {
         public static FLabel[] Init(PoleMimicGraphics poleMimicGraf, CreatureTemplate.Type type)
         {

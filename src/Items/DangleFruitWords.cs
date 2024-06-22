@@ -3,7 +3,7 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public static class DangleFruitWords
+    public class DangleFruitWords : Wordify<DangleFruit>
     {
         public static FLabel[] Init(DangleFruit fruit) => POWords.Init(fruit, "F");
 

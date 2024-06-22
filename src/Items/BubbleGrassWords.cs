@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class BubbleGrassWords
+    public class BubbleGrassWords : Wordify<BubbleGrass>
     {
         public static FLabel[] Init(BubbleGrass bubbleWeed) => POWords.Init(bubbleWeed, $"Bubble{Environment.NewLine}Weed");
 

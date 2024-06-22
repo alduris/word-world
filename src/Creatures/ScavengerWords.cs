@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class ScavengerWords
+    public class ScavengerWords : Wordify<Scavenger>
     {
         public static FLabel[] Init(ScavengerGraphics scavGraf, CreatureTemplate.Type type)
         {

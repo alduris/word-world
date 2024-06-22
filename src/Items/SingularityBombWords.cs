@@ -5,7 +5,7 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public static class SingularityBombWords
+    public class SingularityBombWords : Wordify<SingularityBomb>
     {
         public static FLabel[] Init(SingularityBomb bomb)
         {

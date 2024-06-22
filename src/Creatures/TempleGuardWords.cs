@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class TempleGuardWords
+    public class TempleGuardWords : Wordify<TempleGuard>
     {
         public static FLabel[] Init(TempleGuardGraphics guardGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser sLeaser)
         {

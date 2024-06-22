@@ -4,7 +4,7 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public static class DandelionPeachWords
+    public class DandelionPeachWords : Wordify<DandelionPeach>
     {
         public static FLabel[] Init(DandelionPeach obj) => POWords.Init(obj, "P");
 

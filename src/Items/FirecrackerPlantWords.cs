@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class FirecrackerPlantWords
+    public class FirecrackerPlantWords : Wordify<FirecrackerPlant>
     {
         private const string WORD = "Cherrybomb";
 

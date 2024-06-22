@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class NeedleWormWords
+    public class NeedleWormWords : Wordify<NeedleWorm>
     {
         public static FLabel[] Init(NeedleWormGraphics nootGraf, CreatureTemplate.Type type)
         {

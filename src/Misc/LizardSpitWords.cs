@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Misc
 {
-    public static class LizardSpitWords
+    public class LizardSpitWords : Wordify<LizardSpit>
     {
         public static FLabel[] Init(LizardSpit spit, RoomCamera.SpriteLeaser sLeaser)
         {

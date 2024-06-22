@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class CentipedeWords
+    public class CentipedeWords : Wordify<Centipede>
     {
         public static FLabel[] Init(CentipedeGraphics centiGraf, CreatureTemplate.Type type)
         {

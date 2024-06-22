@@ -3,7 +3,7 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public static class PuffBallWords
+    public class PuffBallWords : Wordify<PuffBall>
     {
         public static FLabel[] Init(PuffBall puff) => POWords.Init(puff, "Puff");
 

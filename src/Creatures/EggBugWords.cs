@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class EggBugWords
+    public class EggBugWords : Wordify<EggBug>
     {
         public static FLabel[] Init(EggBugGraphics eggBugGraf, CreatureTemplate.Type type)
         {

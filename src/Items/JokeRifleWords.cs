@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class JokeRifleWords
+    public class JokeRifleWords : Wordify<JokeRifle>
     {
         public static FLabel[] Init(RoomCamera.SpriteLeaser sLeaser)
         {

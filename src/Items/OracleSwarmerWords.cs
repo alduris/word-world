@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class OracleSwarmerWords
+    public class OracleSwarmerWords : Wordify<OracleSwarmer>
     {
         public static FLabel[] Init(OracleSwarmer neuron)
         {

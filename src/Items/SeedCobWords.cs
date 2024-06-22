@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class SeedCobWords
+    public class SeedCobWords : Wordify<SeedCob>
     {
         public static FLabel[] Init()
         {

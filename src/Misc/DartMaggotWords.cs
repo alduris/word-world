@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Misc
 {
-    public static class DartMaggotWords
+    public class DartMaggotWords : Wordify<DartMaggot>
     {
         public static FLabel[] Init()
         {

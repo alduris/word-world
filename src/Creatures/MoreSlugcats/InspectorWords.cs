@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures.MoreSlugcats
 {
-    public static class InspectorWords
+    public class InspectorWords : Wordify<Inspector>
     {
         public static FLabel[] Init(InspectorGraphics inspGraf, CreatureTemplate.Type type)
         {

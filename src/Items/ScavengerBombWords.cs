@@ -3,7 +3,7 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public static class ScavengerBombWords
+    public class ScavengerBombWords : Wordify<ScavengerBomb>
     {
         public static FLabel[] Init(ScavengerBomb bomb) => POWords.Init(bomb, "B");
 

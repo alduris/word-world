@@ -6,7 +6,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures.MoreSlugcats
 {
-    public static class YeekWords
+    public class YeekWords : Wordify<Yeek>
     {
         public static FLabel[] Init(YeekGraphics yeekGraf, CreatureTemplate.Type type)
         {

@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures.MoreSlugcats
 {
-    public static class StowawayBugWords
+    public class StowawayBugWords : Wordify<StowawayBug>
     {
         public static FLabel[] Init(StowawayBugGraphics stowawayGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser sLeaser)
         {

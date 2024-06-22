@@ -3,7 +3,7 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public static class DataPearlWords
+    public class DataPearlWords : Wordify<DataPearl>
     {
         public static FLabel[] Init(DataPearl pearl) => POWords.Init(pearl, "P");
 

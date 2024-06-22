@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class FlareBombWords
+    public class FlareBombWords : Wordify<FlareBomb>
     {
         public static FLabel[] Init(FlareBomb flare)
         {

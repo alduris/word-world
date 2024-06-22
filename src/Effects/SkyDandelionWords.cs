@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Effects
 {
-    public static class SkyDandelionWords
+    public class SkyDandelionWords : Wordify<SkyDandelion>
     {
         public static FLabel[] Init(RoomCamera.SpriteLeaser sLeaser)
         {

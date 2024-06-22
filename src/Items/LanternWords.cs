@@ -3,7 +3,7 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public static class LanternWords
+    public class LanternWords : Wordify<Lantern>
     {
         public static FLabel[] Init(Lantern lantern, RoomCamera.SpriteLeaser sLeaser)
         {

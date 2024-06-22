@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class SporePlantWords
+    public class SporePlantWords : Wordify<SporePlant>
     {
         public static FLabel[] Init(SporePlant hive) => POWords.Init(hive, $"Bee{Environment.NewLine}hive");
 

@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class CicadaWords
+    public class CicadaWords : Wordify<Cicada>
     {
         public static FLabel[] Init(CicadaGraphics cicadaGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser sLeaser)
         {

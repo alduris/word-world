@@ -4,7 +4,7 @@ using Type = CosmeticInsect.Type;
 
 namespace WordWorld.Misc
 {
-    public static class CosmeticInsectWords
+    public class CosmeticInsectWords : Wordify<CosmeticInsect>
     {
         public static FLabel[] Init(CosmeticInsect bug, RoomCamera.SpriteLeaser sLeaser)
         {

@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Misc
 {
-    public static class AncientBotWords
+    public class AncientBotWords : Wordify<AncientBot>
     {
         public static FLabel[] Init()
         {

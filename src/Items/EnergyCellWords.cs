@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class EnergyCellWords
+    public class EnergyCellWords : Wordify<EnergyCell>
     {
         public static FLabel[] Init()
         {

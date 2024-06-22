@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class SlimeMoldWords
+    public class SlimeMoldWords : Wordify<SlimeMold>
     {
         public static FLabel[] Init(SlimeMold slime, RoomCamera.SpriteLeaser sLeaser)
         {

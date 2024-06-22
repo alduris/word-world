@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class OverseerWords
+    public class OverseerWords : Wordify<Overseer>
     {
         public static FLabel[] Init(OverseerGraphics overseerGraf, CreatureTemplate.Type type)
         {

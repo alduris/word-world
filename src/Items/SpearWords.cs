@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class SpearWords
+    public class SpearWords : Wordify<Spear>
     {
         private static Color SpearColor(Spear spear, RoomCamera.SpriteLeaser sLeaser)
         {

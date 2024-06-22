@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class VultureMaskWords
+    public class VultureMaskWords : Wordify<VultureMask>
     {
         public static FLabel[] Init(VultureMask mask)
         {

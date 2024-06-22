@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class NeedleEggWords
+    public class NeedleEggWords : Wordify<NeedleEgg>
     {
         public static FLabel[] Init(NeedleEgg egg) => POWords.Init(egg, "Egg");
 

@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class FlyLureWords
+    public class FlyLureWords : Wordify<FlyLure>
     {
         private const string WORD = "Batnip";
 

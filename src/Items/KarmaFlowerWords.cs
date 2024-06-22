@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class KarmaFlowerWords
+    public class KarmaFlowerWords : Wordify<KarmaFlower>
     {
         public static FLabel[] Init(KarmaFlower plant)
         {

@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class HazerWords
+    public class HazerWords : Wordify<Hazer>
     {
         public static FLabel[] Init(HazerGraphics hazerGraf, CreatureTemplate.Type type)
         {

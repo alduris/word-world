@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class SwollenWaterNutWords
+    public class SwollenWaterNutWords : Wordify<SwollenWaterNut>
     {
         public static FLabel[] Init(SwollenWaterNut nut) => POWords.Init(nut, "N");
 

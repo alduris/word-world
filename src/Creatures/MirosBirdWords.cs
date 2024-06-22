@@ -2,7 +2,7 @@
 
 namespace WordWorld.Creatures
 {
-    public static class MirosBirdWords
+    public class MirosBirdWords : Wordify<MirosBird>
     {
         public static FLabel[] Init(MirosBirdGraphics mirosGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser sLeaser)
         {

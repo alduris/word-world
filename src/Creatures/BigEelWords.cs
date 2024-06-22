@@ -4,34 +4,30 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class BigEelWords
+    public class BigEelWords : CreatureWordify<BigEelGraphics>
     {
-        public static FLabel[] Init(BigEelGraphics bigEelGraf, CreatureTemplate.Type type)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var labels = LabelsFromLetters(type == CreatureTemplate.Type.BigEel ? "Leviathan" : type.value);
+            labels.AddRange(LabelsFromLetters(Type == CreatureTemplate.Type.BigEel ? "Leviathan" : Type.value));
 
-            var scale = bigEelGraf.eel.bodyChunks.Max(c => c.rad) * 2.5f / FontSize;
-            var colorA = bigEelGraf.eel.iVars.patternColorA;
-            var colorB = bigEelGraf.eel.iVars.patternColorB;
-            for (int i = 0; i < labels.Length; i++)
+            var scale = Obj.eel.bodyChunks.Max(c => c.rad) * 2.5f / FontSize;
+            var colorA = Obj.eel.iVars.patternColorA;
+            var colorB = Obj.eel.iVars.patternColorB;
+            for (int i = 0; i < labels.Count; i++)
             {
                 var label = labels[i];
                 label.scale = scale;
-                label.color = HSLColor.Lerp(colorA, colorB, i / (float)(labels.Length - 1)).rgb;
+                label.color = HSLColor.Lerp(colorA, colorB, i / (float)(labels.Count - 1)).rgb;
             }
-
-            return labels;
         }
 
-        public static void Draw(BigEelGraphics bigEelGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-
-            // Text says "Leviathan" but split into individual chars
-            var chunks = bigEelGraf.eel.bodyChunks;
-            for (int i = 0; i < labels.Length; i++)
+            var chunks = Obj.eel.bodyChunks;
+            for (int i = 0; i < labels.Count; i++)
             {
-                labels[i].SetPosition(PointAlongChunks(i, labels.Length, chunks, timeStacker) - camPos);
-                labels[i].rotation = RotationAlongSprites(i, labels.Length, chunks.Length, sLeaser.sprites, bigEelGraf.BodyChunksSprite);
+                labels[i].SetPosition(PointAlongChunks(i, labels.Count, chunks, timeStacker) - camPos);
+                labels[i].rotation = RotationAlongSprites(i, labels.Count, chunks.Length, sLeaser.sprites, Obj.BodyChunksSprite);
             }
         }
     }

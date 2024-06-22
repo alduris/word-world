@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class LeechWords
+    public class LeechWords : Wordify<Leech>
     {
         public static FLabel[] Init(LeechGraphics leechGraf, CreatureTemplate.Type type)
         {

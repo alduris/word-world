@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace WordWorld.Creatures
 {
-    public static class TubeWormWords
+    public class TubeWormWords : Wordify<TubeWorm>
     {
         private static bool EasterEgg(TubeWorm worm)
         {

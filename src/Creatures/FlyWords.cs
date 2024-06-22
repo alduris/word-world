@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class FlyWords
+    public class FlyWords : Wordify<Fly>
     {
         public static FLabel[] Init(FlyGraphics flyGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser spriteLeaser)
         {

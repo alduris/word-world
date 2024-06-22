@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class DropBugWords
+    public class DropBugWords : Wordify<DropBug>
     {
         public static FLabel[] Init(DropBugGraphics dropBugGraf, CreatureTemplate.Type type)
         {

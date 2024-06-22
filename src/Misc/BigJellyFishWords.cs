@@ -7,7 +7,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Misc
 {
-    public static class BigJellyFishWords
+    public class BigJellyFishWords : Wordify<BigJellyFish>
     {
         public static FLabel[] Init(BigJellyFish bigJelly)
         {

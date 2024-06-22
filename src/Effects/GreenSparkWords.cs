@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Effects
 {
-    public static class GreenSparkWords
+    public class GreenSparkWords : Wordify<GreenSpark>
     {
         public static FLabel[] Init(GreenSparks.GreenSpark spark, RoomCamera.SpriteLeaser sLeaser)
         {

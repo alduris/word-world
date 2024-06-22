@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class LizardWords
+    public class LizardWords : Wordify<Lizard>
     {
         public static FLabel[] Init(LizardGraphics lizGraf, CreatureTemplate.Type type)
         {

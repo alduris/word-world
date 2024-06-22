@@ -9,7 +9,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class DaddyWords
+    public class DaddyWords : Wordify<Daddy>
     {
         private static int Length(Tentacle tentacle) => (int)(tentacle.idealLength / FontSize);
 

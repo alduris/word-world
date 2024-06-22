@@ -3,7 +3,7 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public static class OverseerCarcassWords
+    public class OverseerCarcassWords : Wordify<OverseerCarcass>
     {
         public static FLabel[] Init(OverseerCarcass eye)
         {

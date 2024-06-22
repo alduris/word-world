@@ -5,7 +5,7 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public static class GlowWeedWords
+    public class GlowWeedWords : Wordify<GlowWeed>
     {
         public static FLabel[] Init(GlowWeed obj) => POWords.Init(obj, $"Glow{Environment.NewLine}Weed");
 

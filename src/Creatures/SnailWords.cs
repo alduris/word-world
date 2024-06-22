@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class SnailWords
+    public class SnailWords : Wordify<Snail>
     {
         /*
          * Hi viewers of this class! This one is a bit of a doozie because snails have 2 colors and I wanted to be able to represent that on one word.

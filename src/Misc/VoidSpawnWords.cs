@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Misc
 {
-    public static class VoidSpawnWords
+    public class VoidSpawnWords : Wordify<VoidSpawn>
     {
         public static FLabel[] Init(VoidSpawnGraphics spawnGraf)
         {

@@ -7,7 +7,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Misc
 {
-    public static class OracleWords
+    public class OracleWords : Wordify<Oracle>
     {
         public static FLabel[] Init(OracleGraphics oracleGraf, RoomCamera.SpriteLeaser sLeaser)
         {

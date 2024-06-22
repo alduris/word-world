@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class EggBugEggWords
+    public class EggBugEggWords : Wordify<EggBugEgg>
     {
         public static FLabel[] Init(EggBugEgg egg)
         {

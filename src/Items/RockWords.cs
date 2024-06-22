@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class RockWords
+    public class RockWords : Wordify<Rock>
     {
         public static FLabel[] Init(Rock rock) => POWords.Init(rock, "R");
 

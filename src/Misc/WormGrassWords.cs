@@ -6,7 +6,7 @@ using Worm = WormGrass.Worm;
 
 namespace WordWorld.Misc
 {
-    public static class WormGrassWords
+    public class WormGrassWords : Wordify<WormGrass>
     {
         public static FLabel[] Init(Worm worm, RoomCamera.SpriteLeaser sLeaser)
         {

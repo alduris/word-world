@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class VultureGrubWords
+    public class VultureGrubWords : Wordify<VultureGrub>
     {
         public static FLabel[] Init(VultureGrubGraphics grubGraf, CreatureTemplate.Type type)
         {

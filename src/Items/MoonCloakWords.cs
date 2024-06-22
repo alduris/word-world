@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class MoonCloakWords
+    public class MoonCloakWords : Wordify<MoonCloak>
     {
         public static FLabel[] Init(MoonCloak cloak)
         {

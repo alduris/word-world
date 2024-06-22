@@ -3,7 +3,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public static class BigSpiderWords
+    public class BigSpiderWords : Wordify<BigSpider>
     {
         public static FLabel[] Init(BigSpiderGraphics bigSpiderGraf, CreatureTemplate.Type type)
         {

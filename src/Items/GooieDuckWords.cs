@@ -5,7 +5,7 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public static class GooieDuckWords
+    public class GooieDuckWords : Wordify<GooieDuck>
     {
         public static FLabel[] Init(GooieDuck gooieduck)
         {

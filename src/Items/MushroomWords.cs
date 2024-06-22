@@ -4,7 +4,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public static class MushroomWords
+    public class MushroomWords : Wordify<Mushroom>
     {
         public static FLabel[] Init(Mushroom plant, RoomCamera.SpriteLeaser sLeaser)
         {
