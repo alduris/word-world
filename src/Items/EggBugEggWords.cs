@@ -4,13 +4,12 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public class EggBugEggWords : Wordify<EggBugEgg>
+    public class EggBugEggWords() : POWordify<EggBugEgg>("Egg")
     {
-        public static FLabel[] Init(EggBugEgg egg)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [new FLabel(Font, "Egg") { scale = egg.firstChunk.rad * 3f / TextWidth("Egg"), color = egg.eggColors[1] }];
+            base.Init(sLeaser);
+            Label = new FLabel(Font, "Egg") { scale = Drawable.firstChunk.rad * 3f / TextWidth("Egg"), color = Drawable.eggColors[1] };
         }
-
-        public static void Draw(EggBugEgg egg, FLabel[] labels, float timeStacker, Vector2 camPos) => POWords.Draw(egg, labels, timeStacker, camPos);
     }
 }

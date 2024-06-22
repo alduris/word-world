@@ -147,17 +147,11 @@ namespace WordWorld
                 if (labels != null)
                 {
                     var container = self.sprites[0].container ?? rCam.ReturnFContainer("Midground");
-                    if (obj is Ghost || (ModManager.MSC && obj is EnergyCell)) container = rCam.ReturnFContainer("Items");
                     for (int i = 0; i < labels.Length; i++)
                     {
                         var label = labels[i];
                         label.alignment = FLabelAlignment.Center;
                         container.AddChild(label);
-                    }
-                    if (obj is SkyDandelions.SkyDandelion && labels.Length == 2)
-                    {
-                        labels[1].RemoveFromContainer();
-                        rCam.ReturnFContainer("Shadows").AddChild(labels[1]);
                     }
                 }
 

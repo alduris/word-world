@@ -4,21 +4,24 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class MouseWords : Wordify<Mouse>
+    public class MouseWords : CreatureWordify<MouseGraphics>
     {
-        public static FLabel[] Init(MouseGraphics mouseGraf, CreatureTemplate.Type type)
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var text = type == CreatureTemplate.Type.LanternMouse ? "Mouse" : Unpascal(type);
-            return [new FLabel(Font, text) {
-                scale = (mouseGraf.mouse.bodyChunks.Sum(x => x.rad) + mouseGraf.mouse.bodyChunkConnections[0].distance) / TextWidth(text)
-            }];
+            string text = Type == CreatureTemplate.Type.LanternMouse ? "Mouse" : Unpascal(Type);
+            label = new FLabel(Font, text)
+            {
+                scale = (Drawable.mouse.bodyChunks.Sum(x => x.rad) + Drawable.mouse.bodyChunkConnections[0].distance) / TextWidth(text)
+            };
         }
 
-        public static void Draw(MouseGraphics mouseGraf, FLabel[] labels, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].SetPosition(AvgBodyChunkPos(mouseGraf.mouse.bodyChunks[0], mouseGraf.mouse.bodyChunks[1], timeStacker) - camPos);
-            labels[0].rotation = AngleBtwnParts(mouseGraf.head, mouseGraf.tail, timeStacker) + 90f;
-            labels[0].color = mouseGraf.BodyColor;
+            label.SetPosition(AvgBodyChunkPos(Drawable.mouse.bodyChunks[0], Drawable.mouse.bodyChunks[1], timeStacker) - camPos);
+            label.rotation = AngleBtwnParts(Drawable.head, Drawable.tail, timeStacker) + 90f;
+            label.color = Drawable.BodyColor;
         }
     }
 }

@@ -4,23 +4,20 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public class MushroomWords : Wordify<Mushroom>
+    public class MushroomWords() : POWordify<Mushroom>("M")
     {
-        public static FLabel[] Init(Mushroom plant, RoomCamera.SpriteLeaser sLeaser)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var label = new FLabel(Font, "M")
-            {
-                scale = sLeaser.sprites[plant.HatSprite].element.sourcePixelSize.y / FontSize * 2f
-            };
-            return [label];
+            base.Init(sLeaser);
+            Label.scale = sLeaser.sprites[Drawable.HatSprite].element.sourcePixelSize.y / FontSize * 2f;
         }
 
-        public static void Draw(Mushroom plant, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            POWords.Draw(plant, labels, timeStacker, camPos);
-            labels[0].color = sLeaser.sprites[plant.HatSprite].color;
-            sLeaser.sprites[plant.StalkSprite].isVisible = true;
-            sLeaser.sprites[plant.EffectSprite].isVisible = true;
+            base.Draw(sLeaser, timeStacker, camPos);
+            Label.color = sLeaser.sprites[Drawable.HatSprite].color;
+            sLeaser.sprites[Drawable.StalkSprite].isVisible = true;
+            sLeaser.sprites[Drawable.EffectSprite].isVisible = true;
         }
     }
 }

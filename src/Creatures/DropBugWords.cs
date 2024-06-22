@@ -3,23 +3,24 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class DropBugWords : Wordify<DropBug>
+    public class DropBugWords : CreatureWordify<DropBugGraphics>
     {
-        public static FLabel[] Init(DropBugGraphics dropBugGraf, CreatureTemplate.Type type)
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [
-                new FLabel(Font, type == CreatureTemplate.Type.DropBug ? "Dropwig" : Unpascal(type))
-                {
-                    scale = dropBugGraf.bug.mainBodyChunk.rad * 3f / FontSize
-                }
-            ];
+            label = new(Font, Type == CreatureTemplate.Type.DropBug ? "Dropwig" : Unpascal(Type))
+            {
+                scale = Drawable.bug.mainBodyChunk.rad * 3f / FontSize
+            };
+            labels.Add(label);
         }
 
-        public static void Draw(DropBugGraphics dropBugGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].SetPosition(GetPos(dropBugGraf.bug.bodyChunks[1], timeStacker) - camPos);
-            labels[0].rotation = FixRotation(sLeaser.sprites[dropBugGraf.HeadSprite].rotation) + 90f;
-            labels[0].color = dropBugGraf.currSkinColor;
+            label.SetPosition(GetPos(Drawable.bug.bodyChunks[1], timeStacker) - camPos);
+            label.rotation = FixRotation(sLeaser.sprites[Drawable.HeadSprite].rotation) + 90f;
+            label.color = Drawable.currSkinColor;
         }
     }
 }

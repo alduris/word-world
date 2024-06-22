@@ -5,15 +5,17 @@ namespace WordWorld.Misc
 {
     public class LizardSpitWords : Wordify<LizardSpit>
     {
-        public static FLabel[] Init(LizardSpit spit, RoomCamera.SpriteLeaser sLeaser)
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [new(Font, "Spit") { color = Color.Lerp(sLeaser.sprites[spit.DotSprite].color, sLeaser.sprites[spit.JaggedSprite].color, 0.4f) }];
+            label = new(Font, "Spit") { color = Color.Lerp(sLeaser.sprites[Drawable.DotSprite].color, sLeaser.sprites[Drawable.JaggedSprite].color, 0.4f) };
         }
 
-        public static void Draw(LizardSpit spit, FLabel[] labels, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].SetPosition(Vector2.Lerp(spit.lastPos, spit.pos, timeStacker) - camPos);
-            labels[0].scale = spit.Rad * 4f / FontSize;
+            label.SetPosition(Vector2.Lerp(Drawable.lastPos, Drawable.pos, timeStacker) - camPos);
+            label.scale = Drawable.Rad * 4f / FontSize;
         }
     }
 }

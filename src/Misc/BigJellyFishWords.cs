@@ -9,52 +9,59 @@ namespace WordWorld.Misc
 {
     public class BigJellyFishWords : Wordify<BigJellyFish>
     {
-        public static FLabel[] Init(BigJellyFish bigJelly)
+        private FLabel bodyLabel;
+        private FLabel coreLabel;
+        private readonly List<List<FLabel>> tentacleLabels = [];
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
             // Create labels
-            List<FLabel> labels = [new(Font, "Big Jellyfish"), new(Font, "Core")];
-            for (int i = 0; i < bigJelly.tentacles.Length; i++)
+            bodyLabel = new(Font, "Big Jellyfish");
+            coreLabel = new(Font, "Core");
+            labels.Add(bodyLabel); labels.Add(coreLabel);
+
+            for (int i = 0; i < Drawable.tentacles.Length; i++)
             {
+                List<FLabel> list = [];
                 foreach (var c in "Tentacle".ToCharArray())
                 {
-                    labels.Add(new(Font, c.ToString()));
+                    list.Add(new(Font, c.ToString()));
                 }
+                tentacleLabels.Add(list);
+                labels.AddRange(list);
             }
 
             // Color and rescale labels
             foreach (var label in labels)
             {
-                label.color = bigJelly.color;
+                label.color = Drawable.color;
             }
 
-            var chunks = bigJelly.bodyChunks;
-            labels[0].scale = (chunks.Sum(x => x.rad) - chunks[bigJelly.CoreChunk].rad) * 2f / TextWidth(labels[0].text);
-            labels[1].color = bigJelly.coreColor;
-            labels[1].scale = chunks[bigJelly.CoreChunk].rad * 2f / TextWidth(labels[1].text);
-
-            return [.. labels];
+            var chunks = Drawable.bodyChunks;
+            bodyLabel.scale = (chunks.Sum(x => x.rad) - chunks[Drawable.CoreChunk].rad) * 2f / TextWidth(bodyLabel.text);
+            coreLabel.color = Drawable.coreColor;
+            coreLabel.scale = chunks[Drawable.CoreChunk].rad * 2f / TextWidth(coreLabel.text);
         }
 
-        public static void Draw(BigJellyFish bigJelly, FLabel[] labels, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
             // Main and core
-            labels[0].SetPosition(GetPos(bigJelly.mainBodyChunk, timeStacker) - camPos);
-            labels[1].SetPosition(GetPos(bigJelly.bodyChunks[bigJelly.CoreChunk], timeStacker) - camPos);
+            bodyLabel.SetPosition(GetPos(Drawable.mainBodyChunk, timeStacker) - camPos);
+            coreLabel.SetPosition(GetPos(Drawable.bodyChunks[Drawable.CoreChunk], timeStacker) - camPos);
 
             // Tentacles
-            for (int i = 0; i < bigJelly.tentacles.Length; i++)
+            for (int i = 0; i < tentacleLabels.Count; i++)
             {
-                var tentacle = bigJelly.tentacles[i];
-                // 8 = "Tentacle".Length
-                for (int j = 0; j < 8; j++)
+                var tentacle = Drawable.tentacles[i];
+                var labels = tentacleLabels[i];
+                for (int j = 0; j < labels.Count; j++)
                 {
-                    int k = 2 + i * 8 + j;
-                    var index = Custom.LerpMap(j, -1, 7, 0, tentacle.GetLength(0) - 1);
+                    var index = Custom.LerpMap(j, -1, labels.Count, 0, tentacle.GetLength(0) - 1);
                     var prevPos = Vector2.Lerp(tentacle[Mathf.FloorToInt(index), 1], tentacle[Mathf.FloorToInt(index), 0], timeStacker);
                     var nextPos = Vector2.Lerp(tentacle[Mathf.CeilToInt(index), 1], tentacle[Mathf.CeilToInt(index), 0], timeStacker);
 
-                    labels[k].SetPosition(Vector2.Lerp(prevPos, nextPos, index % 1) - camPos);
-                    labels[k].rotation = AngleBtwn(nextPos, prevPos);
+                    labels[j].SetPosition(Vector2.Lerp(prevPos, nextPos, index % 1) - camPos);
+                    labels[j].rotation = AngleBtwn(nextPos, prevPos);
                 }
             }
         }

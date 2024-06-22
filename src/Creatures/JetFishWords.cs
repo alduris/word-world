@@ -3,22 +3,24 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class JetFishWords : Wordify<JetFish>
+    public class JetFishWords : CreatureWordify<JetFishGraphics>
     {
-        public static FLabel[] Init(JetFishGraphics jetfishGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser sLeaser)
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var label = new FLabel(Font, type == CreatureTemplate.Type.JetFish ? "Jetfish" : Unpascal(type))
+            label = new FLabel(Font, Type == CreatureTemplate.Type.JetFish ? "Jetfish" : Unpascal(Type))
             {
-                scale = jetfishGraf.fish.bodyChunks[0].rad * 2.5f / FontSize,
-                color = sLeaser.sprites[jetfishGraf.BodySprite].color
+                scale = Drawable.fish.bodyChunks[0].rad * 2.5f / FontSize,
+                color = sLeaser.sprites[Drawable.BodySprite].color
             };
-            return [label];
+            labels.Add(label);
         }
 
-        public static void Draw(JetFishGraphics jetfishGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].SetPosition(AvgBodyChunkPos(jetfishGraf.fish.bodyChunks[0], jetfishGraf.fish.bodyChunks[1], timeStacker) - camPos);
-            labels[0].rotation = FixRotation(sLeaser.sprites[jetfishGraf.BodySprite].rotation + 90f);
+            label.SetPosition(AvgBodyChunkPos(Drawable.fish.bodyChunks[0], Drawable.fish.bodyChunks[1], timeStacker) - camPos);
+            label.rotation = FixRotation(sLeaser.sprites[Drawable.BodySprite].rotation + 90f);
         }
     }
 }

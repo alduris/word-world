@@ -4,20 +4,21 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public class KarmaFlowerWords : Wordify<KarmaFlower>
+    public class KarmaFlowerWords() : POWordify<KarmaFlower>("K")
     {
-        public static FLabel[] Init(KarmaFlower plant)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [new FLabel(Font, "K") { scale = 20f / FontSize, color = plant.color }];
+            base.Init(sLeaser);
+            Label.scale = 20f / FontSize;
         }
 
-        public static void Draw(KarmaFlower plant, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            POWords.Draw(plant, labels, timeStacker, camPos);
-            sLeaser.sprites[plant.StalkSprite].isVisible = true;
+            base.Draw(sLeaser, timeStacker, camPos);
+            sLeaser.sprites[Drawable.StalkSprite].isVisible = true;
             for (int i = 0; i < 3; i++)
             {
-                sLeaser.sprites[plant.EffectSprite(i)].isVisible = true;
+                sLeaser.sprites[Drawable.EffectSprite(i)].isVisible = true;
             }
         }
     }

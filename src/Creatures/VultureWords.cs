@@ -5,111 +5,114 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class VultureWords : Wordify<Vulture>
+    public class VultureWords : CreatureWordify<VultureGraphics>
     {
-        public static FLabel[] Init(VultureGraphics vultureGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser sLeaser)
+        private FLabel bodyLabel, headLabel, maskLabel;
+        private readonly List<List<FLabel>> wingLabels = [];
+        private FLabel[] tuskLabels;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            List<FLabel> list = [
-                new(Font, PascalRegex.Replace(type.value, Environment.NewLine))
-                {
-                    scale = vultureGraf.vulture.bodyChunks[0].rad * 4f / FontSize,
-                    color = sLeaser.sprites[vultureGraf.BodySprite].color
-                },
-                new(Font, "Head")
-                {
-                    scale = vultureGraf.vulture.bodyChunks[4].rad * 4f / FontSize,
-                    color = sLeaser.sprites[vultureGraf.EyesSprite].color
-                },
-                new(Font, "Mask")
-                {
-                    scale = 17.5f / FontSize * (vultureGraf.IsKing ? 1.15f : 1f)
-                }
-            ];
-            for (int i = 0; i < vultureGraf.vulture.tentacles.Length; i++)
+            bodyLabel = new(Font, PascalRegex.Replace(Type.value, Environment.NewLine))
             {
+                scale = Drawable.vulture.bodyChunks[0].rad * 4f / FontSize,
+                color = sLeaser.sprites[Drawable.BodySprite].color
+            };
+            headLabel = new(Font, "Head")
+            {
+                scale = Drawable.vulture.bodyChunks[4].rad * 4f / FontSize,
+                color = sLeaser.sprites[Drawable.EyesSprite].color
+            };
+            maskLabel = new(Font, "Mask")
+            {
+                scale = 17.5f / FontSize * (Drawable.IsKing ? 1.15f : 1f)
+            };
+
+            for (int i = 0; i < Drawable.vulture.tentacles.Length; i++)
+            {
+                List<FLabel> list = [];
                 for (int j = 0; j < 4; j++)
                 {
                     list.Add(new(Font, "Wing"[j].ToString())
                     {
                         scale = 1.5f,
-                        color = HSLColor.Lerp(vultureGraf.ColorA, vultureGraf.ColorB, j / 3f).rgb
+                        color = HSLColor.Lerp(Drawable.ColorA, Drawable.ColorB, j / 3f).rgb
                     });
                 }
+
+                wingLabels.Add(list);
+                labels.AddRange(list);
             }
-            if (vultureGraf.vulture.kingTusks != null)
+            if (Drawable.vulture.kingTusks != null)
             {
-                for (int i = 0; i < 2; i++)
+                tuskLabels = new FLabel[Drawable.tusks.Length];
+                for (int i = 0; i < Drawable.tusks.Length; i++)
                 {
-                    list.Add(new(Font, "Tusk")
+                    labels.Add(tuskLabels[i] = new(Font, "Tusk")
                     {
                         scale = KingTusks.Tusk.length / TextWidth("Tusk"),
-                        color = sLeaser.sprites[vultureGraf.MaskSprite].color
+                        color = sLeaser.sprites[Drawable.MaskSprite].color
                     });
                 }
             }
-            return [.. list];
         }
 
-        public static void Draw(VultureGraphics vultureGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
             // Labels: 0 -> body, 1 -> mask, [2,2+len(tentacles)*4] -> wings, the rest -> tusks (may not be present)
-            var chunks = vultureGraf.vulture.bodyChunks;
-            var tentacles = vultureGraf.vulture.tentacles; // vulture wings
+            var chunks = Drawable.vulture.bodyChunks;
+            var tentacles = Drawable.vulture.tentacles; // vulture wings
 
             // Body sprite
-            labels[0].SetPosition(GetPos(chunks[0], timeStacker) - camPos);
-            labels[0].rotation = FixRotation(AngleBtwnChunks(chunks[0], chunks[2], timeStacker));
-            labels[0].color = sLeaser.sprites[vultureGraf.BodySprite].color;
+            bodyLabel.SetPosition(GetPos(chunks[0], timeStacker) - camPos);
+            bodyLabel.rotation = FixRotation(AngleBtwnChunks(chunks[0], chunks[2], timeStacker));
+            bodyLabel.color = sLeaser.sprites[Drawable.BodySprite].color;
 
             // Head
-            labels[1].SetPosition(chunks[4].pos - camPos);
-            labels[1].rotation = sLeaser.sprites[vultureGraf.HeadSprite].rotation;
-            labels[1].color = sLeaser.sprites[vultureGraf.EyesSprite].color;
+            headLabel.SetPosition(chunks[4].pos - camPos);
+            headLabel.rotation = sLeaser.sprites[Drawable.HeadSprite].rotation;
+            headLabel.color = sLeaser.sprites[Drawable.EyesSprite].color;
 
             // Mask
-            labels[2].isVisible = (vultureGraf.vulture.State as Vulture.VultureState).mask && !vultureGraf.IsMiros;
-            if (labels[2].isVisible)
+            maskLabel.isVisible = (Drawable.vulture.State as Vulture.VultureState).mask && !Drawable.IsMiros;
+            if (maskLabel.isVisible)
             {
-                labels[2].color = vultureGraf.vulture.kingTusks != null ? sLeaser.sprites[vultureGraf.MaskArrowSprite].color : sLeaser.sprites[vultureGraf.MaskSprite].color;
-                labels[2].SetPosition(chunks[4].pos - camPos);
-                labels[2].rotation = sLeaser.sprites[vultureGraf.HeadSprite].rotation + 90f;
+                maskLabel.color = Drawable.vulture.kingTusks != null ? sLeaser.sprites[Drawable.MaskArrowSprite].color : sLeaser.sprites[Drawable.MaskSprite].color;
+                maskLabel.SetPosition(chunks[4].pos - camPos);
+                maskLabel.rotation = sLeaser.sprites[Drawable.HeadSprite].rotation + 90f;
             }
 
             // Vulture wings
-            int k = 0;
-            for (int i = 3; i < 3 + tentacles.Length * 4; i += 4)
+            for (int i = 0; i < wingLabels.Count; i++)
             {
-                var tentacle = tentacles[k++];
-                for (int j = i; j < i + 4; j++) // 4 letters per wing
+                var tentacle = tentacles[i];
+                var labels = wingLabels[i];
+                for (int j = 0; j < labels.Count; j++)
                 {
-                    var pos = PointAlongTentacle(j - i, 4, tentacle, timeStacker);
+                    var pos = PointAlongTentacle(j, labels.Count, tentacle, timeStacker);
                     labels[j].SetPosition(pos - camPos);
                     labels[j].rotation = FixRotation(AngleBtwn(pos, GetPos(tentacle.connectedChunk, timeStacker)));
-                    labels[j].color = HSLColor.Lerp(vultureGraf.ColorA, vultureGraf.ColorB, (j - i) / 3f).rgb;
+                    labels[j].color = HSLColor.Lerp(Drawable.ColorA, Drawable.ColorB, j / (labels.Count - 1f)).rgb;
                 }
             }
 
             // Tusks
-            if (vultureGraf.vulture.kingTusks != null)
+            if (Drawable.vulture.kingTusks != null)
             {
-                var tusks = vultureGraf.vulture.kingTusks;
-
-                int offset = 3 + tentacles.Length * 4;
-                for (int i = 0; i < vultureGraf.tusks.Length; i++)
+                var tusks = Drawable.vulture.kingTusks;
+                for (int i = 0; i < Drawable.tusks.Length; i++)
                 {
-                    labels[i + offset].SetPosition(AvgVectors(tusks.tusks[i].chunkPoints[0, 0], tusks.tusks[i].chunkPoints[1, 0]) - camPos);
-                    labels[i + offset].rotation = AngleBtwn(tusks.tusks[i].chunkPoints[0, 0], tusks.tusks[i].chunkPoints[1, 0]) + 90f;
-                    labels[i + offset].color = sLeaser.sprites[vultureGraf.MaskSprite].color;
-                    //labels[i + offset].SetPosition(vultureGraf.tusks[i].pos - camPos);
-                    //labels[i + offset].rotation = vultureGraf.tuskRotations[i] + (i % 2 == 0 ? -90f : 90f);
-                    sLeaser.sprites[tusks.tusks[i].LaserSprite(vultureGraf)].isVisible = true;
+                    tuskLabels[i].SetPosition(AvgVectors(tusks.tusks[i].chunkPoints[0, 0], tusks.tusks[i].chunkPoints[1, 0]) - camPos);
+                    tuskLabels[i].rotation = AngleBtwn(tusks.tusks[i].chunkPoints[0, 0], tusks.tusks[i].chunkPoints[1, 0]) + 90f;
+                    tuskLabels[i].color = sLeaser.sprites[Drawable.MaskSprite].color;
+                    sLeaser.sprites[tusks.tusks[i].LaserSprite(Drawable)].isVisible = true;
                 }
             }
 
             // Miros laser
-            if (vultureGraf.IsMiros)
+            if (Drawable.IsMiros)
             {
-                sLeaser.sprites[vultureGraf.LaserSprite()].isVisible = Mathf.Lerp(vultureGraf.lastLaserActive, vultureGraf.laserActive, timeStacker) > 0f;
+                sLeaser.sprites[Drawable.LaserSprite()].isVisible = Mathf.Lerp(Drawable.lastLaserActive, Drawable.laserActive, timeStacker) > 0f;
             }
         }
     }

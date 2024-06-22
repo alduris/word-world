@@ -3,19 +3,18 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public class LanternWords : Wordify<Lantern>
+    public class LanternWords() : POWordify<Lantern>("L")
     {
-        public static FLabel[] Init(Lantern lantern, RoomCamera.SpriteLeaser sLeaser)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var labels = POWords.Init(lantern, "L");
-            labels[0].color = sLeaser.sprites[0].color;
-            return labels;
+            base.Init(sLeaser);
+            Label.color = sLeaser.sprites[0].color;
         }
 
-        public static void Draw(Lantern lantern, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            POWords.Draw(lantern, labels, timeStacker, camPos);
-            labels[0].color = Color.Lerp(sLeaser.sprites[0].color, new Color(1f, 1f, 1f), 0.4f);
+            base.Draw(sLeaser, timeStacker, camPos);
+            Label.color = Drawable.blink > 1 ? Drawable.blinkColor : Color.Lerp(sLeaser.sprites[0].color, new Color(1f, 1f, 1f), 0.4f);
             sLeaser.sprites[3].isVisible = true;
         }
     }

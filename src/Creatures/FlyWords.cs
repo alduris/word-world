@@ -3,21 +3,24 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class FlyWords : Wordify<Fly>
+    public class FlyWords : CreatureWordify<FlyGraphics>
     {
-        public static FLabel[] Init(FlyGraphics flyGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser spriteLeaser)
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [new FLabel(Font, Unpascal(type))
+            label = new FLabel(Font, Unpascal(Type))
             {
-                scale = flyGraf.lowerBody.rad * 4f / FontSize,
-                color = spriteLeaser.sprites[0].color
-            }];
+                scale = Drawable.lowerBody.rad * 4f / FontSize,
+                color = sLeaser.sprites[0].color
+            };
+            labels.Add(label);
         }
 
-        public static void Draw(FlyGraphics flyGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].SetPosition(GetPos(flyGraf.lowerBody, timeStacker) - camPos);
-            labels[0].rotation = sLeaser.sprites[0].rotation;
+            label.SetPosition(GetPos(Drawable.lowerBody, timeStacker) - camPos);
+            label.rotation = sLeaser.sprites[0].rotation;
         }
     }
 }

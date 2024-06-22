@@ -5,27 +5,26 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures.MoreSlugcats
 {
-    public class InspectorWords : Wordify<Inspector>
+    public class InspectorWords : CreatureWordify<InspectorGraphics>
     {
-        public static FLabel[] Init(InspectorGraphics inspGraf, CreatureTemplate.Type type)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            List<FLabel> labels = [new(Font, Unpascal(type))];
-            for (int i = 0; i < inspGraf.myInspector.heads.Length; i++)
+            labels.Add(new(Font, Unpascal(Type)));
+            for (int i = 0; i < Drawable.myInspector.heads.Length; i++)
                 labels.Add(new(Font, "Head"));
 
             // Inspectors' main body chunks are teeny tiny little things (1/4 of a tile width in diameter, not radius)
             // Therefore, using it would be a bad idea (can barely see the label) so instead I hardcode it
             labels[0].scale = 1.5f; // inspGraf.myInspector.bodyChunks[0].rad * 2f / FontSize;
-            for (int i = 0; i < inspGraf.myInspector.heads.Length; i++)
+            for (int i = 0; i < Drawable.myInspector.heads.Length; i++)
             {
                 labels[i + 1].scale = 1.125f;
             }
-            return [.. labels];
         }
 
-        public static void Draw(InspectorGraphics inspGraf, FLabel[] labels, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            var insp = inspGraf.myInspector;
+            var insp = Drawable.myInspector;
 
             // Body
             labels[0].SetPosition(GetPos(insp.bodyChunks[0], timeStacker) - camPos);

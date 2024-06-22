@@ -4,16 +4,19 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public class SlimeMoldWords : Wordify<SlimeMold>
+    public class SlimeMoldWords : Wordify<SlimeMold> // Slime mold is evil thanks to MSC. It is used for like. 3 different things and they are completely unrelated
     {
-        public static FLabel[] Init(SlimeMold slime, RoomCamera.SpriteLeaser sLeaser)
+        private bool isSeed = false;
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            bool isSeed = ModManager.MSC && slime.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed; // why the hell are seeds slime mold
+            isSeed = ModManager.MSC && Drawable.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed; // why the hell are seeds slime mold
 
             // Figure out name and scaling
             var str = "Mold";
             var scale = 1f;
-            if (slime.JellyfishMode)
+            if (Drawable.JellyfishMode)
             {
                 str = "Jelly";
                 scale = 2.4f;
@@ -23,29 +26,27 @@ namespace WordWorld.Items
                 str = "Seed";
             }
 
-            if (slime.big)
+            if (Drawable.big)
             {
                 scale = 1.3f;
             }
 
             // Create label
-            var label = new FLabel(Font, str)
+            label = new FLabel(Font, str)
             {
-                scale = slime.firstChunk.rad * 3f / FontSize * scale,
-                color = isSeed ? sLeaser.sprites[0].color : slime.color
+                scale = Drawable.firstChunk.rad * 3f / FontSize * scale,
+                color = isSeed ? sLeaser.sprites[0].color : Drawable.color
             };
-
-            return [label];
+            labels.Add(label);
         }
 
-        public static void Draw(SlimeMold slime, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            bool isSeed = ModManager.MSC && slime.abstractPhysicalObject.type == MoreSlugcatsEnums.AbstractObjectType.Seed;
-            labels[0].SetPosition(GetPos(slime.firstChunk, timeStacker) - camPos);
+            label.SetPosition(GetPos(Drawable.firstChunk, timeStacker) - camPos);
             if (!isSeed)
             {
-                sLeaser.sprites[slime.LightSprite].isVisible = slime.darkMode > 0f;
-                sLeaser.sprites[slime.BloomSprite].isVisible = slime.darkMode > 0f;
+                sLeaser.sprites[Drawable.LightSprite].isVisible = Drawable.darkMode > 0f;
+                sLeaser.sprites[Drawable.BloomSprite].isVisible = Drawable.darkMode > 0f;
             }
         }
     }

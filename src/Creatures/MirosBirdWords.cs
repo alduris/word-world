@@ -1,38 +1,42 @@
-﻿using static WordWorld.WordUtil;
+﻿using UnityEngine;
+using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class MirosBirdWords : Wordify<MirosBird>
+    public class MirosBirdWords : CreatureWordify<MirosBirdGraphics>
     {
-        public static FLabel[] Init(MirosBirdGraphics mirosGraf, CreatureTemplate.Type type, RoomCamera.SpriteLeaser sLeaser)
+        private FLabel bodyLabel;
+        private FLabel eyeLabel;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [
-                new(Font, Unpascal(type))
-                {
-                    scale = mirosGraf.bird.mainBodyChunk.rad * 2f / FontSize,
-                    color = sLeaser.sprites[0].color
-                },
-                new(Font, "Eye")
-                {
-                    scale = mirosGraf.bird.Head.rad * 2f / FontSize,
-                    color = mirosGraf.EyeColor
-                }
-            ];
+            bodyLabel = new(Font, Unpascal(Type))
+            {
+                scale = Drawable.bird.mainBodyChunk.rad * 2f / FontSize,
+                color = sLeaser.sprites[0].color
+            };
+            eyeLabel = new(Font, "Eye")
+            {
+                scale = Drawable.bird.Head.rad * 2f / FontSize,
+                color = Drawable.EyeColor
+            };
+            labels.Add(bodyLabel);
+            labels.Add(eyeLabel);
         }
 
-        public static void Draw(MirosBirdGraphics mirosGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
             // Main body label
-            labels[0].SetPosition(sLeaser.sprites[mirosGraf.BodySprite].GetPosition());
-            labels[0].rotation = sLeaser.sprites[mirosGraf.BodySprite].rotation;
+            bodyLabel.SetPosition(sLeaser.sprites[Drawable.BodySprite].GetPosition());
+            bodyLabel.rotation = sLeaser.sprites[Drawable.BodySprite].rotation;
 
             // Eye label
-            labels[1].SetPosition(sLeaser.sprites[mirosGraf.HeadSprite].GetPosition());
-            labels[1].rotation = sLeaser.sprites[mirosGraf.HeadSprite].rotation;
-            labels[1].color = mirosGraf.EyeColor;
+            eyeLabel.SetPosition(sLeaser.sprites[Drawable.HeadSprite].GetPosition());
+            eyeLabel.rotation = sLeaser.sprites[Drawable.HeadSprite].rotation;
+            eyeLabel.color = Drawable.EyeColor;
 
             // Re-enable eye trail sprite
-            sLeaser.sprites[mirosGraf.EyeTrailSprite].isVisible = true;
+            sLeaser.sprites[Drawable.EyeTrailSprite].isVisible = true;
         }
     }
 }

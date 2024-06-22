@@ -5,25 +5,33 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public class EnergyCellWords : Wordify<EnergyCell>
+    public class EnergyCellWords() : POWordify<EnergyCell>("Cell")
     {
-        public static FLabel[] Init()
+        private float textWidth = 1f;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [new FLabel(Font, "Cell")];
+            base.Init(sLeaser);
+            textWidth = TextWidth(text);
         }
 
-        public static void Draw(EnergyCell cell, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            POWords.Draw(cell, labels, timeStacker, camPos);
+            base.Draw(sLeaser, timeStacker, camPos);
 
             var label = labels[0];
-            label.scale = cell.scale * 2f / TextWidth("Cell");
+            label.scale = Drawable.scale * 2f / textWidth;
             label.color = sLeaser.sprites[2].color;
             if (label.color.b < 0.01f) label.color = new Color(0.01f, 0.01f, 0.01f); // prevents disappearing for some reason
             
             sLeaser.sprites[2].isVisible = true;
             sLeaser.sprites[3].isVisible = true;
             sLeaser.sprites[4].isVisible = true;
+        }
+
+        protected override void AddToContainer(RoomCamera rCam, RoomCamera.SpriteLeaser sLeaser, FContainer container)
+        {
+            base.AddToContainer(rCam, sLeaser, rCam.ReturnFContainer("Items"));
         }
     }
 }

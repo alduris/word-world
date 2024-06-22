@@ -5,19 +5,13 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public class GooieDuckWords : Wordify<GooieDuck>
+    public class GooieDuckWords() : POWordify<GooieDuck>($"Gooie{Environment.NewLine}duck")
     {
-        public static FLabel[] Init(GooieDuck gooieduck)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            var labels = POWords.Init(gooieduck, $"Gooie{Environment.NewLine}duck");
-            labels[0].color = gooieduck.CoreColor;
-            return labels;
-        }
-
-        public static void Draw(GooieDuck gooieduck, FLabel[] labels, float timeStacker, Vector2 camPos)
-        {
-            POWords.Draw(gooieduck, labels, timeStacker, camPos);
-            labels[0].scale = gooieduck.firstChunk.rad * 3f / WordUtil.FontSize + Mathf.Sin(gooieduck.PulserA) / 6f;
+            base.Draw(sLeaser, timeStacker, camPos);
+            Label.scale = Drawable.firstChunk.rad * 3f / WordUtil.FontSize + Mathf.Sin(Drawable.PulserA) / 6f;
+            Label.color = Drawable.blink > 1 ? Drawable.blinkColor : Drawable.CoreColor;
         }
     }
 }

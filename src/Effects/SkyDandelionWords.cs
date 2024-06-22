@@ -1,13 +1,18 @@
 ﻿using UnityEngine;
 using static WordWorld.WordUtil;
+using SkyDandelion = SkyDandelions.SkyDandelion;
 
 namespace WordWorld.Effects
 {
     public class SkyDandelionWords : Wordify<SkyDandelion>
     {
-        public static FLabel[] Init(RoomCamera.SpriteLeaser sLeaser)
+        private bool hasShadow = false;
+        private FLabel label;
+        private FLabel shadowLabel;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var label = new FLabel(Font, "D")
+            label = new FLabel(Font, "D")
             {
                 scale = sLeaser.sprites[0].element.sourcePixelSize.y / FontSize * 2f,
                 color = sLeaser.sprites[0].color
@@ -19,31 +24,42 @@ namespace WordWorld.Effects
                 label.alpha = sLeaser.sprites[0].alpha;
             }
 
+            labels.Add(label);
+
             if (sLeaser.sprites.Length == 2)
             {
-                var shadowLabel = new FLabel(Font, "D")
+                shadowLabel = new FLabel(Font, "D")
                 {
                     scale = label.scale,
                     color = sLeaser.sprites[1].color
                 };
-                return [label, shadowLabel];
+                hasShadow = true;
+                labels.Add(shadowLabel);
             }
-            return [label];
         }
 
-        public static void Draw(SkyDandelions.SkyDandelion plant, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            var label = labels[0];
-            label.SetPosition(Vector2.Lerp(plant.lastPos, plant.pos, timeStacker) - camPos);
+            label.SetPosition(Vector2.Lerp(Drawable.lastPos, Drawable.pos, timeStacker) - camPos);
             if (label.scale > 0f)
             {
-                var health = Mathf.Lerp(plant.lastHealth, plant.health, timeStacker);
+                var health = Mathf.Lerp(Drawable.lastHealth, Drawable.health, timeStacker);
                 label.scale = sLeaser.sprites[0].element.sourcePixelSize.y / FontSize * health * 2f;
             }
 
-            if (labels.Length == 2)
+            if (hasShadow)
             {
-                labels[1].SetPosition(sLeaser.sprites[1].GetPosition());
+                shadowLabel.SetPosition(sLeaser.sprites[1].GetPosition());
+            }
+        }
+
+        protected override void AddToContainer(RoomCamera rCam, RoomCamera.SpriteLeaser sLeaser, FContainer container)
+        {
+            base.AddToContainer(rCam, sLeaser, container);
+            if (hasShadow)
+            {
+                shadowLabel.RemoveFromContainer();
+                rCam.ReturnFContainer("Shadows").AddChild(shadowLabel);
             }
         }
     }

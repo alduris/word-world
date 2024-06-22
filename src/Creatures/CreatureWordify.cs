@@ -5,15 +5,20 @@ namespace WordWorld.Creatures
     public abstract class CreatureWordify<T> : Wordify<T> where T : GraphicsModule
     {
         protected CreatureTemplate.Type Type = null;
-        public Creature Critter => Obj.owner as Creature;
 
-        public override void Init(RoomCamera.SpriteLeaser sLeaser)
+        public Creature Critter => Drawable.owner as Creature;
+
+        public sealed override void Init(IDrawable drawable, RoomCamera.SpriteLeaser sLeaser)
         {
-            if (Critter == null)
+            if ((drawable as GraphicsModule).owner is Creature c)
+            {
+                Type = c.abstractCreature.creatureTemplate.type;
+            }
+            else
             {
                 throw new ArgumentException("`CreatureWordify` must be used with a `GraphicsModule` that has a `Creature` owner!");
             }
-            Type = Critter.abstractCreature.creatureTemplate.type;
+            base.Init(drawable, sLeaser);
         }
     }
 }

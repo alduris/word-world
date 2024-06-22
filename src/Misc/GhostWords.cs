@@ -5,23 +5,30 @@ namespace WordWorld.Misc
 {
     public class GhostWords : Wordify<Ghost>
     {
-        public static FLabel[] Init(Ghost echo)
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [new(Font, "Echo")
+            label = new(Font, "Echo")
             {
-                scale = 8f * echo.scale,
-                color = echo.goldColor
-            }];
+                scale = 8f * Drawable.scale,
+                color = Drawable.goldColor
+            };
         }
 
-        public static void Draw(Ghost echo, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            var startPos = Vector2.Lerp(echo.spine[0].lastPos, echo.spine[0].pos, timeStacker);
-            var endPos = Vector2.Lerp(echo.spine[echo.spine.Length - 1].lastPos, echo.spine[echo.spine.Length - 1].pos, timeStacker);
-            labels[0].SetPosition(AvgVectors(startPos, endPos) - camPos);
-            labels[0].rotation = AngleBtwn(startPos, endPos);
-            sLeaser.sprites[echo.DistortionSprite].isVisible = true;
-            sLeaser.sprites[echo.LightSprite].isVisible = true;
+            var startPos = Vector2.Lerp(Drawable.spine[0].lastPos, Drawable.spine[0].pos, timeStacker);
+            var endPos = Vector2.Lerp(Drawable.spine[Drawable.spine.Length - 1].lastPos, Drawable.spine[Drawable.spine.Length - 1].pos, timeStacker);
+            label.SetPosition(AvgVectors(startPos, endPos) - camPos);
+            label.rotation = AngleBtwn(startPos, endPos);
+            sLeaser.sprites[Drawable.DistortionSprite].isVisible = true;
+            sLeaser.sprites[Drawable.LightSprite].isVisible = true;
+        }
+
+        protected override void AddToContainer(RoomCamera rCam, RoomCamera.SpriteLeaser sLeaser, FContainer container)
+        {
+            base.AddToContainer(rCam, sLeaser, rCam.ReturnFContainer("Items"));
         }
     }
 }

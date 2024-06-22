@@ -3,22 +3,24 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class LeechWords : Wordify<Leech>
+    public class LeechWords : CreatureWordify<LeechGraphics>
     {
-        public static FLabel[] Init(LeechGraphics leechGraf, CreatureTemplate.Type type)
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var label = new FLabel(Font, PascalRegex.Replace(type.value, " "))
+            label = new FLabel(Font, PascalRegex.Replace(Type.value, " "))
             {
-                scale = leechGraf.leech.mainBodyChunk.rad * 4f / FontSize
+                scale = Drawable.leech.mainBodyChunk.rad * 4f / FontSize
             };
-            return [label];
+            labels.Add(label);
         }
 
-        public static void Draw(LeechGraphics leechGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].color = sLeaser.sprites[0].color;
-            labels[0].SetPosition(GetPos(leechGraf.leech.mainBodyChunk, timeStacker) - camPos);
-            labels[0].rotation = AngleBtwnParts(leechGraf.body[0], leechGraf.body[leechGraf.body.Length - 1], timeStacker) + 90f;
+            label.color = sLeaser.sprites[0].color;
+            label.SetPosition(GetPos(Drawable.leech.mainBodyChunk, timeStacker) - camPos);
+            label.rotation = AngleBtwnParts(Drawable.body[0], Drawable.body[Drawable.body.Length - 1], timeStacker) + 90f;
         }
     }
 }

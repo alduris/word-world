@@ -4,26 +4,28 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class VultureGrubWords : Wordify<VultureGrub>
+    public class VultureGrubWords : CreatureWordify<VultureGrubGraphics>
     {
-        public static FLabel[] Init(VultureGrubGraphics grubGraf, CreatureTemplate.Type type)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var text = Unpascal(type);
-            return [new FLabel(Font, text)
+            var text = Unpascal(Type);
+            var label = new FLabel(Font, text)
             {
-                scale = grubGraf.worm.bodyChunks.Sum(x => x.rad) * 3f / TextWidth(text)
-            }];
+                scale = Drawable.worm.bodyChunks.Sum(x => x.rad) * 3f / TextWidth(text)
+            };
+            labels.Add(label);
+            // TODO: should I turn the laser into words as well?
         }
 
-        public static void Draw(VultureGrubGraphics grubGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
             // Body
-            labels[0].SetPosition(GetPos(grubGraf.worm.bodyChunks[0], timeStacker) - camPos);
-            labels[0].rotation = FixRotation(AngleBtwnChunks(grubGraf.worm.bodyChunks[1], grubGraf.worm.bodyChunks[2], timeStacker)) - 90f;
-            labels[0].color = sLeaser.sprites[grubGraf.MeshSprite].color;
+            labels[0].SetPosition(GetPos(Drawable.worm.bodyChunks[0], timeStacker) - camPos);
+            labels[0].rotation = FixRotation(AngleBtwnChunks(Drawable.worm.bodyChunks[1], Drawable.worm.bodyChunks[2], timeStacker)) - 90f;
+            labels[0].color = sLeaser.sprites[Drawable.MeshSprite].color;
 
             // Show laser sprite
-            sLeaser.sprites[grubGraf.LaserSprite].isVisible = Mathf.Lerp(grubGraf.lastLaserActive, grubGraf.laserActive, timeStacker) > 0f;
+            sLeaser.sprites[Drawable.LaserSprite].isVisible = Mathf.Lerp(Drawable.lastLaserActive, Drawable.laserActive, timeStacker) > 0f;
         }
     }
 }

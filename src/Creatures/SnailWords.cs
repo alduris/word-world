@@ -5,7 +5,7 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class SnailWords : Wordify<Snail>
+    public class SnailWords : CreatureWordify<SnailGraphics>
     {
         /*
          * Hi viewers of this class! This one is a bit of a doozie because snails have 2 colors and I wanted to be able to represent that on one word.
@@ -14,13 +14,15 @@ namespace WordWorld.Creatures
          * so complicated.
          */
 
-        public static FLabel[] Init(SnailGraphics snailGraf, CreatureTemplate.Type type)
+        private Snail Snail => Critter as Snail;
+        private List<List<FLabel>> lines;
+        private List<string> words;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var labels = new List<FLabel>();
-            
             // Compute how big the letters have to be
-            var snailWidth = snailGraf.snail.bodyChunks.Sum(x => x.rad) + snailGraf.snail.bodyChunkConnections.Sum(x => x.distance);
-            var words = PascalRegex.Split(type.value).Where(x => x.Length > 0);
+            words = PascalRegex.Split(Type.value).Where(x => x.Length > 0).ToList();
+            var snailWidth = Snail.bodyChunks.Sum(x => x.rad) + Snail.bodyChunkConnections.Sum(x => x.distance);
             var maxWidth = words.Max(TextWidth);
             var fontSize = snailWidth * 2f / maxWidth;
 
@@ -30,11 +32,12 @@ namespace WordWorld.Creatures
                 var thisWidth = TextWidth(word);
                 var invlerpMax = thisWidth - TextWidth(word[word.Length - 1].ToString());
 
+                List<FLabel> line = [];
                 for (int i = 0; i < word.Length; i++)
                 {
                     // Figure out color
                     var blendAmt = Mathf.InverseLerp(0f, invlerpMax, (i == 0 ? 0f : TextWidth(word.Substring(0, i))) + (maxWidth - thisWidth));
-                    var colorBlend = Color.Lerp(snailGraf.snail.shellColor[0], snailGraf.snail.shellColor[1], blendAmt);
+                    var colorBlend = Color.Lerp(Snail.shellColor[0], Snail.shellColor[1], blendAmt);
 
                     // Create label
                     var label = new FLabel(Font, word[i].ToString())
@@ -42,36 +45,34 @@ namespace WordWorld.Creatures
                         scale = fontSize,
                         color = colorBlend
                     };
-                    labels.Add(label);
+                    line.Add(label);
                 }
+                lines.Add(line);
+                labels.AddRange(line);
             }
-            return [.. labels];
         }
 
-        public static void Draw(SnailGraphics snailGraf, FLabel[] labels, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            // Get the words and calculate the angle/pos of the snail
-            var words = PascalRegex.Split(snailGraf.snail.abstractCreature.creatureTemplate.type.value).Where(x => x.Length > 0).ToArray();
-
-            var angle = AngleBtwnChunks(snailGraf.snail.bodyChunks[0], snailGraf.snail.bodyChunks[1], timeStacker); // + 90f; // readd +90f for head to end
-            var snailPos = GetPos(snailGraf.snail.bodyChunks[1], timeStacker);
+            var angle = AngleBtwnChunks(Snail.bodyChunks[0], Snail.bodyChunks[1], timeStacker); // + 90f; // readd +90f for head to end
+            var snailPos = GetPos(Snail.bodyChunks[1], timeStacker);
             
-            int k = 0;
-            for (int i = 0; i < words.Length; i++)
+            for (int i = 0; i < lines.Count; i++)
             {
-                // Negative because positive = up and we want later words to be below if custom creature uses Snail as base
-                var yPos = -FontSize * (i - (words.Length - 1f) / 2f);
+                var line = lines[i];
                 
-                for (int j = 0; j < words[i].Length; j++, k++)
+                var yPos = -FontSize * (i - (lines.Count - 1f) / 2f); // Negative because positive = up and we want later words to be below if custom creature uses Snail as base
+                
+                for (int j = 0; j < line.Count; j++)
                 {
-                    var xPos = (TextWidth(words[i].Substring(0, j)) - TextWidth(words[i]) / 2f + TextWidth(words[i][j].ToString())) * labels[k].scale;
+                    var xPos = (TextWidth(words[i].Substring(0, j)) - TextWidth(words[i]) / 2f + TextWidth(words[i][j].ToString())) * lines[i][j].scale;
                     var angleOff = Mathf.Atan2(yPos, xPos);
                     var dist = Mathf.Sqrt(xPos * xPos + yPos * yPos);
 
                     // Compute the final position/rotation of the label
                     var pos = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad + angleOff), -Mathf.Sin(angle * Mathf.Deg2Rad + angleOff)) * dist + snailPos - camPos;
-                    labels[k].SetPosition(pos);
-                    labels[k].rotation = angle;
+                    lines[i][j].SetPosition(pos);
+                    lines[i][j].rotation = angle;
                 }
             }
         }

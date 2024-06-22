@@ -6,21 +6,20 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures.MoreSlugcats
 {
-    public class YeekWords : Wordify<Yeek>
+    public class YeekWords : CreatureWordify<YeekGraphics>
     {
-        public static FLabel[] Init(YeekGraphics yeekGraf, CreatureTemplate.Type type)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var label = new FLabel(Font, type.value);
-            label.scale = yeekGraf.myYeek.bodyChunks[0].rad * 4f / TextWidth(label.text);
-            label.color = yeekGraf.furColor;
-            return [label];
+            var label = new FLabel(Font, Type.value);
+            label.scale = Drawable.myYeek.bodyChunks[0].rad * 4f / TextWidth(label.text);
+            label.color = Drawable.furColor;
+            labels.Add(label);
         }
 
-        public static void Draw(YeekGraphics yeekGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].SetPosition(GetPos(yeekGraf.myYeek.mainBodyChunk, timeStacker) - camPos);
-            labels[0].rotation = Custom.VecToDeg(Vector2.Lerp(yeekGraf.lastHeadDrawDirection, yeekGraf.headDrawDirection, timeStacker));
-            // labels[0].rotation = sLeaser.sprites[yeekGraf.HeadSpritesStart + 2].rotation;
+            labels[0].SetPosition(GetPos(Drawable.myYeek.mainBodyChunk, timeStacker) - camPos);
+            labels[0].rotation = Custom.VecToDeg(Vector2.Lerp(Drawable.lastHeadDrawDirection, Drawable.headDrawDirection, timeStacker));
         }
     }
 }

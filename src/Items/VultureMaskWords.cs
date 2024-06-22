@@ -5,22 +5,23 @@ namespace WordWorld.Items
 {
     public class VultureMaskWords : Wordify<VultureMask>
     {
-        public static FLabel[] Init(VultureMask mask)
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [
-                new FLabel(Font, "Mask")
-                {
-                    scale = 17.5f / FontSize * (mask.King ? 1.15f : 1f),
-                    rotation = 90f
-                }
-            ];
+            label = new FLabel(Font, "Mask")
+            {
+                scale = 17.5f / FontSize * (Drawable.King ? 1.15f : 1f),
+                rotation = 90f
+            };
+            labels.Add(label);
         }
 
-        public static void Draw(VultureMask mask, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].SetPosition(sLeaser.sprites[0].GetPosition());
-            labels[0].rotation = sLeaser.sprites[0].rotation + 90f;
-            labels[0].color = sLeaser.sprites[0].color;
+            label.SetPosition(sLeaser.sprites[0].GetPosition());
+            label.rotation = sLeaser.sprites[0].rotation + 90f;
+            label.color = sLeaser.sprites[0].color;
         }
     }
 }

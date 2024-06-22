@@ -1,9 +1,9 @@
-﻿using WordWorld.Defaults;
+﻿using MoreSlugcats;
+using WordWorld.Defaults;
 
 namespace WordWorld.Misc
 {
-    public class BulletWords() : POWords("B")
+    public class BulletWords() : POWordify<Bullet>("B")
     {
-        //
     }
 }

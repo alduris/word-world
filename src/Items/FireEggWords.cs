@@ -6,17 +6,19 @@ namespace WordWorld.Items
 {
     public class FireEggWords : Wordify<FireEgg>
     {
-        public static FLabel[] Init(FireEgg egg)
-        {
+        private FLabel label;
 
-            return [new FLabel(Font, "Egg") { scale = egg.firstChunk.rad * 3f / TextWidth("Egg"), color = egg.eggColors[1] }];
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
+        {
+            label = new FLabel(Font, "Egg") { scale = Drawable.firstChunk.rad * 3f / TextWidth("Egg"), color = Drawable.eggColors[1] };
+            labels.Add(label);
         }
 
-        public static void Draw(FireEgg egg, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].SetPosition(GetPos(egg.firstChunk, timeStacker) - camPos);
-            labels[0].scale = egg.firstChunk.rad * 3f / TextWidth(labels[0].text);
-            labels[0].color = sLeaser.sprites[1].color;
+            label.SetPosition(GetPos(Drawable.firstChunk, timeStacker) - camPos);
+            label.scale = Drawable.firstChunk.rad * 3f / TextWidth(labels[0].text);
+            label.color = Drawable.blink > 1 ? Drawable.blinkColor : sLeaser.sprites[1].color;
         }
     }
 }

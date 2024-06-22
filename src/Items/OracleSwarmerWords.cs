@@ -1,22 +1,20 @@
 ﻿using UnityEngine;
 using WordWorld.Defaults;
-using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public class OracleSwarmerWords : Wordify<OracleSwarmer>
+    public class OracleSwarmerWords() : POWordify<OracleSwarmer>("N")
     {
-        public static FLabel[] Init(OracleSwarmer neuron)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var labels = POWords.Init(neuron, "N");
-            labels[0].scale *= 1.5f;
-            return labels;
+            base.Init(sLeaser);
+            Label.scale *= 1.5f;
         }
 
-        public static void Draw(OracleSwarmer neuron, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            POWords.Draw(neuron, labels, timeStacker, camPos);
-            labels[0].color = sLeaser.sprites[0].color;
+            base.Draw(sLeaser, timeStacker, camPos);
+            Label.color = sLeaser.sprites[0].color;
         }
     }
 }

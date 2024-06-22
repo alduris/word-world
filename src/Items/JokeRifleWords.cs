@@ -4,22 +4,21 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public class JokeRifleWords : Wordify<JokeRifle>
+    public class JokeRifleWords() : POWordify<JokeRifle>("Rifle")
     {
-        public static FLabel[] Init(RoomCamera.SpriteLeaser sLeaser)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var label = new FLabel(Font, "Rifle")
+            Label = new FLabel(Font, text)
             {
-                scale = sLeaser.sprites[0].element.sourcePixelSize.x / TextWidth("Rifle"),
+                scale = sLeaser.sprites[0].element.sourcePixelSize.x / TextWidth(text),
                 color = sLeaser.sprites[0].color
             };
-            return [label];
         }
 
-        public static void Draw(JokeRifle rifle, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            POWords.Draw(rifle, labels, timeStacker, camPos);
-            labels[0].rotation = FixRotation(sLeaser.sprites[0].rotation);
+            base.Draw(sLeaser, timeStacker, camPos);
+            Label.rotation = FixRotation(sLeaser.sprites[0].rotation);
         }
     }
 }

@@ -6,16 +6,19 @@ namespace WordWorld.Misc
 {
     public class JellyFishWords : Wordify<JellyFish>
     {
-        public static FLabel[] Init(JellyFish jelly)
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [new(Font, $"Jelly{Environment.NewLine}fish") { scale = jelly.bodyChunks[0].rad * 1.5f / FontSize }];
+            label = new(Font, $"Jelly{Environment.NewLine}fish") { scale = Drawable.bodyChunks[0].rad * 1.5f / FontSize };
+            labels.Add(label);
         }
 
-        public static void Draw(JellyFish jelly, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].SetPosition(GetPos(jelly.bodyChunks[0], timeStacker) - camPos);
-            labels[0].rotation = AngleFrom(jelly.rotation);
-            labels[0].color = sLeaser.sprites[jelly.BodySprite(1)].color;
+            label.SetPosition(GetPos(Drawable.bodyChunks[0], timeStacker) - camPos);
+            label.rotation = AngleFrom(Drawable.rotation);
+            label.color = sLeaser.sprites[Drawable.BodySprite(1)].color;
         }
     }
 }

@@ -5,30 +5,29 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class CentipedeWords : Wordify<Centipede>
+    public class CentipedeWords : CreatureWordify<CentipedeGraphics>
     {
-        public static FLabel[] Init(CentipedeGraphics centiGraf, CreatureTemplate.Type type)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
             // Thanks several users on RW Main discord for this idea
-            List<FLabel> labels = [];
-            float scale = centiGraf.centipede.bodyChunks.Max(c => c.rad) * 3f / FontSize;
-            if (type == CreatureTemplate.Type.SmallCentipede)
+            float scale = Drawable.centipede.bodyChunks.Max(c => c.rad) * 3f / FontSize;
+            if (Type == CreatureTemplate.Type.SmallCentipede)
             {
                 // Special case for babypede
                 labels.AddRange(LabelsFromLetters("Babypede"));
             }
             else
             {
-                int numChunks = centiGraf.centipede.bodyChunks.Length;
+                int numChunks = Drawable.centipede.bodyChunks.Length;
 
-                bool stretch = numChunks >= type.value.Length;
+                bool stretch = numChunks >= Type.value.Length;
                 if (stretch)
                 {
                     // Stretch the name to match segments (calculate how many letters we need to add)
-                    int nameE = type.value.IndexOf("Centi") + 1;
-                    if (nameE == 0) nameE = type.value.IndexOf("pede") + 1;
-                    if (nameE == 0) nameE = type.value.IndexOf("e") + 1;
-                    var chars = type.value.ToCharArray();
+                    int nameE = Type.value.IndexOf("Centi") + 1;
+                    if (nameE == 0) nameE = Type.value.IndexOf("pede") + 1;
+                    if (nameE == 0) nameE = Type.value.IndexOf("e") + 1;
+                    var chars = Type.value.ToCharArray();
                     int numOfEs = numChunks - chars.Length;
 
                     for (int i = 0; i < numChunks; i++)
@@ -40,8 +39,8 @@ namespace WordWorld.Creatures
                 else
                 {
                     // Fit name in segments
-                    labels.AddRange(LabelsFromLetters(type.value));
-                    scale *= (float)centiGraf.centipede.bodyChunks.Length / labels.Count;
+                    labels.AddRange(LabelsFromLetters(Type.value));
+                    scale *= (float)Drawable.centipede.bodyChunks.Length / labels.Count;
                 }
             }
 
@@ -49,22 +48,20 @@ namespace WordWorld.Creatures
             foreach (var label in labels)
             {
                 label.scale = scale * 1.5f;
-                label.color = centiGraf.ShellColor;
+                label.color = Drawable.ShellColor;
             }
-
-            return [.. labels];
         }
 
-        public static void Draw(CentipedeGraphics centiGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            var chunks = centiGraf.centipede.bodyChunks;
-            bool fit = labels.Length > chunks.Length;
-            for (int i = 0; i < labels.Length; i++)
+            var chunks = Drawable.centipede.bodyChunks;
+            bool fit = labels.Count > chunks.Length;
+            for (int i = 0; i < labels.Count; i++)
             {
                 if (fit)
                 {
-                    labels[i].SetPosition(PointAlongChunks(i, labels.Length, chunks, timeStacker) - camPos);
-                    labels[i].rotation = RotationAlongSprites(i, labels.Length, chunks.Length, sLeaser.sprites, x => x);
+                    labels[i].SetPosition(PointAlongChunks(i, labels.Count, chunks, timeStacker) - camPos);
+                    labels[i].rotation = RotationAlongSprites(i, labels.Count, chunks.Length, sLeaser.sprites, x => x);
                 }
                 else
                 {

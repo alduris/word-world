@@ -4,38 +4,47 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class DeerWords : Wordify<Deer>
+    public class DeerWords : CreatureWordify<DeerGraphics>
     {
-        public static FLabel[] Init(DeerGraphics deerGraf, CreatureTemplate.Type type)
+        private FLabel bodyLabel;
+        private FLabel antlerLabel;
+
+        private Deer MyDeer => Critter as Deer;
+        private BodyChunk AntlerBodyChunk => MyDeer.bodyChunks[5];
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var bodyChunks = deerGraf.deer.bodyChunks;
-            var bodyLabel = new FLabel(Font, Unpascal(type))
+            var bodyChunks = MyDeer.bodyChunks;
+            bodyLabel = new FLabel(Font, Unpascal(Type))
             {
                 scale = (bodyChunks[1].rad + bodyChunks[2].rad + bodyChunks[3].rad + bodyChunks[4].rad) / 2f / FontSize,
-                color = deerGraf.bodyColor
+                color = Drawable.bodyColor
             };
-            var antlerLabel = new FLabel(Font, "Antlers")
+            antlerLabel = new FLabel(Font, "Antlers")
             {
-                scale = bodyChunks[5].rad / FontSize,
-                color = deerGraf.bodyColor
+                scale = AntlerBodyChunk.rad / FontSize,
+                color = Drawable.bodyColor
             };
 
             // TODO: legs
 
-            return [bodyLabel, antlerLabel];
+            labels.Add(bodyLabel);
+            labels.Add(antlerLabel);
         }
 
-        public static void Draw(DeerGraphics deerGraf, FLabel[] labels, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            var bodyChunks = deerGraf.deer.bodyChunks;
-            labels[0].SetPosition(
+            var bodyChunks = MyDeer.bodyChunks;
+            
+            bodyLabel.SetPosition(
                 AvgVectors(
                     AvgBodyChunkPos(bodyChunks[1], bodyChunks[2], timeStacker),
                     AvgBodyChunkPos(bodyChunks[3], bodyChunks[4], timeStacker)
                 ) - camPos
             );
-            labels[1].SetPosition(GetPos(bodyChunks[5], timeStacker) - camPos);
-            labels[1].rotation = Custom.VecToDeg(deerGraf.deer.HeadDir);
+
+            antlerLabel.SetPosition(GetPos(AntlerBodyChunk, timeStacker) - camPos);
+            antlerLabel.rotation = Custom.VecToDeg(MyDeer.HeadDir);
         }
     }
 }

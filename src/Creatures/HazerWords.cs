@@ -3,21 +3,26 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class HazerWords : Wordify<Hazer>
+    public class HazerWords : CreatureWordify<HazerGraphics>
     {
-        public static FLabel[] Init(HazerGraphics hazerGraf, CreatureTemplate.Type type)
+        private FLabel label;
+        private FSprite bodySprite;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            return [new FLabel(Font, Unpascal(type)) {
-                scale = hazerGraf.bug.mainBodyChunk.rad * 6f / FontSize
-            }];
+            bodySprite = sLeaser.sprites[Drawable.BodySprite];
+            label = new FLabel(Font, Unpascal(Type))
+            {
+                scale = Drawable.bug.mainBodyChunk.rad * 6f / FontSize
+            };
+            labels.Add(label);
         }
 
-        public static void Draw(HazerGraphics hazerGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            FSprite bodySprite = sLeaser.sprites[hazerGraf.BodySprite];
-            labels[0].SetPosition(GetPos(hazerGraf.bug.firstChunk, timeStacker) - camPos);
-            labels[0].rotation = FixRotation(bodySprite.rotation) - 90f;
-            labels[0].color = bodySprite.color;
+            label.SetPosition(GetPos(Drawable.bug.firstChunk, timeStacker) - camPos);
+            label.rotation = FixRotation(bodySprite.rotation) - 90f;
+            label.color = bodySprite.color;
         }
     }
 }

@@ -5,15 +5,12 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public class SingularityBombWords : Wordify<SingularityBomb>
+    public class SingularityBombWords() : POWordify<SingularityBomb>("S")
     {
-        public static FLabel[] Init(SingularityBomb bomb)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            var labels = POWords.Init(bomb, "S");
-            labels[0].color = Custom.HSL2RGB(0.6638889f, 1f, 0.35f);
-            return labels;
+            base.Draw(sLeaser, timeStacker, camPos);
+            if (Drawable.blink < 1) Label.color = Custom.HSL2RGB(0.6638889f, 1f, 0.35f);
         }
-
-        public static void Draw(SingularityBomb bomb, FLabel[] labels, float timeStacker, Vector2 camPos) => POWords.Draw(bomb, labels, timeStacker, camPos);
     }
 }

@@ -7,7 +7,7 @@ namespace WordWorld
     public abstract class Wordify<T> : IWordify where T : IDrawable
     {
         private WeakReference<IDrawable> _drawableRef;
-        protected T Obj
+        protected T Drawable
         {
             get
             {
@@ -21,15 +21,21 @@ namespace WordWorld
 
         public readonly List<FLabel> labels = [];
 
-        public void Init(IDrawable drawable, RoomCamera.SpriteLeaser sLeaser)
+        public virtual void Init(IDrawable drawable, RoomCamera.SpriteLeaser sLeaser)
         {
+            if (drawable is not T)
+            {
+                throw new ArgumentException($"Cannot create a `{GetType().Name}` without a `{typeof(T).Name}`!");
+            }
             _drawableRef = new WeakReference<IDrawable>(drawable);
             Init(sLeaser);
         }
 
-        public virtual void AddToContainer(RoomCamera rCam, RoomCamera.SpriteLeaser sLeaser)
+        public void AddToContainer(RoomCamera rCam, RoomCamera.SpriteLeaser sLeaser) => AddToContainer(rCam, sLeaser, null);
+
+        protected virtual void AddToContainer(RoomCamera rCam, RoomCamera.SpriteLeaser sLeaser, FContainer container)
         {
-            var container = sLeaser.sprites[0].container ?? rCam.ReturnFContainer("Midground");
+            container ??= sLeaser.sprites[0].container ?? rCam.ReturnFContainer("Midground");
             foreach (var label in labels)
             {
                 label.alignment = FLabelAlignment.Center;

@@ -4,14 +4,12 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Items
 {
-    public class WaterNutWords : Wordify<WaterNut>
+    public class WaterNutWords() : POWordify<WaterNut>("N")
     {
-        public static FLabel[] Init(WaterNut nut) => POWords.Init(nut, "N");
-
-        public static void Draw(WaterNut nut, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            POWords.Draw(nut, labels, timeStacker, camPos);
-            labels[0].color = Color.Lerp(sLeaser.sprites[0].color, nut.color, 0.4f);
+            base.Draw(sLeaser, timeStacker, camPos);
+            if (Drawable.blink <= 1) Label.color = Color.Lerp(sLeaser.sprites[0].color, Drawable.color, 0.4f);
         }
     }
 }

@@ -27,16 +27,16 @@ namespace WordWorld.Defaults
 
         public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var name = Obj.owner is Creature creature ? creature.abstractCreature.creatureTemplate.type.value : Obj.owner.abstractPhysicalObject.type.value;
+            var name = Drawable.owner is Creature creature ? creature.abstractCreature.creatureTemplate.type.value : Drawable.owner.abstractPhysicalObject.type.value;
             Label = new FLabel(Font, name);
 
-            Label.scale = Obj.owner.bodyChunks.Max(chunk => chunk.rad) * 3f / TextWidth(Label.text);
+            Label.scale = Drawable.owner.bodyChunks.Max(chunk => chunk.rad) * 3f / TextWidth(Label.text);
             Label.color = sLeaser.sprites[0].color;
         }
 
         public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            var pos = GetPos(Obj.owner.bodyChunks[0], timeStacker) - camPos;
+            var pos = GetPos(Drawable.owner.bodyChunks[0], timeStacker) - camPos;
             var rot = sLeaser.sprites[0].rotation;
 
             Label.SetPosition(pos);

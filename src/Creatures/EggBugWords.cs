@@ -5,47 +5,61 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class EggBugWords : Wordify<EggBug>
+    public class EggBugWords : CreatureWordify<EggBugGraphics>
     {
-        public static FLabel[] Init(EggBugGraphics eggBugGraf, CreatureTemplate.Type type)
+        private FLabel bodyLabel;
+        private FLabel[,] eggLabels;
+        private bool Firebug => (Critter as EggBug).FireBug;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
             string str;
-            if (type == CreatureTemplate.Type.EggBug) str = "Eggbug";
-            else if (ModManager.MSC && type == MoreSlugcatsEnums.CreatureTemplateType.FireBug) str = "Firebug";
-            else str = Unpascal(type);
+            if (Type == CreatureTemplate.Type.EggBug) str = "Eggbug";
+            else if (ModManager.MSC && Type == MoreSlugcatsEnums.CreatureTemplateType.FireBug) str = "Firebug";
+            else str = Unpascal(Type);
 
-            List<FLabel> labels = [new(Font, str) {
-                scale = (eggBugGraf.bug.bodyChunks[0].rad + eggBugGraf.bug.bodyChunks[1].rad + eggBugGraf.bug.bodyChunkConnections[0].distance) * 1.75f / TextWidth(str),
-                color = eggBugGraf.blackColor
-            }];
+            bodyLabel = new(Font, str)
+            {
+                scale = (Drawable.bug.bodyChunks[0].rad + Drawable.bug.bodyChunks[1].rad + Drawable.bug.bodyChunkConnections[0].distance) * 1.75f / TextWidth(str),
+                color = Drawable.blackColor
+            };
+            labels.Add(bodyLabel);
 
             // Eggs
-            for (int i = 0; i < 6; i++)
+            var eggs = Drawable.eggs;
+            int a = eggs.GetLength(0), b = eggs.GetLength(1);
+            eggLabels = new FLabel[a, b];
+            for (int i = 0; i < eggs.Length; i++)
             {
-                labels.Add(new(Font, "Egg")
-                {
-                    scale = eggBugGraf.eggs[i / 3, i % 2].rad * 3f / TextWidth("Egg"),
-                    color = eggBugGraf.eggColors[1]
-                });
+                // Ignore how cursed this is, you can't enumerate over a multidimensional array
+                labels.Add(
+                    eggLabels[i / a, i % b] = new(Font, "Egg")
+                    {
+                        scale = eggs[i / a, i % b].rad * 3f / TextWidth("Egg"),
+                        color = Drawable.eggColors[1]
+                    }
+                );
             }
-
-            return [.. labels];
         }
 
-        public static void Draw(EggBugGraphics eggBugGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
             // Body
-            labels[0].SetPosition(GetPos(eggBugGraf.bug.bodyChunks[1], timeStacker) - camPos);
-            labels[0].rotation = FixRotation(sLeaser.sprites[eggBugGraf.HeadSprite].rotation) + 90f;
+            bodyLabel.SetPosition(GetPos(Drawable.bug.bodyChunks[1], timeStacker) - camPos);
+            bodyLabel.rotation = FixRotation(sLeaser.sprites[Drawable.HeadSprite].rotation) + 90f;
 
             // Eggs
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < eggLabels.GetLength(0); i++)
             {
-                var eggSprite = sLeaser.sprites[eggBugGraf.BackEggSprite(i % 2, i / 2, 2)];
-                labels[i + 1].x = eggSprite.x;
-                labels[i + 1].y = eggSprite.y;
-                labels[i + 1].rotation = eggSprite.rotation;
-                if (eggBugGraf.bug.FireBug && i >= eggBugGraf.bug.eggsLeft) labels[i + 1].isVisible = false;
+                for (int j = 0; j < eggLabels.GetLength(1); j++)
+                {
+                    var eggSprite = sLeaser.sprites[Drawable.BackEggSprite(j, i, 2)];
+                    var label = eggLabels[i, j];
+                    label.x = eggSprite.x;
+                    label.y = eggSprite.y;
+                    label.rotation = eggSprite.rotation;
+                    label.isVisible = eggSprite.isVisible && !(Firebug && i >= Drawable.bug.eggsLeft);
+                }
             }
         }
     }

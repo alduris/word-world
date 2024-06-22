@@ -3,34 +3,33 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class PoleMimicWords : Wordify<PoleMimic>
+    public class PoleMimicWords : CreatureWordify<PoleMimicGraphics>
     {
-        public static FLabel[] Init(PoleMimicGraphics poleMimicGraf, CreatureTemplate.Type type)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            // TODO: add extension trick like in centis and dlls with pole mimics, so that when hiding they are all l's or something to make a line and reveal letters sometimes
-            var labels = LabelsFromLetters(type.value);
+            labels.AddRange(LabelsFromLetters(Type.value));
             foreach (var label in labels)
             {
                 label.scale = 1.5f;
             }
-            return labels;
         }
 
-        public static void Draw(PoleMimicGraphics poleMimicGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            float mimicAmt = Mathf.Lerp(poleMimicGraf.lastLookLikeAPole, poleMimicGraf.lookLikeAPole, timeStacker);
+            float mimicAmt = Mathf.Lerp(Drawable.lastLookLikeAPole, Drawable.lookLikeAPole, timeStacker);
+
             // Move labels
-            for (int i = 0; i < labels.Length; i++)
+            for (int i = 0; i < labels.Count; i++)
             {
                 var label = labels[i];
-                label.SetPosition(PointAlongTentacle(labels.Length - i, labels.Length + 1, poleMimicGraf.pole.tentacle, timeStacker) - camPos);
+                label.SetPosition(PointAlongTentacle(labels.Count - i, labels.Count + 1, Drawable.pole.tentacle, timeStacker) - camPos);
 
-                int leafPair = Mathf.RoundToInt((1f - (float)i / labels.Length) * (poleMimicGraf.leafPairs - 1));
-                label.color = Color.Lerp(poleMimicGraf.blackColor, poleMimicGraf.mimicColor, mimicAmt);
-                if (leafPair < poleMimicGraf.decoratedLeafPairs)
+                int leafPair = Mathf.RoundToInt((1f - (float)i / labels.Count) * (Drawable.leafPairs - 1));
+                label.color = Color.Lerp(Drawable.blackColor, Drawable.mimicColor, mimicAmt);
+                if (leafPair < Drawable.decoratedLeafPairs)
                 {
-                    FSprite sprite = sLeaser.sprites[poleMimicGraf.LeafDecorationSprite(leafPair, 0)];
-                    float revealAmt = Mathf.Lerp(poleMimicGraf.leavesMimic[leafPair, 0, 4], poleMimicGraf.leavesMimic[leafPair, 0, 3], timeStacker);
+                    FSprite sprite = sLeaser.sprites[Drawable.LeafDecorationSprite(leafPair, 0)];
+                    float revealAmt = Mathf.Lerp(Drawable.leavesMimic[leafPair, 0, 4], Drawable.leavesMimic[leafPair, 0, 3], timeStacker);
                     label.color = Color.Lerp(label.color, sprite.color, revealAmt);
                 }
             }

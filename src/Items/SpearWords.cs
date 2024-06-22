@@ -28,24 +28,25 @@ namespace WordWorld.Items
             return spear.blink > 1 && Random.value > 0.5f ? spear.blinkColor : color;
         }
 
-        public static FLabel[] Init(Spear spear, RoomCamera.SpriteLeaser sLeaser)
-        {
-            var label = new FLabel(Font, "Spear");
+        private FLabel label;
 
-            bool explosive = spear is ExplosiveSpear;
-            label.color = SpearColor(spear, sLeaser);
-            label.scale = sLeaser.sprites[spear.bugSpear || explosive ? 1 : 0].element.sourcePixelSize.y * 0.9f / TextWidth(label.text);
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
+        {
+            label = new FLabel(Font, "Spear");
+
+            bool explosive = Drawable is ExplosiveSpear;
+            label.color = SpearColor(Drawable, sLeaser);
+            label.scale = sLeaser.sprites[Drawable.bugSpear || explosive ? 1 : 0].element.sourcePixelSize.y * 0.9f / TextWidth(label.text);
             label.scaleY /= 2f;
 
-
-            return [label];
+            labels.Add(label);
         }
 
-        public static void Draw(Spear spear, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            labels[0].SetPosition(GetPos(spear.firstChunk, timeStacker) - camPos);
-            labels[0].rotation = FixRotation(sLeaser.sprites[spear.bugSpear || spear is ExplosiveSpear ? 1 : 0].rotation) - 90f;
-            labels[0].color = SpearColor(spear, sLeaser);
+            label.SetPosition(GetPos(Drawable.firstChunk, timeStacker) - camPos);
+            label.rotation = FixRotation(sLeaser.sprites[Drawable.bugSpear || Drawable is ExplosiveSpear ? 1 : 0].rotation) - 90f;
+            label.color = SpearColor(Drawable, sLeaser);
         }
     }
 }

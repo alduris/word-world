@@ -3,25 +3,25 @@ using WordWorld.Defaults;
 
 namespace WordWorld.Items
 {
-    public class OverseerCarcassWords : Wordify<OverseerCarcass>
+    public class OverseerCarcassWords() : POWordify<OverseerCarcass>(null)
     {
-        public static FLabel[] Init(OverseerCarcass eye)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var abstr = (eye.abstractPhysicalObject as OverseerCarcass.AbstractOverseerCarcass);
+            var abstr = (Drawable.abstractPhysicalObject as OverseerCarcass.AbstractOverseerCarcass);
             var big = ModManager.MSC && abstr.InspectorMode;
-            var labels = POWords.Init(eye, big ? "Eye" : "O");
+            text = big ? "Eye" : "O";
+            base.Init(sLeaser);
             if (!big)
             {
-                labels[0].scale /= 1.5f;
+                Label.scale /= 1.5f;
             }
-            labels[0].color = abstr.color;
-            return labels;
+            Label.color = abstr.color;
         }
 
-        public static void Draw(OverseerCarcass eye, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            POWords.Draw(eye, labels, timeStacker, camPos);
-            labels[0].color = sLeaser.sprites[5].color;
+            base.Draw(sLeaser, timeStacker, camPos);
+            if (Drawable.blink <= 1) Label.color = sLeaser.sprites[5].color;
         }
     }
 }

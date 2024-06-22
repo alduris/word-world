@@ -4,30 +4,29 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class TentaclePlantWords : Wordify<TentaclePlant>
+    public class TentaclePlantWords : CreatureWordify<TentaclePlantGraphics>
     {
-        public static FLabel[] Init(TentaclePlantGraphics kelpGraf, CreatureTemplate.Type type)
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var labels = LabelsFromLetters(Unpascal(type));
-            var size = kelpGraf.plant.tentacle.idealLength / labels.Length / FontSize * 2f;
+            labels.AddRange(LabelsFromLetters(Unpascal(Type)));
+            var size = Drawable.plant.tentacle.idealLength / labels.Count / FontSize * 2f;
             foreach (var label in labels)
             {
                 label.scale = size;
             }
-            return labels;
         }
 
-        public static void Draw(TentaclePlantGraphics kelpGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            for (int i = 0; i < labels.Length; i++)
+            for (int i = 0; i < labels.Count; i++)
             {
                 // Calculate position (we don't care about rotation lol)
-                labels[i].SetPosition(PointAlongRope(i, labels.Length, kelpGraf.ropeGraphic, timeStacker) - camPos);
+                labels[i].SetPosition(PointAlongRope(i, labels.Count, Drawable.ropeGraphic, timeStacker) - camPos);
 
                 // Calculate color since it can vary
-                float colorIndex = Custom.LerpMap(i, 0, labels.Length - 1, 1, kelpGraf.danglers.Length);
+                float colorIndex = Custom.LerpMap(i, 0, labels.Count - 1, 1, Drawable.danglers.Length);
                 Color color = Color.Lerp(sLeaser.sprites[Mathf.FloorToInt(colorIndex)].color, sLeaser.sprites[Mathf.CeilToInt(colorIndex)].color, colorIndex % 1f);
-                labels[i].color = color; // UndoColorLerp(color, rCam.currentPalette.blackColor, rCam.room.Darkness(kelpGraf.plant.rootPos));
+                labels[i].color = color;
             }
         }
     }

@@ -3,25 +3,26 @@ using static WordWorld.WordUtil;
 
 namespace WordWorld.Creatures
 {
-    public class SpiderWords : Wordify<Spider>
+    public class SpiderWords : CreatureWordify<SpiderGraphics>
     {
-        public static FLabel[] Init(SpiderGraphics spiderGraf, CreatureTemplate.Type type)
+        private FLabel label;
+
+        public override void Init(RoomCamera.SpriteLeaser sLeaser)
         {
-            var text = Unpascal(type);
-            return [new FLabel(Font, text)
+            var text = Unpascal(Type);
+            label = new FLabel(Font, text)
             {
-                scale = spiderGraf.spider.firstChunk.rad * 4f / TextWidth(text),
-                color = spiderGraf.blackColor
-            }];
+                scale = Drawable.spider.firstChunk.rad * 4f / TextWidth(text),
+                color = Drawable.blackColor
+            };
         }
 
-        public static void Draw(SpiderGraphics spiderGraf, FLabel[] labels, RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
+        public override void Draw(RoomCamera.SpriteLeaser sLeaser, float timeStacker, Vector2 camPos)
         {
-            var label = labels[0];
-            label.SetPosition(GetPos(spiderGraf.spider.mainBodyChunk, timeStacker) - camPos);
+            label.SetPosition(GetPos(Drawable.spider.mainBodyChunk, timeStacker) - camPos);
 
-            var rot = sLeaser.sprites[spiderGraf.BodySprite].rotation;
-            if (spiderGraf.spider.dead) rot = FixRotation(rot + 90f);
+            var rot = sLeaser.sprites[Drawable.BodySprite].rotation;
+            if (Drawable.spider.dead) rot = FixRotation(rot + 90f);
             label.rotation = rot;
         }
     }
