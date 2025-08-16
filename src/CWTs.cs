@@ -2,8 +2,10 @@ using System;
 using System.Runtime.CompilerServices;
 using MoreSlugcats;
 using RWCustom;
+using Watcher;
 using WordWorld.Creatures;
 using WordWorld.Creatures.MoreSlugcats;
+using WordWorld.Creatures.Watcher;
 using WordWorld.Defaults;
 using WordWorld.Effects;
 using WordWorld.Items;
@@ -21,141 +23,107 @@ namespace WordWorld
 
             try
             {
-                // Something to create new thing here
-                throw new NotImplementedException();
-
-                // Test API stuff first
-                /*if (WordAPI.RegisteredClasses.Count > 0 && WordAPI.RegisteredClasses.TryGetValue(self.drawableObject.GetType(), out var funcs) && funcs.InitLabels != null)
-                {
-                    return funcs.InitLabels.Invoke(self.drawableObject, self);
-                }
-
-                // Get thing to draw
-
-                // If it's a creature, get its creature template type
-                CreatureTemplate.Type type = null;
-                if (obj is GraphicsModule gm && gm.owner is Creature c)
-                {
-                    type = c.abstractCreature.creatureTemplate.type;
-                }
-
-                // Return labels
-                var labels = obj switch
+#warning reimplement api
+                return obj switch
                 {
                     // Creatures
-                    BigEelGraphics        => BigEelWords.Init(obj as BigEelGraphics, type),
-                    BigSpiderGraphics     => BigSpiderWords.Init(obj as BigSpiderGraphics, type),
-                    CentipedeGraphics     => CentipedeWords.Init(obj as CentipedeGraphics, type),
-                    CicadaGraphics        => CicadaWords.Init(obj as CicadaGraphics, type, self),
-                    DaddyGraphics         => DaddyWords.Init(obj as DaddyGraphics, type),
-                    DeerGraphics          => DeerWords.Init(obj as DeerGraphics, type),
-                    DropBugGraphics       => DropBugWords.Init(obj as DropBugGraphics, type),
-                    EggBugGraphics        => EggBugWords.Init(obj as EggBugGraphics, type),
-                    FlyGraphics           => FlyWords.Init(obj as FlyGraphics, type, self),
-                    GarbageWormGraphics   => GarbageWormWords.Init(obj as GarbageWormGraphics, type, self),
-                    HazerGraphics         => HazerWords.Init(obj as HazerGraphics, type),
-                    JetFishGraphics       => JetFishWords.Init(obj as JetFishGraphics, type, self),
-                    LeechGraphics         => LeechWords.Init(obj as LeechGraphics, type),
-                    LizardGraphics        => LizardWords.Init(obj as LizardGraphics, type),
-                    MirosBirdGraphics     => MirosBirdWords.Init(obj as MirosBirdGraphics, type, self),
-                    MouseGraphics         => MouseWords.Init(obj as MouseGraphics, type),
-                    NeedleWormGraphics    => NeedleWormWords.Init(obj as NeedleWormGraphics, type),
-                    OverseerGraphics      => OverseerWords.Init(obj as OverseerGraphics, type),
-                    PlayerGraphics        => PlayerWords.Init(obj as PlayerGraphics, type),
-                    PoleMimicGraphics     => PoleMimicWords.Init(obj as PoleMimicGraphics, type),
-                    ScavengerGraphics     => ScavengerWords.Init(obj as ScavengerGraphics, type),
-                    SnailGraphics         => SnailWords.Init(obj as SnailGraphics, type),
-                    SpiderGraphics        => SpiderWords.Init(obj as SpiderGraphics, type),
-                    TempleGuardGraphics   => TempleGuardWords.Init(obj as TempleGuardGraphics, type, self),
-                    TentaclePlantGraphics => TentaclePlantWords.Init(obj as TentaclePlantGraphics, type),
-                    TubeWormGraphics      => TubeWormWords.Init(obj as TubeWormGraphics, type),
-                    VultureGrubGraphics   => VultureGrubWords.Init(obj as VultureGrubGraphics, type),
-                    VultureGraphics       => VultureWords.Init(obj as VultureGraphics, type, self),
+                    BigEelGraphics =>        new BigEelWords(),
+                    BigSpiderGraphics =>     new BigSpiderWords(),
+                    CentipedeGraphics =>     new CentipedeWords(),
+                    CicadaGraphics =>        new CicadaWords(),
+                    DaddyGraphics =>         new DaddyWords(),
+                    DeerGraphics =>          new DeerWords(),
+                    DropBugGraphics =>       new DropBugWords(),
+                    EggBugGraphics =>        new EggBugWords(),
+                    FlyGraphics =>           new FlyWords(),
+                    GarbageWormGraphics =>   new GarbageWormWords(),
+                    HazerGraphics =>         new HazerWords(),
+                    JetFishGraphics =>       new JetFishWords(),
+                    LeechGraphics =>         new LeechWords(),
+                    LizardGraphics =>        new LizardWords(),
+                    MirosBirdGraphics =>     new MirosBirdWords(),
+                    MouseGraphics =>         new MouseWords(),
+                    NeedleWormGraphics =>    new NeedleWormWords(),
+                    OverseerGraphics =>      new OverseerWords(),
+                    PlayerGraphics =>        new PlayerWords(),
+                    PoleMimicGraphics =>     new PoleMimicWords(),
+                    ScavengerGraphics =>     new ScavengerWords(),
+                    SnailGraphics =>         new SnailWords(),
+                    SpiderGraphics =>        new SpiderWords(),
+                    TempleGuardGraphics =>   new TempleGuardWords(),
+                    TentaclePlantGraphics => new TentaclePlantWords(),
+                    TubeWormGraphics =>      new TubeWormWords(),
+                    VultureGrubGraphics =>   new VultureGrubWords(),
+                    VultureGraphics =>       new VultureWords(),
 
-                    InspectorGraphics   => InspectorWords.Init(obj as InspectorGraphics, type),
-                    StowawayBugGraphics => StowawayBugWords.Init(obj as StowawayBugGraphics, type, self),
-                    YeekGraphics        => YeekWords.Init(obj as YeekGraphics, type),
+                    InspectorGraphics =>   new InspectorWords(),
+                    StowawayBugGraphics => new StowawayBugWords(),
+                    YeekGraphics =>        new YeekWords(),
+
+                    DrillCrab => new DrillCrabWords(),
 
                     // Items
-                    BubbleGrass      => BubbleGrassWords.Init(obj as BubbleGrass),
-                    DandelionPeach   => DandelionPeachWords.Init(obj as DandelionPeach),
-                    DangleFruit      => DangleFruitWords.Init(obj as DangleFruit),
-                    DataPearl        => DataPearlWords.Init(obj as DataPearl),
-                    EggBugEgg        => EggBugEggWords.Init(obj as EggBugEgg),
-                    EnergyCell       => EnergyCellWords.Init(),
-                    FirecrackerPlant => FirecrackerPlantWords.Init(),
-                    FireEgg          => FireEggWords.Init(obj as FireEgg),
-                    FlareBomb        => FlareBombWords.Init(obj as FlareBomb),
-                    FlyLure          => FlyLureWords.Init(),
-                    GlowWeed         => GlowWeedWords.Init(obj as GlowWeed),
-                    GooieDuck        => GooieDuckWords.Init(obj as GooieDuck),
-                    JokeRifle        => JokeRifleWords.Init(self),
-                    KarmaFlower      => KarmaFlowerWords.Init(obj as KarmaFlower),
-                    Lantern          => LanternWords.Init(obj as Lantern, self),
-                    LillyPuck        => LillyPuckWords.Init(obj as LillyPuck),
-                    MoonCloak        => MoonCloakWords.Init(obj as MoonCloak),
-                    Mushroom         => MushroomWords.Init(obj as Mushroom, self),
-                    NeedleEgg        => NeedleEggWords.Init(obj as NeedleEgg),
-                    NSHSwarmer       => NSHSwarmerWords.Init(obj as NSHSwarmer),
-                    OracleSwarmer    => OracleSwarmerWords.Init(obj as OracleSwarmer),
-                    OverseerCarcass  => OverseerCarcassWords.Init(obj as OverseerCarcass),
-                    PuffBall         => PuffBallWords.Init(obj as PuffBall),
-                    ScavengerBomb    => ScavengerBombWords.Init(obj as ScavengerBomb),
-                    SeedCob          => SeedCobWords.Init(),
-                    SingularityBomb  => SingularityBombWords.Init(obj as SingularityBomb),
-                    SlimeMold        => SlimeMoldWords.Init(obj as SlimeMold, self),
-                    Spear            => SpearWords.Init(obj as Spear, self),
-                    SporePlant       => SporePlantWords.Init(obj as SporePlant),
-                    SwollenWaterNut  => SwollenWaterNutWords.Init(obj as SwollenWaterNut),
-                    VultureMask      => VultureMaskWords.Init(obj as VultureMask),
-                    WaterNut         => WaterNutWords.Init(obj as WaterNut),
+                    BubbleGrass =>      new BubbleGrassWords(),
+                    DandelionPeach =>   new DandelionPeachWords(),
+                    DangleFruit =>      new DangleFruitWords(),
+                    DataPearl =>        new DataPearlWords(),
+                    EggBugEgg =>        new EggBugEggWords(),
+                    EnergyCell =>       new EnergyCellWords(),
+                    FirecrackerPlant => new FirecrackerPlantWords(),
+                    FireEgg =>          new FireEggWords(),
+                    FlareBomb =>        new FlareBombWords(),
+                    FlyLure =>          new FlyLureWords(),
+                    GlowWeed =>         new GlowWeedWords(),
+                    GooieDuck =>        new GooieDuckWords(),
+                    JokeRifle =>        new JokeRifleWords(),
+                    KarmaFlower =>      new KarmaFlowerWords(),
+                    Lantern =>          new LanternWords(),
+                    LillyPuck =>        new LillyPuckWords(),
+                    MoonCloak =>        new MoonCloakWords(),
+                    Mushroom =>         new MushroomWords(),
+                    NeedleEgg =>        new NeedleEggWords(),
+                    NSHSwarmer =>       new NSHSwarmerWords(),
+                    OracleSwarmer =>    new OracleSwarmerWords(),
+                    OverseerCarcass =>  new OverseerCarcassWords(),
+                    PuffBall =>         new PuffBallWords(),
+                    ScavengerBomb =>    new ScavengerBombWords(),
+                    SeedCob =>          new SeedCobWords(),
+                    SingularityBomb =>  new SingularityBombWords(),
+                    SlimeMold =>        new SlimeMoldWords(),
+                    Spear =>            new SpearWords(),
+                    SporePlant =>       new SporePlantWords(),
+                    SwollenWaterNut =>  new SwollenWaterNutWords(),
+                    VultureMask =>      new VultureMaskWords(),
+                    WaterNut =>         new WaterNutWords(),
 
-                    Rock             => RockWords.Init(obj as Rock), // for priority reasons
+                    Rock => new RockWords(), // for priority reasons
 
                     // Misc parts
-                    SporePlant.Bee => SporePlantWords.BeeInit(),
-                    SporePlant.AttachedBee => SporePlantWords.AttachedBeeInit(self),
+                    SporePlant.Bee =>         new SporePlantBeeWords(),
+                    SporePlant.AttachedBee => new SporePlantAttachedBeeWords(),
 
                     // Effects
-                    GoldFlakes.GoldFlake       => GoldFlakeWords.Init(obj as GoldFlakes.GoldFlake, self),
-                    GreenSparks.GreenSpark     => GreenSparkWords.Init(obj as GreenSparks.GreenSpark, self),
-                    SkyDandelions.SkyDandelion => SkyDandelionWords.Init(self),
+                    GoldFlakes.GoldFlake =>       new GoldFlakeWords(),
+                    GreenSparks.GreenSpark =>     new GreenSparkWords(),
+                    SkyDandelions.SkyDandelion => new SkyDandelionWords(),
 
                     // Misc
-                    AncientBot        => AncientBotWords.Init(),
-                    BigJellyFish      => BigJellyFishWords.Init(obj as BigJellyFish),
-                    Bullet            => BulletWords.Init(obj as Bullet),
-                    CosmeticInsect    => CosmeticInsectWords.Init(obj as CosmeticInsect, self),
-                    DartMaggot        => DartMaggotWords.Init(),
-                    Ghost             => GhostWords.Init(obj as Ghost),
-                    JellyFish         => JellyFishWords.Init(obj as JellyFish),
-                    LizardSpit        => LizardSpitWords.Init(obj as LizardSpit, self),
-                    OracleGraphics    => OracleWords.Init(obj as OracleGraphics, self),
-                    VoidSpawnGraphics => VoidSpawnWords.Init(obj as VoidSpawnGraphics),
-                    WormGrass.Worm    => WormGrassWords.Init(obj as WormGrass.Worm, self),
+                    AncientBot =>        new AncientBotWords(),
+                    BigJellyFish =>      new BigJellyFishWords(),
+                    Bullet =>            new BulletWords(),
+                    CosmeticInsect =>    new CosmeticInsectWords(),
+                    DartMaggot =>        new DartMaggotWords(),
+                    Ghost =>             new GhostWords(),
+                    JellyFish =>         new JellyFishWords(),
+                    LizardSpit =>        new LizardSpitWords(),
+                    OracleGraphics =>    new OracleWords(),
+                    VoidSpawnGraphics => new VoidSpawnWords(),
+                    WormGrass.Worm =>    new WormGrassWords(),
 
                     // Default
+                    GraphicsModule => new GMWords(),
                     _ => null
                 };
-
-                if (labels == null && obj is GraphicsModule && (obj as GraphicsModule).owner is Creature)
-                {
-                    GMWords.Init(obj as GraphicsModule, self, type.value);
-                }
-
-                // Assign container
-                if (labels != null)
-                {
-                    var container = self.sprites[0].container ?? rCam.ReturnFContainer("Midground");
-                    for (int i = 0; i < labels.Length; i++)
-                    {
-                        var label = labels[i];
-                        label.alignment = FLabelAlignment.Center;
-                        container.AddChild(label);
-                    }
-                }
-
-                return labels;*/
             }
             catch(Exception e)
             {

@@ -28,6 +28,8 @@ namespace WordWorld
                 throw new ArgumentException($"Cannot create a `{GetType().Name}` without a `{typeof(T).Name}`!");
             }
             _drawableRef = new WeakReference<IDrawable>(drawable);
+            RemoveFromContainer();
+            labels.Clear();
             Init(sLeaser);
         }
 
